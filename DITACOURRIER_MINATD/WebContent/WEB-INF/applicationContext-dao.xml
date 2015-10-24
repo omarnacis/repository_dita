@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+          http://www.springframework.org/schema/context/spring-context-2.5.xsd http://www.springframework.org/schema/context/spring-context-2.5.xsd/spring-spring-context-2.5.xsd-3.0.xsd
+">
+      <!-- DAO -->
+    <bean id="daoBase" class="cm.dita.dao.generic.DaoBaseImpl" abstract="true">
+        <!-- <property name="sessionFactory" ref="sessionFactory" /> -->
+    </bean>    
+    <!-- <bean id="roleUserDao" class="cm.dita.dao.domaine.impl.RoleUserDaoImpl" >
+         <property name="sessionFactory" ref="sessionFactory" />
+    </bean>    
+     -->
+     
+    <bean id="roleUserDao" class="cm.dita.dao.domaine.impl.user.RoleUserDaoImpl" parent="daoBase" />     
+    <bean id="userDao" class="cm.dita.dao.domaine.impl.user.UserDaoImpl" parent="daoBase"/>  
+	<bean id="accessRessourceDao" class="cm.dita.dao.domaine.impl.user.AccessRessourceDaoImpl" parent="daoBase"/>
+	<bean id="groupDao" class="cm.dita.dao.domaine.impl.user.GroupDaoImpl" parent="daoBase"/>
+	<bean id="groupAccessRessourceDao" class="cm.dita.dao.domaine.impl.user.GroupAccessRessourceDaoImpl" parent="daoBase"/>
+	<bean id="roleGroupDao" class="cm.dita.dao.domaine.impl.user.RoleGroupDaoImpl" parent="daoBase"/>
+	<bean id="roleDao" class="cm.dita.dao.domaine.impl.user.RoleDaoImpl" parent="daoBase"/> 
+	<bean id="parametersDao" class="cm.dita.dao.domaine.impl.user.ParametersDaoImpl" parent="daoBase"/>	
+    
+	<bean id="activitesDao" class="cm.dita.dao.domaine.impl.ActivitesDaoImpl" parent="daoBase" />	
+	<bean id="alarmesDao" class="cm.dita.dao.domaine.impl.AlarmesDaoImpl" parent="daoBase" />	
+	<bean id="bordereauDao" class="cm.dita.dao.domaine.impl.BordereauDaoImpl" parent="daoBase" />	
+	<bean id="courriersDao" class="cm.dita.dao.domaine.impl.CourriersDaoImpl" parent="daoBase" />
+	<bean id="espaceDao" class="cm.dita.dao.domaine.impl.EspaceDaoImpl" parent="daoBase" />
+	<bean id="espaceCourrierDao" class="cm.dita.dao.domaine.impl.EspaceCourrierDaoImpl" parent="daoBase" />
+	<bean id="mouchardDao" class="cm.dita.dao.domaine.impl.MouchardDaoImpl" parent="daoBase" />
+	<bean id="piecesjointesDao" class="cm.dita.dao.domaine.impl.PiecesjointesDaoImpl" parent="daoBase" />
+	<bean id="preferencesDao" class="cm.dita.dao.domaine.impl.PreferencesDaoImpl" parent="daoBase" />
+	<bean id="prioritesDao" class="cm.dita.dao.domaine.impl.PrioritesDaoImpl" parent="daoBase" />
+	<bean id="statutsDao" class="cm.dita.dao.domaine.impl.StatutsDaoImpl" parent="daoBase" />
+	<bean id="typescourriersDao" class="cm.dita.dao.domaine.impl.TypeCourriersDaoImpl" parent="daoBase" />
+	<bean id="typespersonnelDao" class="cm.dita.dao.domaine.impl.TypespersonnelDaoImpl" parent="daoBase" />
+	<bean id="typespiecesjointesDao" class="cm.dita.dao.domaine.impl.TypespiecesjointesDaoImpl" parent="daoBase" />
+	<bean id="correspondantDao" class="cm.dita.dao.domaine.impl.CorrespondantDaoImpl" parent="daoBase" />
+	<bean id="IImageDao" class="cm.dita.dao.domaine.impl.ImageDaoImpl" parent="daoBase" />
+	
+	
+	<bean id="applicationContextHolder"	class="cm.dita.utils.ApplicationContextHolder" />
+	
+</beans>

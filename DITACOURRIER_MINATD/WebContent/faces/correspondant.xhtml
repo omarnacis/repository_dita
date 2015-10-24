@@ -1,0 +1,268 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+  xmlns:c="http://java.sun.com/jsp/jstl/core">
+  
+  <ui:composition template="layout.xhtml"
+  xmlns:sec="http://www.springframework.org/security/facelets/tags">
+  <ui:define name="contenu">
+  
+  
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+          #{msg['correspondant']}
+            <small></small>
+          </h1>
+         <ol class="breadcrumb">
+            <li><a href="${request.contextPath}/faces/index.xhtml"><i class="fa fa-dashboard"></i>#{msg['dashboard']}</a></li>            
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title">#{msg['correspondant.liste']}</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                   
+                 <h:form id="formcorrespondants"> 
+		                <p:dataTable id="dataTable" var="correspondant" value="#{correspondantControllerBean.correspondantListDataModel}" widgetVar="correspondantTable"
+		                        paginator="true" rows="10" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		                         emptyMessage="#{msg['global.msgsearch']}"
+		                       selection="#{correspondantControllerBean.selectedCorrespondants}">
+		              
+				              	<f:facet name="header">
+				              
+				              	<div class="row rigth">
+		              				<div class="col-sm-12">   
+		              				<div class="col-sm-3"> 
+		              					          				  		
+						              	<div class="btn-group">                          
+				                           <button type="button" class="btn btn-default btn-sm btn-flat dropdown-toggle" data-toggle="dropdown">		                           
+				                                 Action <span class="caret"></span>
+				                            </button>
+				                            <ul class="dropdown-menu" role="menu">
+				                              <li>
+			                               		<sec:ifAnyGranted  roles="ROLE_correspondants.add,ROLE_ADMIN">  
+							            				<p:commandLink value="#{msg['button.add']}" update=":newcorrespondantForm" oncomplete="PF('addDialog').show()" actionListener="#{correspondantControllerBean.ajoutEvent(actionEvent)}" />		                        
+							                  	</sec:ifAnyGranted> 
+				                              </li>		                             
+				                              <!-- <li class="divider"></li>
+				                              <li>
+				                              	   <sec:ifAnyGranted  roles="ROLE_correspondants.delete,ROLE_ADMIN">  
+				                              	 		<p:commandLink value="#{msg['button.delete']}" actionListener="#{correspondantControllerBean.deleteMultipleEvent()}" />
+				         							</sec:ifAnyGranted>
+				                              </li> -->
+				                             
+				                            </ul>
+				                          </div>
+				                       </div>
+		              				 <div class="col-sm-9">	
+		              				 	<div class="input-group search-taille">                         
+			                            	<p:outputPanel>						                       
+						                        <p:inputText id="globalFilter" onkeyup="correspondantTable.filter()" styleClass="form-control input-sm"  />                           
+						                    </p:outputPanel>
+						                 </div>	                            
+			                            
+			                       </div>
+			                        </div>
+			                     </div>
+				              		 
+				              	</f:facet>
+				              
+				              <!--   <p:column selectionMode="multiple" style="width:18px" />   -->
+				               
+				                <!-- <p:column  sortBy="#{correspondant.id}" filterBy="#{correspondant.id}" filterMatchMode="contains"  >
+				                    <f:facet name="header">
+				                        <h:outputText value="#{msg['correspondant.code']}" />
+				                    </f:facet>
+				                    <h:outputText value="#{correspondant.id}" />
+				                </p:column> -->
+				                          
+				                
+				                 <p:column headerText="#{msg['correspondant.nom']}" id="nom" sortBy="#{correspondant.nom}" filterBy="#{correspondant.nom}" filterMatchMode="contains" >
+				                    <h:outputText value="#{correspondant.nom}" />
+				                </p:column>
+				                
+				                <p:column headerText="#{msg['correspondant.mail']}" id="mailAddresslist" sortBy="#{correspondant.mailAddress}" filterBy="#{correspondant.mailAddress}" filterMatchMode="contains" >
+				                    <h:outputText value="#{correspondant.mailAddress}" />
+				                </p:column>
+				                
+				                <p:column headerText="#{msg['correspondant.telephone']}" id="telephonelist" sortBy="#{correspondant.telephone}" filterBy="#{correspondant.telephone}" filterMatchMode="contains" >
+				                    <h:outputText value="#{correspondant.telephone}" />
+				                </p:column>
+				                
+				                
+				               <!--  <p:column sortBy="#{correspondant.dateCreation}" filterBy="#{correspondant.dateCreation}" filterMatchMode="contains">
+				                    <f:facet name="header">
+				                        <h:outputText value="#{msg['correspondant.date']}" />
+				                    </f:facet>
+				                    <h:outputText value="#{correspondant.dateCreation}" />
+				                </p:column> -->
+				                
+				         <p:column>
+		                    <f:facet name="header">
+		                        <h:outputText value="" />
+		                    </f:facet>
+		                    
+			                    <sec:ifAnyGranted  roles="ROLE_correspondants.view,ROLE_ADMIN">  
+	                        	 		<p:commandButton  actionListener="#{correspondantControllerBean.editEvent(correspondant.id)}" oncomplete="PF('editDialog').show()" update=":correspondantDetailForm" icon="ui-icon-info" styleClass="btn-info" title="#{msg['global.detail']}" />
+	   							</sec:ifAnyGranted>
+			                    <sec:ifAnyGranted  roles="ROLE_correspondants.edit,ROLE_ADMIN">  
+	                        	 		<p:commandButton  actionListener="#{correspondantControllerBean.editEvent(correspondant.id)}" oncomplete="PF('addDialog').show()" update=":newcorrespondantForm" icon="ui-icon-pencil" styleClass="btn-success" title="#{msg['global.modifier']}" />
+	   							</sec:ifAnyGranted>
+	   							
+			                   	<sec:ifAnyGranted  roles="ROLE_correspondants.delete,ROLE_ADMIN">  
+	                        	 		<p:commandButton  actionListener="#{correspondantControllerBean.editEvent(correspondant.id)}" oncomplete="PF('deleteDialog').show()"  icon="ui-icon-trash" styleClass="btn-danger" title="#{msg['global.supprimer']}"/>
+	   							</sec:ifAnyGranted>
+	   						 
+		                </p:column>
+		                
+		                 		
+		            </p:dataTable>
+			         </h:form> 
+                </div><!-- /.box-body -->
+              
+              </div><!-- /.box -->
+
+           </div> 
+          </div><!-- /.row -->
+   
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+      
+       <p:growl id="growl" showDetail="false" life="20000" />
+      
+      <!-- DIALOG DE DETAILS -->
+      
+		<p:dialog header="#{msg['global.detail']}" widgetVar="editDialog" resizable="false" id="correspondantDlg" modal="true"> 
+              <h:form id="correspondantDetailForm">   
+               
+               <p:tabView id="tabView">  
+				    <p:tab id="tab1" title="#{msg['correspondant.details.infos']}">  
+				       		
+
+			                    <p:panelGrid columns="6" cellpadding="4" style="margin:0 auto;">                     
+			                      <h:outputLabel for="nom" value="#{msg['correspondant.nom']}:" />
+			                      <h:outputLabel> <h4>#{correspondantControllerBean.correspondant.nom}</h4></h:outputLabel>
+			                    
+  	
+			                    </p:panelGrid>
+                    			<p:separator/>
+			                    <p:panelGrid  columns="4" cellpadding="4" style="margin:0 auto;"> 
+			                    		<h:outputLabel  value="#{msg['correspondant.mail']}:" />
+			                    		<h:outputLabel>  <h4>#{correspondantControllerBean.correspondant.mailAddress}</h4></h:outputLabel>
+			                    		
+			                    		<h:outputLabel  value="#{msg['correspondant.telephone']}:" />
+					                   	<h:outputLabel>  <h4>#{correspondantControllerBean.correspondant.telephone}</h4></h:outputLabel>
+ 
+			  					</p:panelGrid>
+  								<p:separator/>
+			  					<p:panelGrid  columns="2" cellpadding="4" style="margin:0 auto;"> 
+			  					  <h:outputLabel  value="#{msg['correspondant.datecreation']} :" /> 
+			  					  <h:outputLabel>  <h4>#{correspondantControllerBean.correspondant.dateCreation}</h4></h:outputLabel>
+					             
+			                	</p:panelGrid>	
+				       		
+				    </p:tab>  
+				  
+				  
+				</p:tabView>    				
+				 <p:panelGrid  columns="2" cellpadding="4" style="margin:0 auto;">                   		      
+                   	<f:facet name="footer">
+                            <p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;" value="#{msg['button.close']}" oncomplete="PF('editDialog').hide()" />
+                    </f:facet> 
+                </p:panelGrid>    
+             </h:form>
+          </p:dialog> 
+          
+          <!-- DIALOG D'AJOUT ET MISE A JOUR -->
+
+             
+          <p:dialog header="#{msg['glabel.ajouter']}" widgetVar="addDialog" resizable="false" id="newcorrespondantDlg" modal="true"> 
+              <h:form id="newcorrespondantForm">  
+              	<p:focus for="nom"/>
+              	   <p:panelGrid  columns="1" cellpadding="4" style="margin:0 auto;">
+                        <i>#{msg['global.label.obligatoire']}</i>
+                   </p:panelGrid>
+                   
+                
+                   <p:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">                     
+                     <h:outputLabel for="nom" title="#{msg['correspondant.nom']}" value="#{msg['correspondant.nom']}:*" />
+                     <p:inputText value="#{correspondantControllerBean.correspondant.nom}"  id="nom" required="true" requiredMessage="#{msg['correspondant.nom.require']}"
+                     	validator="#{correspondantControllerBean.validateName}"
+                     />             
+					</p:panelGrid>
+                    <p:separator/>
+                    
+                    <p:panelGrid  columns="4" cellpadding="4" style="margin:0 auto;"> 
+                    
+                    		<h:outputLabel for="mailAddress" title="#{msg['correspondant.mail']}" value="#{msg['correspondant.mail']}:*" />
+                    		<p:inputText value="#{correspondantControllerBean.correspondant.mailAddress}"  id="mailAddress" validatorMessage="#{msg['correspondant.mail.validator']}"  required="true" requiredMessage="#{msg['correspondant.mail.require']}">
+		                    	<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+		                    </p:inputText>
+		                    
+		                    <h:outputLabel for="telephone" title="#{msg['correspondant.telephone']}" value="#{msg['correspondant.telephone']}:*" />
+		                   <p:inputText  value="#{correspondantControllerBean.correspondant.telephone}" id="telephone"  required="true" requiredMessage="#{msg['correspondant.telephone.require']}">
+		                    	<f:convertNumber integerOnly="true" type="number"  />
+		                    </p:inputText>
+		                                 
+  					</p:panelGrid>
+  					<p:separator/>
+  					
+  					<p:panelGrid  columns="2" cellpadding="4" style="margin:0 auto;">
+		                     
+		                      <h:outputLabel for="creationDate" title="#{msg['correspondant.datecreation']}" value="#{msg['correspondant.datecreation']} :" /> 
+		                      <p:inputText value="#{correspondantControllerBean.correspondant.dateCreation}"   id="creationDate" disabled="true" />                    
+  					</p:panelGrid>
+                		              				
+				              		      
+                    <f:facet name="footer">
+                       
+                              </f:facet>
+               
+              
+                    	<div style="float:left">
+                    		<c:if test="#{correspondantControllerBean.operation==1}">
+                            <p:commandLink styleClass="btn btn-primary btn-block btn-flat" style="color:#ffffff;" value="#{msg['button.sauvegarder']}"  update=":formcorrespondants, :growl"   oncomplete="PF(handleSubmitRequest(xhr, status, args, 'newcorrespondantDlg','newcorrespondantForm'));"  actionListener="#{correspondantControllerBean.create}"  />
+                        </c:if>
+                    		 <c:if test="#{correspondantControllerBean.operation==2}">
+                        	<p:commandLink styleClass="btn btn-primary btn-block btn-flat" style="color:#ffffff;" value="#{msg['button.sauvegarder']}"  update=":formcorrespondants, :growl"   oncomplete="PF(handleSubmitRequest(xhr, status, args, 'newcorrespondantDlg','newcorrespondantForm'));"  actionListener="#{correspondantControllerBean.update()}"  />
+                      
+                        </c:if> 	
+                    		 
+                    	</div>
+                        <div style="float:right">   
+                            <p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;" value="#{msg['button.close']}" oncomplete="PF('addDialog').hide()" />                            
+                   		</div>
+               
+              </h:form>
+          </p:dialog> 
+          
+          <!-- DIALOG DE CONFIRMATION DE LA SUPPRESSION -->
+          
+          <h:form id="deleteFrom">
+        	 <p:confirmDialog  header="#{msg['global.supprimer']}"
+			message="#{msg['global.supprimer.label']}" severity="alert"  widgetVar="deleteDialog">			
+			<p:commandButton value="#{msg['button.oui']}" update=":formcorrespondants,:growl"   actionListener="#{correspondantControllerBean.delete(actionEvent)}" 
+			 oncomplete="PF('deleteDialog').hide();"/>			
+			<p:commandButton value="#{msg['button.non']}" onclick="deleteDialog.hide();" type="button" /> 
+			</p:confirmDialog> 
+        
+          </h:form>
+        
+              
+   </ui:define>
+  </ui:composition>
+</html>

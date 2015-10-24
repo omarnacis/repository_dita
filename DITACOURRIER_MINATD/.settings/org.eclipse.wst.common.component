@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="DITACOURRIER_MINATD">
+        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <dependent-module archiveName="commons-io-1.4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/commons-io-1.4.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="quartz-1.8.6.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/quartz-1.8.6.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-logging-1.1.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/commons-logging-1.1.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-security-acl-3.0.1.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/security/spring-security-acl-3.0.1.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="facelets-taglib-jsf20-spring-3-0.5.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/security/facelets-taglib-jsf20-spring-3-0.5.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="asm-attrs.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/asm-attrs.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="aopalliance-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/aopalliance-1.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jstl.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/jstl.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="standard.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/standard.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-aop-3.2.1.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/spring-aop-3.2.1.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="querydsl-core-2.9.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/querydsl-core-2.9.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-beans-3.1.1.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/spring-beans-3.1.1.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="antlr-2.7.7.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/antlr-2.7.7.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jdt-compiler-3.1.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/jdt-compiler-3.1.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-context-3.1.1.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/spring-context-3.1.1.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="logback-classic-1.0.6.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/logback-classic-1.0.6.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="cglib-2.2.2.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/cglib-2.2.2.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jsf-api-2.1.8.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/jsf-api-2.1.8.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-beans-3.2.1.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/spring-beans-3.2.1.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-binding-2.0.2.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/spring-binding-2.0.2.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jcl-over-slf4j-1.7.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/jcl-over-slf4j-1.7.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-jdbc-3.1.1.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/spring-jdbc-3.1.1.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="mysema-commons-lang-0.2.4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/mysema-commons-lang-0.2.4.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-webflow.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/spring-webflow.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-collections-2.1.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/commons-collections-2.1.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="logback-core-1.0.6.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/logback-core-1.0.6.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-logging-1.0.4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/commons-logging-1.0.4.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-context-support-3.0.5.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/spring-context-support-3.0.5.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hibernate-jpa-2.0-api-1.0.1.Final.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/hibernate-jpa-2.0-api-1.0.1.Final.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="poi-3.2-FINAL-20081019.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/poi-3.2-FINAL-20081019.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="org.springframework.webflow-sources-2.3.0.release.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/org.springframework.webflow-sources-2.3.0.release.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-security-core-3.1.3.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/security/spring-security-core-3.1.3.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="mailapi.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_mail/mailapi.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-core-3.2.1.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/spring-core-3.2.1.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="asm.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/asm.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-asm-3.1.1.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/spring-asm-3.1.1.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-data-book-jpa-1.0.0.BUILD-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/spring-data-book-jpa-1.0.0.BUILD-SNAPSHOT.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-expression-3.1.1.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/spring-expression-3.1.1.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="dom4j-1.6.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/dom4j-1.6.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-aop-3.1.1.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/spring-aop-3.1.1.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hibernate-entitymanager-4.1.9.Final.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/hibernate-entitymanager-4.1.9.Final.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="c3p0-0.9.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/c3p0-0.9.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-tx-3.1.1.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/spring-tx-3.1.1.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jsf-impl-2.1.8.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/jsf-impl-2.1.8.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="querydsl-jpa-2.9.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/querydsl-jpa-2.9.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jboss-logging-3.1.0.GA.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/jboss-logging-3.1.0.GA.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-orm-3.2.1.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/spring-orm-3.2.1.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-collections-3.2.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/commons-collections-3.2.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-web-3.0.3.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/spring-web-3.0.3.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-security-taglibs-3.0.1.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/security/spring-security-taglibs-3.0.1.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hibernate-commons-annotations-4.0.1.Final.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/hibernate-commons-annotations-4.0.1.Final.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="el-impl-2.2.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/el-impl-2.2.0-SNAPSHOT.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="iText-2.1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/iText-2.1.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="aspectjrt-1.7.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/aspectjrt-1.7.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hsqldb-2.2.9.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/hsqldb-2.2.9.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jasperreports-3.7.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/jasperreports-3.7.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="mysql-connector-java-5.1.6.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/mysql-connector-java-5.1.6.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="postgresql-9.2-1002.jdbc4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/postgresql-9.2-1002.jdbc4.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-digester-1.8.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/commons-digester-1.8.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-lang-2.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/commons-lang-2.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="mail.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_mail/mail.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-data-jpa-1.3.0.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/spring-data-jpa-1.3.0.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-fileupload-1.2.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/commons-fileupload-1.2.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="poi-3.7.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/poi-3.7.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hibernate-core-4.1.9.Final.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/hibernate-core-4.1.9.Final.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="log4j-1.2.12.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/log4j-1.2.12.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jboss-transaction-api_1.1_spec-1.0.0.Final.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/jboss-transaction-api_1.1_spec-1.0.0.Final.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="el-api-2.2.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/el-api-2.2.0-SNAPSHOT.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-context-3.2.1.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/spring-context-3.2.1.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-tx-3.2.1.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/spring-tx-3.2.1.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jfreechart-1.0.12.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/jfreechart-1.0.12.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-security-config-3.1.3.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/security/spring-security-config-3.1.3.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-security-web-3.1.3.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/security/spring-security-web-3.1.3.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="javassist-3.17.1-GA.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/javassist-3.17.1-GA.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="aspectjrt-1.6.5.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/security/aspectjrt-1.6.5.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="el-impl-2.2.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/el-impl-2.2.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-beanutils.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/commons-beanutils.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-jdbc-3.2.1.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/spring-jdbc-3.2.1.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-dbcp-1.2.2.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/commons-dbcp-1.2.2.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="guava-11.0.2.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/guava-11.0.2.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-data-commons-1.5.0.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/spring-data-commons-1.5.0.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="slf4j-api-1.7.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/slf4j-api-1.7.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-pool-1.6.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/commons-pool-1.6.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="org.springframework.webflow-2.0.3.release.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/org.springframework.webflow-2.0.3.release.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="cglib-2.1.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/cglib-2.1.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-core-3.1.1.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/spring-core-3.1.1.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="itext-2.1.7.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/itext-2.1.7.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jsf-api-2.1.9.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/jsf-api-2.1.9.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="aspectjweaver-1.6.5.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/security/aspectjweaver-1.6.5.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="org.springframework.faces-2.0.5.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/security/org.springframework.faces-2.0.5.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jsr305-1.3.9.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/jsr305-1.3.9.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-orm-3.1.1.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/spring-orm-3.1.1.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-expression-3.2.1.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER/WebContent/WEB-INF/lib/lib_jpa/spring-expression-3.2.1.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="primefaces-5.2.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER_v1/WebContent/WEB-INF/lib/primefaces-5.2.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="gson-2.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER_MINATD/WebContent/WEB-INF/lib/pf_extension/gson-2.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="primefaces-extensions-3.1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER_MINATD/WebContent/WEB-INF/lib/pf_extension/primefaces-extensions-3.1.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-lang3-3.4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/DITACOURRIER_MINATD/WebContent/WEB-INF/lib/pf_extension/commons-lang3-3.4.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="java-output-path" value="/DITACOURRIER_MINATD/build/classes"/>
+        <property name="context-root" value="DITACOURRIER_MINATD"/>
+    </wb-module>
+</project-modules>

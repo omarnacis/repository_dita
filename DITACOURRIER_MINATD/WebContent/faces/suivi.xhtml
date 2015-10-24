@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+  xmlns:c="http://java.sun.com/jsp/jstl/core">
+  
+  <ui:composition template="layout.xhtml"
+  xmlns:sec="http://www.springframework.org/security/facelets/tags">
+  <ui:define name="contenu">
+  		
+  
+  
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+          #{msg['courrier.suivi']}
+            <small></small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="${request.contextPath}/faces/index.xhtml"><i class="fa fa-dashboard"></i>#{msg['dashboard']}</a></li>            
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title">#{msg['suivi']}</h3>
+                  <h:form id="rechercherform">
+                  	 
+                  <p:panelGrid columns="2" >
+			      		
+     					<!-- <p:inputText value="#{suivieControllerBean.idcourrier}"/> -->
+     					  <p:selectOneMenu id="courrierparentidAdd" value="#{suivieControllerBean.idcourrier}" panelStyle="width:180px"
+						                         effect="fade"  style="width:160px" filter="true" filterMatchMode="startsWith"  >
+						             <p:ajax  listener="#{suivieControllerBean.rechercher}" update=":formList" global="false"/>
+						             <f:selectItem itemLabel="Selection" itemDisabled="true"/>
+						            <f:selectItems value="#{suivieControllerBean.listeCourriers}" var="c" itemLabel="#{c.refid}" itemValue="#{c.id}" />						           
+						   </p:selectOneMenu>
+     					<!-- <p:commandButton value="#{msg['bouton.recherche']}" update=":formList" action="#{suivieControllerBean.rechercher()}"  /> -->
+     				
+     				</p:panelGrid>
+                  </h:form>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                  
+                   <!-- Begin message éphémere pour les messages de validations -->
+					<p:growl id="growl" showDetail="true" sticky="false" life="10000"/>
+					
+					
+				<!-- End message éphémere pour les messages de validations -->
+				
+				<sec:ifAnyGranted  roles="ROLE_suivi.recherche,ROLE_ADMIN">
+		           <!-- POUR LES STATISTIQUES GLOBAUX-->  
+     		
+                
+			      <h:form id="formList">
+			      	    
+		                <p:dataTable var="courrier" value="#{suivieControllerBean.listeSuiviCourrier}" id="tabMouchard" widgetVar="Mouchard"
+                         emptyMessage="Pas de courrier diponible" paginator="true"  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rows="10"> 
+                      
+                      <!-- DEBUT METHODE PERMETTANT D'AFFICHER LA BOITE DE DETAIL DU COURRIER  -->   
+              <!--      <p:ajax event="rowSelect" listener="#{espaceCourrierControllerBean.onRowSelect}" update=":editCourrier:dialogCourrier" oncomplete="courrierEdit.show();" />  -->
+                      <!-- FIN METHODE PERMETTANT D'AFFICHER LA BOITE DE DETAIL DU COURRIER  -->  
+                     	
+                       
+               	  <p:column headerText="Reference" >
+                    	
+                    <h:outputText value="#{courrier.courrier.refid}" />
+                     
+                </p:column>
+                
+                <p:column headerText="#{msg['espace.nom']}" filterBy="#{courrier.espace.nomespace}" sortBy="{courrier.espace.nomespace}" filterMatchMode="contains" >
+                    <h:outputText value="#{courrier.espace.nomespace}" />
+                </p:column>
+                
+                <p:column headerText="#{msg['courrier.statut']}"  filterBy="#{courrier.statut.statutdesignation}" sortBy="{courrier.statut.statutdesignation}" filterMatchMode="contains" >
+                    <h:outputText value="#{courrier.statut.statutdesignation}" />
+                </p:column>
+                
+                <p:column headerText="#{msg['courrier.datearrive']}"  filterBy="#{courrier.datearrive}" filterMatchMode="contains" >
+                    <h:outputText value="#{courrier.datearrive}" />
+                </p:column>
+                
+                  <p:column headerText="#{msg['courrier.courobservation']}" >
+                  	
+                  	 <p:commandButton style="color:#000;" update=":rejetform3:viewObs2, :rejetform3:viewObs" value="#{msg['courrier.observer.voir']}" icon="ui-icon-circle-zoomout" styleClass="btn-info"  oncomplete="PF('rejetDialog3').show();" title="#{msg['courrier.visualiser']}" action="#{suivieControllerBean.editObservation(courrier.id)}" rendered="#{!(empty courrier.observeReceiver) or !(empty courrier.observation)}"/>
+                  	    
+                </p:column>
+                
+                  	   
+                </p:dataTable>
+                  
+                  
+			  </h:form> 
+			  <!--  MODAL DE VISUALISATION DE L'OBSERVATION DE RECEPTION-->
+       	<h:form id="rejetform3">
+	       <p:dialog header="#{msg['observation.receiver.title']} du courrier #{suivieControllerBean.espacecourriercourant.courrier.refid}" id="rejetCourrier3" resizable="true" widgetVar="rejetDialog3" modal="true">
+       		<p:panelGrid columns="2" >
+       		
+       		<h:outputText value="#{msg['observation.sender']}"/>
+       		<p:inputTextarea id="viewObs" cols="45" style="opacity:1;" value="#{suivieControllerBean.espacecourriercourant.observation}" disabled="true"/>
+       	  	
+       	  	<h:outputText value="#{msg['observation.receiver.title']}"/>
+       	  	<p:inputTextarea id="viewObs2" cols="45" style="opacity:0.8;" value="#{suivieControllerBean.espacecourriercourant.observeReceiver}" disabled="true"/>
+       	  	</p:panelGrid>
+       	  <p:separator/>
+       	   
+		   <p:commandLink styleClass="btn btn-danger pull-right" value="#{msg['button.close']}" style="color:#fff;" oncomplete="PF('rejetDialog3').hide()" global="false"/>
+       		</p:dialog>
+       	</h:form>
+       <!--  FIN MODAL DE VISUALISATION DE L'OBSERVATION DE RECEPTION-->
+			  <h:form id="rejetform1">
+	       		<p:dialog header="#{msg['courrier.title.traite']}" id="rejetCourrier1" resizable="true" widgetVar="rejetDialog1" modal="true">
+					<p:panelGrid>
+						</p:panelGrid>
+	     				<p:separator/>
+	    			 <p:commandLink global="false"  styleClass="btn btn-primary pull-left" value="#{msg['button.close']}" style="color:#ffffff;" onclick="rejetDialog1.hide();"  />
+	      		 </p:dialog>
+      		 </h:form>
+			  </sec:ifAnyGranted> 
+                </div><!-- /.box-body -->
+              
+              </div><!-- /.box -->
+
+           </div> 
+          </div><!-- /.row -->
+   
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+      
+ 
+   
+   </ui:define>
+  </ui:composition>
+</html>

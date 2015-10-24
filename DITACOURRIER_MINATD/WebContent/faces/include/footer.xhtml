@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:p="http://primefaces.org/ui"
+   xmlns:c="http://java.sun.com/jsp/jstl/core"
+   xmlns:sec="http://www.springframework.org/security/facelets/tags"
+  xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	
+		<script type="text/javascript">  
+		    function handleSubmitRequest(xhr, status, args, dialogName, formName ,dialogWi) {
+		            dialog = jQuery('#'+dialogName);
+		        if(args.validationFailed) {  
+		            dialog.effect("shake", { times:3 }, 100);  
+		        } else {
+		            clearForm(formName);
+		            PF('addDialog').hide(); 
+		            PF('editDialog').hide();
+		            PF('profilDialog').hide();
+		            PF('passDialog').hide();
+		          //  initPassDialog.hide();
+		            
+		        }  
+		    }
+		    
+		    function handleSubmitRequest_profil(xhr, status, args, dialogName, formName ,dialogWi) {
+	            dialog = jQuery('#'+dialogName);
+	        if(args.validationFailed) {  
+	            dialog.effect("shake", { times:3 }, 100);  
+	        } else {
+	            clearForm(formName);
+	            
+	            PF('profilDialog').hide();
+	            PF('passDialog').hide();
+	          //  initPassDialog.hide();
+	            
+	        }  
+	    }
+		    
+		    function handleSubmitRequest_init(xhr, status, args, dialogName, formName ,dialogWi) {
+	            dialog = jQuery('#'+dialogName);
+	        if(args.validationFailed) {  
+	            dialog.effect("shake", { times:3 }, 100);  
+	        } else {
+	            clearForm(formName);
+	            PF('initPassDialog').hide();
+	            
+	        }  
+	    }
+		    
+		    function handleSubmitRequest2(xhr, status, args, dialogName, formName ,dialogWi) {
+	            dialog = jQuery('#'+dialogName);
+	        if(args.validationFailed) {  
+	            dialog.effect("shake", { times:3 }, 100);  
+	        } else {
+	            clearForm(formName);
+	            PF('rejetDialog').hide(); 
+	            //editDialog.hide();
+	            
+	        }  
+	   	 }
+		    
+		    function clearForm(formName){
+		        jQuery('#'+formName).each(function(){
+			        this.reset();
+			});
+		    }
+		    
+		    function hideUser(){		    	
+		        jQuery('#id_user').click();
+		       
+		    }	    
+		   
+		    
+		</script>
+	
+</html>

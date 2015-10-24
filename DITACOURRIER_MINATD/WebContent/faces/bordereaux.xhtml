@@ -1,0 +1,391 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:pe="http://primefaces.org/ui/extensions"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+  xmlns:c="http://java.sun.com/jsp/jstl/core">
+  
+  <ui:composition template="layout.xhtml"
+  xmlns:sec="http://www.springframework.org/security/facelets/tags">
+  <ui:define name="contenu">
+  
+  
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+          #{msg['bordereau']}
+            <small></small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="${request.contextPath}/faces/index.xhtml"><i class="fa fa-dashboard"></i>#{msg['dashboard']}</a></li>            
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title">#{msg['bordereau.liste']}</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                
+                <!--**************************************************LISTER LES BORDEREAUX*******************************************************************************  -->
+   
+                   
+                 <h:form id="formbordereaus"> 
+		                <p:dataTable id="dataTable" var="bord" value="#{bordereauControllerBean.bordereauListDataModel}" widgetVar="bordereauTable"
+		                        paginator="true" rows="10" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		                          emptyMessage="#{msg['bordereau.global.msgsearch']}"
+		                       selection="#{bordereauControllerBean.selectedBordereaus}">
+		              
+		              	<f:facet name="header">
+		              
+		              	<div class="row rigth">
+              				<div class="col-sm-12">   
+              				<div class="col-sm-3"> 
+              					                  				  		
+				              	<div class="btn-group">
+		                            <button type="button" class="btn btn-default btn-sm btn-flat dropdown-toggle" data-toggle="dropdown">
+		                              Action <span class="caret"></span>
+		                            </button>
+		                            <ul class="dropdown-menu" role="menu">
+		                            
+                            		  <li>
+	                               		<sec:ifAnyGranted  roles="ROLE_bordereaus.add,ROLE_ADMIN">  
+					            				<p:commandLink value="#{msg['button.add']}" update=":newbordereauForm" oncomplete="PF('addConfirmeDialog').show()" title="#{msg['bordereau.add.titre']}"/>		                        
+					                  	</sec:ifAnyGranted> 
+		                              </li>
+		                              <!-- <li class="divider"></li>		                              
+		                              <li>
+	                               		<sec:ifAnyGranted  roles="ROLE_bordereaus.traite1,ROLE_ADMIN">  
+					            				<p:commandLink value="#{msg['bordereau.traiter']}" update=":newbordereauForm,:growl" oncomplete="addDialog.show()" actionListener="#{bordereauControllerBean.traiterBordereauEvent(0)}" title="#{msg['bordereau.traiter.titre']}"/>		                        
+					                  	</sec:ifAnyGranted> 
+		                              </li>	 -->	                             
+		                              <li class="divider"></li>
+		                              <li>
+		                              	   <sec:ifAnyGranted  roles="ROLE_bordereaus.delete,ROLE_ADMIN">  
+		                              	 		<p:commandLink value="#{msg['button.delete']}" oncomplete="PF('deleteDialog').show()" title="#{msg['button.delete.select']}" />
+		         							</sec:ifAnyGranted>
+		                              </li>
+		                             
+		                            </ul>
+		                          </div>
+		                       </div>
+              				 <div class="col-sm-9">	
+              				 	<div class="input-group search-taille">                         
+	                            	<p:outputPanel>						                       
+				                        <p:inputText id="globalFilter" onkeyup="bordereauTable.filter()" styleClass="form-control input-sm"  />                           
+				                    </p:outputPanel>
+				                 </div>	                            
+	                            
+	                       </div>
+	                        </div>
+	                     </div>
+		              		 
+		              	</f:facet>
+		              
+		                <p:column selectionMode="multiple" style="width:18px" />  
+		               
+		                <p:column  sortBy="#{bord.id}" filterBy="#{bord.id}" filterMatchMode="contains"  >
+		                    <f:facet name="header">
+		                        <h:outputText value="#{msg['bordereau.code']}" />
+		                    </f:facet>
+		                    <h:outputText value="#{bord.id}" />
+		                </p:column>
+		                
+		                
+		
+		                <p:column sortBy="#{bord.numbordereau}" filterBy="#{bord.numbordereau}" filterMatchMode="contains">
+		                    <f:facet name="header">
+		                        <h:outputText value="#{msg['bordereau.numbordereau']}" />
+		                    </f:facet>
+		                    <h:outputText value="#{bord.numbordereau}" />
+		                </p:column>
+		                
+		                
+		                 <p:column headerText="#{msg['bordereau.espace']}" id="espace" sortBy="#{bord.espacebordereau.nomespace}" filterBy="#{bord.espacebordereau.nomespace}" filterMatchMode="contains" >
+		                    <h:outputText value="#{bord.espacebordereau.nomespace}" />
+		                </p:column>
+		                
+		                <p:column headerText="#{msg['bordereau.dateCreation']}" id="dateCreation" sortBy="#{bord.dateCreation}" filterBy="#{bord.dateCreation}" filterMatchMode="contains" >
+		                    <h:outputText value="#{bord.dateCreation}" />
+		                </p:column>
+		                
+		                <p:column headerText="#{msg['bordereau.datetraitement']}" id="datetraitement" sortBy="#{bord.datetraitement}" filterBy="#{bord.datetraitement}" filterMatchMode="contains" >
+		                    <h:outputText value="#{bord.datetraitement}" />
+		                </p:column>
+		                
+		                <p:column sortBy="#{bord.usercreateid}" filterBy="#{bord.usercreateid}" filterMatchMode="contains">
+		                    <f:facet name="header">
+		                        <h:outputText value="#{msg['bordereau.usercreateid']}" />
+		                    </f:facet>
+		                    <h:outputText value="#{bord.usercreateid}" />
+		                </p:column>
+		                
+		                 <p:column>
+		                    <f:facet name="header">
+		                        <h:outputText value="" />
+		                    </f:facet>
+		                    <sec:ifAnyGranted  roles="ROLE_bordereaus.view,ROLE_ADMIN">  
+                        	 		<p:commandButton  actionListener="#{bordereauControllerBean.builtBordereauBeforeTransfertEvent(bord.id)}" oncomplete="PF('editDialog').show()" update=":bordereauDetailForm:display" icon="ui-icon-info" styleClass="btn-info" title="#{msg['global.detail']}" />
+                        	 		<p:commandButton  actionListener="#{bordereauControllerBean.builtBordereauBeforeTransfertEvent(bord.id)}" oncomplete="PF('viewerDialog').show()"  icon="ui-icon-info" styleClass="btn-info" title="#{msg['global.detail']}" />
+   							</sec:ifAnyGranted>
+   							
+			                    <sec:ifAnyGranted  roles="ROLE_bordereaus.edit,ROLE_ADMIN">
+			                    		                    	
+	                        	 		<p:commandButton  actionListener="#{bordereauControllerBean.traiterBordereauEvent(bord.id)}" oncomplete="PF('addDialog').show()" update=":newbordereauForm,:growl" icon="ui-icon-pencil" styleClass="btn-success" title="#{msg['bordereau.traiter']}"
+	                        	 		 rendered="${!bord.estTraite}" />
+	                        	 	    
+	   							</sec:ifAnyGranted>
+	   							<sec:ifAnyGranted  roles="ROLE_bordereaus.downloadPJ,ROLE_ADMIN">
+	   							
+	   											  <p:commandButton id="downloadLink" value="#{msg['bordereau.dowloadPJ.button']}" ajax="false"  rendered="${bord.estTraite}"  title="#{msg['bordereau.download']}">
+												    <p:fileDownload value="#{bordereauControllerBean.prepDownload(bord.id)}" />
+												  </p:commandButton>
+								</sec:ifAnyGranted>				  
+	   							
+	   							<sec:ifAnyGranted  roles="ROLE_bordereaus.print,ROLE_ADMIN">
+			                    		                   <!--  <p:dataTable   id="tabBordereau" widgetVar="bordereau">
+			                    		                    </p:dataTable>
+	                        	 		                    <h:inputHidden value=""  />
+	                        	 		                        <h:panelGrid columns="5" >
+						 																 
+																    <h:commandLink title="#{msg['bordereau.imprimer']"  update=":newbordereauForm" icon="ui-icon-print" styleClass="btn-success"  >
+																        <p:graphicImage name="${request.contextPath}/mon_theme/dist/img/img_liens_export/pdf.png" alt="export pdf    "/>
+																        <p:dataExporter  encoding="UTF-8"  type="pdf" target="tabBordereau" fileName="Bordereau_#{bord.numbordereau}" pageOnly="true" preProcessor="#{bordereauControllerBean.preProcessPDFPrint}"/> preProcessor="#{bordereauControllerBean.preProcessPDF}" />
+																    </h:commandLink>
+																    
+																 </h:panelGrid> -->
+	                        	 		 
+	                        	 	    <!-- <p:commandButton  icon="ui-icon-print" styleClass="btn-success" title="#{msg['bordereau.imprimer']}"
+	                        	 		 rendered="${bord.estTraite}" >
+	                        	 		 	
+	                        	 		 	<p:printer target="bordereautraitepj" />
+	                        	 		 
+	                        	 		 </p:commandButton>
+	                        	 		 <p:graphicImage value="#{bord.cheminPj}" id="bordereautraitepj" rendered="${bord.estTraite}" /> -->       	 		 
+	                        	 		
+	                        	 	    
+	   							</sec:ifAnyGranted>
+   							
+		                   	<sec:ifAnyGranted  roles="ROLE_bordereaus.delete,ROLE_ADMIN">  
+                        	 		<p:commandButton  actionListener="#{bordereauControllerBean.editEvent(bord.id)}" oncomplete="PF('deleteDialog').show()"  icon="ui-icon-trash" styleClass="btn-danger" title="#{msg['global.supprimer']}" />
+   							</sec:ifAnyGranted>
+		                </p:column>		
+		            </p:dataTable>
+			         </h:form> 
+                </div><!-- /.box-body -->
+              
+              </div><!-- /.box -->
+
+           </div> 
+          </div><!-- /.row -->
+   
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+      
+       <p:growl id="growl" showDetail="true" life="5000" />
+      
+      <!-- DIALOG DE DETAILS -->
+      
+		<p:dialog header="#{msg['global.detail.bordereau']} #{bordereauControllerBean.bordereau.numbordereau}" widgetVar="editDialog" resizable="false" id="bordereauDlg" modal="true"   > 
+               <h:form id="bordereauDetailForm">
+                <p:panelGrid id="display" columns="1" cellpadding="4" style="margin:0 auto;">  
+ 
+			
+				
+                           <p:dataTable rowIndexVar="rowIndex" id="tbl" var="espacecourrier" value="#{bordereauControllerBean.listEspaceCourrierBor}"
+					                
+					                 paginator="true" rows="10" style="margin: auto;"> <!-- style="margin-bottom:20px;"> -->
+					                 
+							                   
+							        <!-- <f:facet name="{Exporters}">
+							            <h:commandLink>
+							                <p:graphicImage name="/mon_theme/dist/img/img_liens_export/excel.png" width="24" alt="export excel"/>
+							                <p:dataExporter type="xls" target="tbl" fileName="Bordereau_#{bordereauControllerBean.bordereau.numbordereau}" />
+							            </h:commandLink>
+							 
+							            <h:commandLink>
+							                <p:graphicImage name="/mon_theme/dist/img/img_liens_export/pdf.png" width="24" alt="export pdf"/>
+							                <p:dataExporter type="pdf" target="tbl" fileName="Bordereau_#{bordereauControllerBean.bordereau.numbordereau}"/>
+							            </h:commandLink>
+							 
+							            <h:commandLink>
+							                <p:graphicImage name="/mon_theme/dist/img/img_liens_export/csv.png" width="24" alt="export csv"/>
+							                <p:dataExporter type="csv" target="tbl" fileName="Bordereau_#{bordereauControllerBean.bordereau.numbordereau}" />
+							            </h:commandLink>
+							 
+							            <h:commandLink>
+							                <p:graphicImage name="/mon_theme/dist/img/img_liens_export/xml.png" width="24" alt="export xml"/>
+							                <p:dataExporter type="xml" target="tbl" fileName="Bordereau_#{bordereauControllerBean.bordereau.numbordereau}" />
+							            </h:commandLink>
+							        </f:facet> -->							      
+					 <!-- REMARQUE LES COLONNES QUI NE SOUHAITENT PAS ETRE EXPORT2 POSSEDE L4ATTRIBUT exportable="false" -->
+							        <p:column>
+							            <f:facet name="header">
+							                <h:outputText value="Ordre" />
+							            </f:facet>
+							            <h:outputText value="#{rowIndex+1}" />
+							        </p:column>
+							 
+							        <p:column>
+							            <f:facet name="header">
+							                <h:outputText value="Numero Enreg"/>
+							            </f:facet>
+							            <h:outputText value="#{espacecourrier.courrier.refid}" />
+							        </p:column>
+							 
+							        <p:column>
+							            <f:facet name="header">
+							                <h:outputText value="Objet" />
+							            </f:facet>
+							            <h:outputText value="#{espacecourrier.courrier.courobjet}" />
+							        </p:column>							 
+
+					    </p:dataTable>
+					    
+				
+					 
+						 <h:panelGrid columns="4" columnClasses="label, value">
+						  
+						    <!-- <h3>Export Page Data Only</h3> -->
+						    <h:commandLink>
+						        <p:graphicImage value="/mon_theme/dist/img/img_liens_export/excel.png" alt="export_excel"/>
+						        <p:dataExporter type="xls" target="tbl" fileName="Bordereau_#{bordereauControllerBean.bordereau.numbordereau}"  /> <!-- postProcessor="#{bordereauControllerBean.postProcessXLS}"/> -->
+						    </h:commandLink>
+						 
+						    <h:commandLink>
+						        <p:graphicImage value="/mon_theme/dist/img/img_liens_export/pdf.png" alt="export_pdf"/>
+						        <p:dataExporter type="pdf" target="tbl" fileName="Bordereau_#{bordereauControllerBean.bordereau.numbordereau}"  preProcessor="#{bordereauControllerBean.preProcessPDF}"/> <!-- preProcessor="#{bordereauControllerBean.preProcessPDF}" /> -->
+						    </h:commandLink>
+						 
+						    <h:commandLink>
+						        <p:graphicImage value="/mon_theme/dist/img/img_liens_export/csv.png" alt="export_csv" />
+						        <p:dataExporter type="csv" target="tbl" fileName="Bordereau_#{bordereauControllerBean.bordereau.numbordereau}"   />
+						    </h:commandLink>
+						 
+						    <h:commandLink>
+						        <p:graphicImage value="/mon_theme/dist/img/img_liens_export/xml.png" alt="export_xml" />
+						        <p:dataExporter type="xml" target="tbl" fileName="Bordereau_#{bordereauControllerBean.bordereau.numbordereau}"  />
+						    </h:commandLink>
+						   
+						 </h:panelGrid>
+						 
+	                    <f:facet name="footer">	                            
+	                            <!-- <h:commandButton  styleClass="btn btn-primary pull-right" value="#{msg['button.close']}" onComplete="editDialog.hide()"/> -->
+	                            <p:commandLink global="false"  styleClass="btn btn-primary pull-right" value="#{msg['button.close']}" style="color:#ffffff;" onclick="editDialog.hide();" />
+	                    </f:facet>
+	                   <!-- 
+	                    <p:commandButton value="#{msg['page.list.utilisateur.print']}" ajax="false"  style="background:#99B4D1;color:#fff;float: left;"  icon="icon-print" action="#{reportingBean.printListProduit}"  />
+					 -->
+                </p:panelGrid> 
+             </h:form>
+          </p:dialog> 
+          
+          <!--  -->
+          <p:dialog header="#{msg['global.detail.bordereau']} #{bordereauControllerBean.bordereau.numbordereau}" widgetVar="viewerDialog" resizable="false" id="bordereauviwerDlg" modal="true"   > 
+               <pe:documentViewer height="600" width="700" url="#{bordereauControllerBean.chemintemp}"/> 
+          </p:dialog> 
+          <!--  -->
+          
+          
+          <!-- DIALOG DE TRAITEMENT DU BORDEREAU -->
+             
+          <p:dialog header="#{msg['bordereau.traitement']}" widgetVar="addDialog" resizable="false" id="newbordereauDlg"  modal="true" > 
+              <h:form id="newbordereauForm" title="#{msg['bordereau.dialogue.form.traite.title']}"   enctype="multipart/form-data"  >
+                
+              		    <p:messages />
+              		    
+		                  <h:panelGrid columns="1" cellpadding="4" style="margin:0 auto;" width="500">
+		                
+		                   <h:panelGrid columns="2" >
+		                 
+		       					<p:outputLabel for="numbordereauTraitement" value="#{msg['bordereau.numero']} :" />			
+	     					    <p:selectOneMenu id="numbordereauTraitement" value="#{bordereauControllerBean.bordereau}" panelStyle="width:180px"  title="#{msg['bordereau.numbordereau.title']}" required="true" requiredMessage="#{msg['bordereau.numero.require']}"
+							                         effect="fade"  style="width:160px" filter="true" filterMatchMode="startsWith" disabled="#{bordereauControllerBean.orderActivationNumbordereau}"  converter="bordereauConverter" >
+							                         
+							            <p:ajax  listener="#{bordereauControllerBean.afficheTraitementDialogEntier}" update="newbordereauForm,:growl" global="false"/>
+							            
+							            <f:selectItems value="#{bordereauControllerBean.listBordereauNonTraite}" var="b" itemLabel="#{b.numbordereau}" itemValue="#{b}" />					 
+							           
+							    </p:selectOneMenu>
+							    
+		                    </h:panelGrid> 
+		                    
+		                    <p:separator/>
+		                    
+		                   <p:column> 
+		                    <h:panelGrid columns="1" cellpadding="4" style="margin:0 auto;" width="800"> 
+		                        <div id="uniform-undefined" class="uploader">
+							    	<p:fileUpload fileUploadListener="#{bordereauControllerBean.handleFileUpload}" mode="advanced" dragDropSupport="false"
+		                                  multiple="true" update="data_file" sizeLimit="10000000" fileLimit="3"  cancelLabel="Annuler" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+		                                                                  label="#{msg['bordereau.add.pj']}" style="font-size: x-small" auto = "true" rendered="${bordereauControllerBean.orderActivationTraitementBordDialog}"/> 
+		                        </div> 
+		                        
+		                            <p:dataTable value="#{bordereauControllerBean.files}" var="file" rowIndexVar="rowIndex" type="unordered" itemType="none" paginator="true" rows="10" styleClass="paginated"
+		                                           id="data_file" rendered="${bordereauControllerBean.orderActivationTraitementBordDialog}" >
+								        <f:facet name="header">
+								             #{msg['File.upload']}
+								        </f:facet>
+								        <p:column  >				                   
+						                    <h:outputText value="#{file.fileName}" />
+						                </p:column>
+						                <p:column  >				                   
+						                    <h:outputText value="#{file.size} octets" />
+						                </p:column>
+						                <p:column  >
+								        	<p:commandButton actionListener="#{bordereauControllerBean.dropTempFileByIndex(rowIndex)}"  icon="ui-icon-trash" update="data_file" />
+								        </p:column>
+								    </p:dataTable>
+								</h:panelGrid>    
+                           </p:column>
+                           
+					        <!-- <p:growl id="messages" showDetail="true" />	 -->
+					        				    
+		                    <f:facet name="footer">
+		                            <h:commandButton rendered="#{bordereauControllerBean.orderActivationTraitementBordDialog}" styleClass="btn btn-primary pull-left" value="#{msg['button.add']}"  update=":formbordereaus, :growl" actionListener="#{bordereauControllerBean.traiterBordereau(fileUploadEvent)}" oncomplete="PF('addDialog').hide()"  />
+		                    		<!-- <p:commandButton styleClass="btn btn-small btn-success" value="#{msg['button.add']}"  update=":formbordereaus, :growl" actionListener="#{bordereauControllerBean.traiterBordereau(fileUploadEvent)}" oncomplete="addDialog.hide()"  /> -->
+			                        <!-- <h:commandButton  styleClass="btn btn-primary pull-right" value="#{msg['button.close']}" onComplete="addDialog.hide()"/> -->
+			                        <p:commandLink global="false"  styleClass="btn btn-primary pull-right" value="#{msg['button.close']}" style="color:#ffffff;" onclick="addDialog.hide();" />
+		                    </f:facet>
+			             </h:panelGrid>
+   
+              </h:form>
+          </p:dialog> 
+          
+         <!-- DIALOG DE CONFIRMATION AJOUT BORDEREAU -->
+          
+          <h:form id="addConfirmeFrom">
+        	<p:confirmDialog  header="#{msg['glabel.ajouter']}" message="#{msg['global.bordereau.addconfirme']}" severity="alert"  widgetVar="addConfirmeDialog">			
+				<p:commandButton value="#{msg['button.oui']}" update=":formbordereaus,:growl"   actionListener="#{bordereauControllerBean.create()}" oncomplete="PF('addConfirmeDialog').hide();"/>			
+				<p:commandButton value="#{msg['button.non']}" onclick="addConfirmeDialog.hide();" type="button" /> 
+			</p:confirmDialog> 
+        
+        </h:form>
+          
+          <!-- DIALOG DE CONFIRMATION DE LA SUPPRESSION -->
+          
+          <h:form id="deleteFrom">
+        	<p:confirmDialog  header="#{msg['global.supprimer']}" message="#{msg['global.supprimer.label']}" severity="alert"  widgetVar="deleteDialog">			
+				<p:commandButton value="#{msg['button.oui']}" update=":formbordereaus,:growl"   actionListener="#{bordereauControllerBean.delete(actionEvent)}" 
+				 oncomplete="PF('deleteDialog').hide();"/>			
+				<p:commandButton value="#{msg['button.non']}" onclick="deleteDialog.hide();" type="button" /> 
+			</p:confirmDialog> 
+        
+        </h:form>
+      
+		
+		
+		
+   
+   </ui:define>
+  </ui:composition>
+</html>

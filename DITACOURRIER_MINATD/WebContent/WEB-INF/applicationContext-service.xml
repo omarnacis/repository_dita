@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+          http://www.springframework.org/schema/context/spring-context-2.5.xsd http://www.springframework.org/schema/context/spring-context-2.5.xsd/spring-spring-context-2.5.xsd-3.0.xsd
+">
+
+ 	
+ 	<bean id="userService"
+        class="cm.dita.service.domaine.impl.user.UserServiceImpl">
+        <property name="dao" ref="userDao" />
+        <property name="accessRessourceDao" ref="accessRessourceDao" />
+        <property name="mouchardDao" ref="mouchardDao"/>
+    </bean>
+   
+     
+     <bean id="parametersService"
+        class="cm.dita.service.domaine.impl.user.ParametersServiceImpl">
+        <property name="dao" ref="parametersDao" />
+    </bean>
+    
+   
+  
+    <bean id="accessRessourceService"
+        class="cm.dita.service.domaine.impl.user.AccessRessourceServiceImpl">
+        <property name="dao" ref="accessRessourceDao" />
+    </bean>
+    
+     <bean id="groupService"
+        class="cm.dita.service.domaine.impl.user.GroupServiceImpl">
+        <property name="dao" ref="groupDao" />
+        <property name="groupAccessRessourceDao" ref="groupAccessRessourceDao"></property>
+        <property name="roleGroupDao" ref="roleGroupDao"></property>
+    </bean>
+     
+     <bean id="groupAccessRessourceService"
+        class="cm.dita.service.domaine.impl.user.GroupAccessRessourceServiceImpl">
+        <property name="dao" ref="groupAccessRessourceDao" />
+         <property name="mouchardDao" ref="mouchardDao"/>
+    </bean>
+     
+    <bean id="roleGroupService"
+        class="cm.dita.service.domaine.impl.user.RoleGroupServiceImpl">
+        <property name="dao" ref="roleGroupDao" />
+        <property name="mouchardDao" ref="mouchardDao"/>
+        
+    </bean>
+    
+    <bean id="roleService"
+        class="cm.dita.service.domaine.impl.user.RoleServiceImpl">
+        <property name="dao" ref="roleDao" />
+        <property name="roleGroupDao"  ref="roleGroupDao"/>
+        <property name="roleUserDao" ref="roleUserDao"></property>
+    </bean>
+	
+     <bean id="roleUserService"
+	        class="cm.dita.service.domaine.impl.user.RoleUserServiceImpl">
+	        <property name="dao" ref="roleUserDao" />
+	        <property name="mouchardDao" ref="mouchardDao"/>
+	</bean> 	
+    
+	<bean id="activitesRessourceService" class="cm.dita.service.domaine.impl.ActivitesRessourceServiceImpl">
+		<property name="dao" ref="activitesDao"/>
+	</bean>
+
+	<bean id="alarmesRessourceService" class="cm.dita.service.domaine.impl.AlarmesRessourceServiceImpl">
+		<property name="dao" ref="alarmesDao"/>
+	</bean>
+	
+	<bean id="bordereauRessourceService" class="cm.dita.service.domaine.impl.BordereauRessourceServiceImpl">
+		<property name="dao" ref="bordereauDao"/>
+	</bean>
+
+	<bean id="courriersRessourceService" class="cm.dita.service.domaine.impl.CourriersRessourceServiceImpl">
+		<property name="dao" ref="courriersDao"/>
+	</bean>
+
+	<bean id="espaceRessourceService" class="cm.dita.service.domaine.impl.EspaceRessourceServiceImpl">
+		<property name="dao" ref="espaceDao"/>
+	</bean>
+
+	<bean id="espaceCourrierRessourceService" class="cm.dita.service.domaine.impl.EspaceCourrierRessourceServiceImpl">
+		<property name="dao" ref="espaceCourrierDao"/>
+		<property name="courriersDao" ref="courriersDao"/>
+		<property name="bordereauDao" ref="bordereauDao"/>
+		<property name="statutsDao" ref="statutsDao"/>
+		<property name="espaceDao" ref="espaceDao"/>
+		<property name="mouchardDao" ref="mouchardDao"/>
+		<property name="userDao" ref="userDao"/>
+	</bean>
+
+
+	<bean id="mouchardRessourceService" class="cm.dita.service.domaine.impl.MouchardRessourceServiceImpl">
+		<property name="dao" ref="mouchardDao"/>
+	</bean>
+
+	<bean id="piecesjointesRessourceService" class="cm.dita.service.domaine.impl.PiecesjointesRessourceServiceImpl">
+		<property name="dao" ref="piecesjointesDao"/>
+	</bean>
+
+	<bean id="preferencesRessourceService" class="cm.dita.service.domaine.impl.PreferencesRessourceServiceImpl">
+		<property name="dao" ref="preferencesDao"/>
+	</bean>
+
+	<bean id="prioritesRessourceService" class="cm.dita.service.domaine.impl.PrioritesRessourceServiceImpl">
+		<property name="dao" ref="prioritesDao"/>
+	</bean>	
+
+	<bean id="statutsRessourceService" class="cm.dita.service.domaine.impl.StatutsRessourceServiceImpl">
+		<property name="dao" ref="statutsDao"/>
+	</bean>
+
+	<bean id="typescourriersRessourceService" class="cm.dita.service.domaine.impl.TypescourriersRessourceServiceImpl">
+		<property name="dao" ref="typescourriersDao"/>
+	</bean>
+
+	<bean id="typespersonnelRessourceService" class="cm.dita.service.domaine.impl.TypespersonnelRessourceServiceImpl">
+		<property name="dao" ref="typespersonnelDao"/>
+	</bean>
+
+	<bean id="typespiecesjointesRessourceService" class="cm.dita.service.domaine.impl.TypespiecesjointesRessourceServiceImpl">
+		<property name="dao" ref="typespiecesjointesDao"/>
+	</bean>
+
+	<bean id="correspondantRessourceService" class="cm.dita.service.domaine.impl.CorrespondantRessourceServiceImpl">
+		<property name="dao" ref="correspondantDao"/>
+	</bean>
+	
+	<bean id="IImageService" class="cm.dita.service.domaine.impl.IImageServiceImpl">
+		<property name="dao" ref="IImageDao"/>
+	</bean>
+ 		
+   </beans>

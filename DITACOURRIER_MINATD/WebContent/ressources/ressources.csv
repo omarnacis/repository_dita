@@ -1,0 +1,84 @@
+nom,detaille
+ROLE_espaces,Page de listing des espaces
+ROLE_espaces.add,Ajouter un espace
+ROLE_espaces.edit,Editer un espace
+ROLE_espaces.view,Visualiser un espace 
+ROLE_espaces.print,Imprimer un espace
+ROLE_espaces.delete,Supprimer un espace
+
+ROLE_users,Page de listing des utilisateurs
+ROLE_users.add,Ajouter un utilisateur
+ROLE_users.edit,Editer un utilisateur
+ROLE_users.view,Visualiser un utilisateur 
+ROLE_users.print,Imprimer un utilisateur
+ROLE_users.delete,Supprimer un utilisateur
+ROLE_users.initPass,Reinitialiser le mot de passe
+ROLE_users.role,Attribuer les privileges a un utilisateur
+
+ROLE_roles,Page de listing des roles
+ROLE_roles.add,Ajouter un role
+ROLE_roles.edit,Editer un role
+ROLE_roles.view,Visualiser un role 
+ROLE_roles.print,Imprimer un role
+ROLE_roles.delete,Supprimer un role
+ROLE_roles.groupes,Liste les groupes d'un role
+ROLE_roles.add.groupe,Ajouter un groupe a un role
+
+ROLE_groups,Page de listing des groupes
+ROLE_groups.add,Ajouter un groupe
+ROLE_groups.edit,Editer un groupe
+ROLE_groups.view,Visualiser un groupe 
+ROLE_groups.print,Imprimer un groupe
+ROLE_groups.delete,Supprimer un groupe
+ROLE_groups.access,Liste les access d'un groupe
+ROLE_groups.add.access,Ajouter un access a un groupe
+
+ROLE_preferences,Page de listing des preferences
+ROLE_preferences.add,Ajouter une preference
+ROLE_preferences.edit,Editer une preference
+ROLE_preferences.view,Visualiser une preference 
+ROLE_preferences.print,Imprimer une preference
+ROLE_preferences.delete,Supprimer une preference
+
+ROLE_bordereaus,Page de listing des bordereaux
+ROLE_bordereaus.add,Ajouter un bordereau
+ROLE_bordereaus.traite1,Traiter un bordereau de numero connu
+ROLE_bordereaus.edit,Editer un bordereau
+ROLE_bordereaus.view,Visualiser un bordereau 
+ROLE_bordereaus.print,Imprimer un bordereau
+ROLE_bordereaus.delete,Supprimer un bordereau
+ROLE_bordereaus.downloadPJ, Télécharger un bordereau
+
+ROLE_statistique, Page de visualisation des statistiques
+ROLE_statistique.view, visualiser les statistiques
+
+ROLE_mouchard, page de visualisation du mouchard
+ROLE_mouchard.view, visualiser le mouchard
+
+ROLE_suivi, Page de visualisation du suivi
+ROLE_suivi.recherche, rechercher le suivi d'un courrier
+
+ROLE_correspondants,Page de listing des correspondants
+ROLE_correspondants.add,Ajouter un correspondants
+ROLE_correspondants.edit,Editer un correspondant
+ROLE_correspondants.view,Visualiser un correspondant 
+ROLE_correspondants.print,Imprimer un correspondant
+ROLE_correspondants.delete,Supprimer un correspondant
+ROLE_correspondants.add,Ajouter un courrier
+
+ROLE_courrier,Page de listing des courriers
+ROLE_courrier.add,Ajouter un courrier
+ROLE_courrier.edit,Editer un courrier
+ROLE_courrier.view,Visualiser un courrier 
+ROLE_courrier.print,Imprimer un courrier
+ROLE_courrier.delete,Supprimer un courrier
+ROLE_courrier.rejeter,Rejeter un courrier
+ROLE_courrier.transferer,Transerer un courrier dans un autre espace
+ROLE_courrier.deleteTrans,Supprimer une transmission
+ROLE_courrier.addPJ, Ajouter une pièce jointe du courrier
+ROLE_courrier.viewPJ, Voire les pièces jointes du courrier
+ROLE_courrier.downloadPJ,telecharger une pièce jointe du courrier
+ROLE_courrier.deletePJ,Supprimer une pièce jointe du courrier
+
+ROLE_notification,Page de listing des notifictions
+ROLE_notification.print,Imprimer une notification

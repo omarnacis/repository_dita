@@ -1,0 +1,182 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:p="http://primefaces.org/ui"
+   xmlns:c="http://java.sun.com/jsp/jstl/core"
+   xmlns:sec="http://www.springframework.org/security/facelets/tags"
+  xmlns:ui="http://java.sun.com/jsf/facelets">
+       <header class="main-header">			
+			
+			 <c:choose>
+		      	<c:when test="{applicationBean.is_text_logo == 'true'}">
+		      		<a href="${request.contextPath}/faces/index.xhtml" class="logo">#{applicationBean.LOGO}</a>
+		      	</c:when>
+		      	<c:otherwise>
+		      		<a href="${request.contextPath}/faces/index.xhtml" class="logo">
+		      			<img alt="#{applicationBean.LOGO}" src="#{facesContext.externalContext.requestContextPath}#{applicationBean.LOGO}" width="200" height="50" />
+		      		</a>
+		      	</c:otherwise>
+		      </c:choose>
+			
+		
+			
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top" role="navigation">
+         <p:clock pattern="HH:mm:ss dd.MM.yyyy" mode="server" />
+          <!-- Sidebar toggle button-->
+          <!-- <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a> -->
+          
+         <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">  
+            <li><span class="hidden-xs"><h3> #{sessionScope['SS_USER'].espace.nomespace}</h3></span></li>
+             <!--  <li class="dropdown notifications-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <i class="fa fa-bell-o"></i>
+                  <span class="label label-warning">10</span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li class="header">You have 10 notifications</li>
+                  <li>
+                    inner menu: contains the actual data
+                    <ul class="menu">
+                      <li>
+                        <a href="#">
+                          <i class="fa fa-users text-aqua"></i> 5 new members joined today
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#">
+                          <i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the page and may cause design problems
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#">
+                          <i class="fa fa-users text-red"></i> 5 new members joined
+                        </a>
+                      </li>
+
+                      <li>
+                        <a href="#">
+                          <i class="fa fa-shopping-cart text-green"></i> 25 sales made
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#">
+                          <i class="fa fa-user text-red"></i> You changed your username
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="footer"><a href="#">View all</a></li>
+                </ul>
+              </li>  -->
+              
+              <!-- LANGUAGE MENU -->
+              
+              <li class="dropdown ">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <img src="${request.contextPath}/faces/img/#{sessionScope['SS_USER'].langue}.png" width="30"/>
+                </a>
+                
+                <ul class="dropdown-menu" style="min-width: 50px;">
+                <h:form>
+                <c:choose>
+                	<c:when test="#{sessionScope['SS_USER'].langue == 'en'}">
+                			
+                			<li style="width:10">
+				                <h:commandLink  action="#{changeLocale.changeLocale('fr')}"  title="#{msg[changeLocale.locale]}">
+				                 	   	<img src="${request.contextPath}/faces/img/fr.png" width="30"/>
+				                 </h:commandLink> 
+			                 </li>
+                	
+                	</c:when>
+                	
+                	<c:when test="#{sessionScope['SS_USER'].langue == 'fr'}">
+                			
+                			<li style="width:10">
+				                <h:commandLink  action="#{changeLocale.changeLocale('en')}"  title="#{msg[changeLocale.locale_2]}">
+				                 	   	<img src="${request.contextPath}/faces/img/en.png" width="30"/>
+				                 </h:commandLink> 
+			                 </li>
+                	
+                	</c:when>
+                
+                </c:choose>
+                
+                </h:form>
+               
+                </ul>
+              </li>
+             
+              <!-- User Account: style can be found in dropdown.less -->
+              <li class="dropdown user user-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                 
+                  <img src="${request.contextPath}/mon_theme/dist/img/avatar.png" class="user-image" alt="User Image"/>
+                  <span class="hidden-xs">#{sessionScope['SS_USER'].login}</span>
+                </a>
+                <ul class="dropdown-menu"  id="id_user">
+                  <!-- User image -->
+                  <li class="user-header">
+                   
+                    <img src="${request.contextPath}/mon_theme/dist/img/avatar.png" class="img-circle" alt="User Image"/>
+                    <p>
+                      #{sessionScope['SS_USER'].login}-#{sessionScope['SS_USER'].infosPersonne.nom} #{sessionScope['SS_USER'].infosPersonne.prenom}
+                      <small>#{sessionScope['SS_USER'].dateCreation}</small>
+                    </p>
+                  </li>
+                  <!-- Menu Body -->
+                  <li class="user-body">
+                    <div class="col-xs-12 text-center">
+                     	<h:form>                      
+			              <p:commandLink update=":profiluserForm" value="#{msg['menu.password']}"  actionListener="#{profilBean.profilEvent(actionEvent)}" oncomplete="PF('passDialog').show();PF(hideUser())" styleClass="btn btn-default btn-flat"    />
+	                    </h:form> 
+                    </div>
+                    
+                  </li>
+                  <!-- Menu Footer-->
+                  <li class="user-footer">
+                    <div class="pull-left">
+	                    <h:form>                      
+			              	<p:commandLink update=":profiluserForm" value="#{msg['global.profil']}"  actionListener="#{profilBean.profilEvent(actionEvent)}" oncomplete="PF('profilDialog').show();PF(hideUser())" styleClass="btn btn-default btn-flat"    />
+	                     </h:form> 
+		            </div>
+                    <div class="pull-right">
+                    	<!-- <h:outputLink styleClass="btn btn-default btn-flat"  value="#{facesContext.externalContext.requestContextPath}/j_spring_security_logout">
+                     	#{msg['global.logout']}
+                      </h:outputLink> -->
+                      
+                      <h:form>                      
+			              	<h:commandLink  value="#{msg['global.logout']}"  action="#{loginBean.logout}" styleClass="btn btn-default btn-flat"    />
+	                     </h:form>
+                      
+                    </div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </nav>
+			
+			
+		
+		
+		</header>
+		      
+		  <!-- InCLUSION DU FORMULAURE E PROFIL -->
+		  		<ui:include src="../user/profil.xhtml"></ui:include>
+		 <!--  InCLUSION DU FORMULAURE DE CHANGEMENT DE MOT DE PASSE -->
+		  		<ui:include src="../user/changePassword.xhtml"></ui:include>
+		  		
+		  		<ui:include src="authen.xhtml"></ui:include>
+	  	 
+          
+         
+</html>

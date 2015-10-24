@@ -1,0 +1,169 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets">
+  <ui:composition template="layout.xhtml"
+  xmlns:sec="http://www.springframework.org/security/facelets/tags">
+  <ui:define name="contenu">
+  
+  
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+          #{msg['notification']}
+            <small></small>
+          </h1>
+         <!--  <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="#">Tables</a></li>
+            <li class="active">Simple</li>
+          </ol> -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title">#{msg['notification.liste']}</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                   
+                                                                 
+                   
+                 <h:form id="formnotifications"> 
+                 <p:commandButton  actionListener="#{notificationBean.courrierEnRetard()}"  />
+   						
+		              <!--   <p:dataTable id="dataTable" var="notification" value="#{notificationBean.notificationListDataModel}" widgetVar="notificationTable"
+		                        paginator="true" rows="10" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		                       rowsPerPageTemplate="10,15,50"   emptyMessage="#{msg['global.msgsearch']}"
+		                       selection="#{notificationBean.selectednotification}">
+		              
+		              	<f:facet name="header">
+		              
+		              	<div class="row rigth">
+              				<div class="col-sm-12">   
+              				<div class="col-sm-3"> 
+              					
+              				 	               				  		
+				              	<div class="btn-group">
+		                            <button type="button" class="btn btn-default btn-sm btn-flat dropdown-toggle" data-toggle="dropdown">
+		                              Action <span class="caret"></span>
+		                            </button>
+		                            <ul class="dropdown-menu" role="menu">
+		                              <li>
+	                               		<sec:ifAnyGranted  roles="ROLE_notifications.add,ROLE_ADMIN">  
+					            				<p:commandLink value="#{msg['button.add']}" update=":newnotificationForm" oncomplete="addDialog.show()" actionListener="#{notificationBean.ajoutEvent(actionEvent)}"  title="Creates new user"/>		                        
+					                  	</sec:ifAnyGranted> 
+		                              </li>		                             
+		                              <li class="divider"></li>
+		                              <li>
+		                              	   <sec:ifAnyGranted  roles="ROLE_notifications.delete,ROLE_ADMIN">  
+		                              	 		<p:commandLink value="#{msg['button.delete']}" oncomplete="deleteDialog.show()" />
+		         							</sec:ifAnyGranted>
+		                              </li>
+		                             
+		                            </ul>
+		                          </div>
+		                       </div>
+              				 <div class="col-sm-9">	
+              				 	<div class="input-group search-taille">                         
+	                            	<p:outputPanel>						                       
+				                        <p:inputText id="globalFilter" onkeyup="notificationTable.filter()" styleClass="form-control input-sm"  />                           
+				                    </p:outputPanel>
+				                 </div>	                            
+	                            
+	                       </div>
+	                        </div>
+	                     </div>
+		              		 
+		              	</f:facet>
+		              
+		                <p:column selectionMode="multiple" style="width:18px" />  
+		               
+		                <p:column  sortBy="#{notification.id}" filterBy="#{notification.id}" filterMatchMode="contains"  >
+		                    <f:facet name="header">
+		                        <h:outputText value="#{msg['notification.code']}" />
+		                    </f:facet>
+		                    <h:outputText value="#{notification.id}" />
+		                </p:column>
+		                
+		                
+		
+		                <p:column sortBy="#{notification.nomnotification}" filterBy="#{notification.nomnotification}" filterMatchMode="contains">
+		                    <f:facet name="header">
+		                        <h:outputText value="#{msg['notification.nom']}" />
+		                    </f:facet>
+		                    <h:outputText value="#{notification.nomnotification}" />
+		                </p:column>
+		                
+		                <p:column sortBy="#{notification.dateCreation}" filterBy="#{notification.dateCreation}" filterMatchMode="contains">
+		                    <f:facet name="header">
+		                        <h:outputText value="#{msg['notification.date']}" />
+		                    </f:facet>
+		                    <h:outputText value="#{notification.dateCreation}" />
+		                </p:column>
+		                
+		                 <p:column>
+		                    <f:facet name="header">
+		                        <h:outputText value="" />
+		                    </f:facet>
+		                    <sec:ifAnyGranted  roles="ROLE_notifications.view,ROLE_ADMIN">  
+                        	 		<p:commandButton  actionListener="#{notificationBean.editEvent(notification)}" oncomplete="editDialog.show()" update=":notificationDetailForm:display" icon="ui-icon-info" styleClass="btn-info" title="#{msg['global.detail']}" />
+   							</sec:ifAnyGranted>
+		                    <sec:ifAnyGranted  roles="ROLE_notifications.edit,ROLE_ADMIN">  
+                        	 		<p:commandButton  actionListener="#{notificationBean.editEvent(notification)}" oncomplete="addDialog.show()" update=":newnotificationForm:display" icon="ui-icon-pencil" styleClass="btn-success" title="#{msg['global.modifier']}" />
+   							</sec:ifAnyGranted>
+		                   	<sec:ifAnyGranted  roles="ROLE_notifications.delete,ROLE_ADMIN">  
+                        	 		<p:commandButton  actionListener="#{notificationBean.editEvent(notification)}" oncomplete="deleteDialog.show()"  icon="ui-icon-trash" styleClass="btn-danger" title="#{msg['global.supprimer']}" />
+   							</sec:ifAnyGranted>
+		                </p:column>		
+		            </p:dataTable> -->
+			         </h:form> 
+                </div><!-- /.box-body -->
+              
+              </div><!-- /.box -->
+
+           </div> 
+          </div><!-- /.row -->
+   
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+      
+       <p:growl id="growl" showDetail="false" life="5000" />
+      
+      <!-- DIALOG DE DETAILS -->
+      
+		<!-- <p:dialog header="#{msg['global.detail']}" widgetVar="editDialog" resizable="false" id="userDlg" modal="true"> 
+               <h:form id="notificationDetailForm">
+                <p:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">   
+						<h:outputText value="#{msg['notification.code']}"></h:outputText>
+						<h:outputText value="#{notificationBean.notification.id}"></h:outputText>
+						
+						<h:outputText value="#{msg['notification.nom']}"></h:outputText>
+						<h:outputText value="#{notificationBean.notification.nomnotification}"></h:outputText>
+						
+						<h:outputText value="#{msg['notification.date']}"></h:outputText>
+						<h:outputText value="#{notificationBean.notification.dateCreation}"></h:outputText>
+                       
+
+                    <f:facet name="footer">
+                            <p:commandButton value="#{msg['button.close']}" oncomplete="editDialog.hide()" />
+                    </f:facet>
+                </p:panelGrid> 
+             </h:form>
+          </p:dialog> 
+           -->
+         
+          
+          
+   
+   </ui:define>
+  </ui:composition>
+</html>

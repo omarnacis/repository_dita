@@ -1,0 +1,310 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets">
+  <ui:composition template="../layout.xhtml"
+  xmlns:sec="http://www.springframework.org/security/facelets/tags">
+  <ui:define name="contenu">
+  
+  
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+          #{msg['roles']}
+            <small></small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="${request.contextPath}/faces/index.xhtml"><i class="fa fa-dashboard"></i>#{msg['dashboard']}</a></li>            
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title">#{msg['role.liste']}</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                   
+                                                                 
+                   
+                 <h:form id="formroles"> 
+		                <p:dataTable id="dataTable" var="role" value="#{roleBean.roleListDataModel}" widgetVar="roleTable"
+		                        paginator="true" rows="10" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		                       emptyMessage="#{msg['global.msgsearch']}"
+		                       selection="#{roleBean.selectedRole}">
+		              
+		              	<f:facet name="header">
+		              
+		              	<div class="row rigth">
+              				<div class="col-sm-12">   
+              				<div class="col-sm-3"> 
+              					
+              				 	               				  		
+				              	<div class="btn-group">
+		                            <button type="button" class="btn btn-default btn-sm btn-flat dropdown-toggle" data-toggle="dropdown">
+		                              Action <span class="caret"></span>
+		                            </button>
+		                            <ul class="dropdown-menu" role="menu">
+		                              <li>
+	                               		<sec:ifAnyGranted  roles="ROLE_roles.add,ROLE_ADMIN">  
+					            				<p:commandLink value="#{msg['button.add']}" update=":newRoleForm" oncomplete="PF('addDialog').show()" actionListener="#{roleBean.ajoutEvent(actionEvent)}" />		                        
+					                  	</sec:ifAnyGranted> 
+		                              </li>		                             
+		                             <!-- <li class="divider"></li>
+		                               <li>
+		                              	   <sec:ifAnyGranted  roles="ROLE_roles.delete,ROLE_ADMIN">  
+		                              	 		<p:commandLink value="#{msg['button.delete']}" oncomplete="deleteDialog.show()" />
+		         							</sec:ifAnyGranted>
+		                              </li> -->
+		                             
+		                            </ul>
+		                          </div>
+		                       </div>
+              				 <div class="col-sm-9">	
+              				 	<div class="input-group search-taille">                         
+	                            	<p:outputPanel>						                       
+				                        <p:inputText id="globalFilter" onkeyup="roleTable.filter()" styleClass="form-control input-sm"  />                           
+				                    </p:outputPanel>
+				                 </div>	                            
+	                            
+	                       </div>
+	                        </div>
+	                     </div>
+		              		 
+		              	</f:facet>
+		              
+		              <!--   <p:column selectionMode="multiple" style="width:18px" />   -->
+		               
+		              <!--   <p:column  sortBy="#{role.identifier}" filterBy="#{role.identifier}" filterMatchMode="contains"  >
+		                    <f:facet name="header">
+		                        <h:outputText value="#{msg['role.code']}" />
+		                    </f:facet>
+		                    <h:outputText value="#{role.identifier}" />
+		                </p:column>
+		                
+		                 -->
+		
+		                <p:column sortBy="#{role.roleName}" filterBy="#{role.roleName}" filterMatchMode="contains">
+		                    <f:facet name="header">
+		                        <h:outputText value="#{msg['role.nom']}" />
+		                    </f:facet>
+		                    <h:outputText value="#{role.roleName}" />
+		                </p:column>
+		                
+		                <p:column sortBy="#{role.dateCreation}" filterBy="#{role.dateCreation}" filterMatchMode="contains">
+		                    <f:facet name="header">
+		                        <h:outputText value="#{msg['role.date']}" />
+		                    </f:facet>
+		                    <h:outputText value="#{role.dateCreation}" />
+		                </p:column>
+		                
+		                 <p:column>
+		                    <f:facet name="header">
+		                        <h:outputText value="" />
+		                    </f:facet>
+		                    <sec:ifAnyGranted  roles="ROLE_roles.view,ROLE_ADMIN">  
+                        	 		<p:commandButton  actionListener="#{roleBean.editEvent(role)}" oncomplete="PF('editDialog').show()" update=":roleDetailForm" icon="ui-icon-info" styleClass="bg-blue" title="#{msg['global.detail']}"  />
+   							</sec:ifAnyGranted>
+		                    <sec:ifAnyGranted  roles="ROLE_roles.edit,ROLE_ADMIN">  
+                        	 		<p:commandButton  actionListener="#{roleBean.editEvent(role)}" oncomplete="PF('addDialog').show()" update=":newRoleForm:display" icon="ui-icon-pencil" styleClass="bg-olive" title="#{msg['global.modifier']}" disabled="#{role.roleName=='ROLE_ADMIN'?true:false}" />
+   							</sec:ifAnyGranted>
+   							
+   							<sec:ifAnyGranted  roles="ROLE_roles.add.groupe,ROLE_ADMIN">  
+                        	 		<p:commandButton  actionListener="#{roleBean.AddGroup2RoleEvent(role)}" oncomplete="PF('group2RoleDialog').show()" update=":newGoup2RoleForm" icon="ui-icon-person" styleClass="bg-purple" title="#{msg['role.group.add']}"  disabled="#{role.roleName=='ROLE_ADMIN'?true:false}"/>
+   							</sec:ifAnyGranted>
+		                   	<sec:ifAnyGranted  roles="ROLE_roles.delete,ROLE_ADMIN">  
+                        	 		<p:commandButton  actionListener="#{roleBean.editEvent(role)}" oncomplete="PF('deleteDialog').show()"  icon="ui-icon-trash" styleClass="bg-red" title="#{msg['global.supprimer']}" disabled="#{role.roleName=='ROLE_ADMIN'?true:false}" />
+   							</sec:ifAnyGranted>
+		                </p:column>		
+		            </p:dataTable>
+			         </h:form> 
+                </div><!-- /.box-body -->
+              
+              </div><!-- /.box -->
+
+           </div> 
+          </div><!-- /.row -->
+   
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+      
+       <p:growl id="growl" showDetail="false" life="5000" />
+      
+      <!-- DIALOG DE DETAILS -->
+      
+		<p:dialog header="#{msg['global.detail']}" widgetVar="editDialog" resizable="false" id="userDlg" modal="true" width="650px"> 
+               <h:form id="roleDetailForm">
+                <p:panelGrid id="display" columns="6" cellpadding="4" style="margin:0 auto;">   
+						<h:outputLabel value="#{msg['role.code']}:"></h:outputLabel>						
+						<h:outputLabel>  <h4>#{roleBean.role.identifier}</h4></h:outputLabel>
+						
+						<h:outputLabel value="#{msg['role.nom']}:"></h:outputLabel>
+						<h:outputLabel>  <h4>#{roleBean.role.roleName}</h4></h:outputLabel>
+						
+						
+						<h:outputLabel value="#{msg['role.date']}:"></h:outputLabel>
+						<h:outputLabel>  <h4>#{roleBean.role.dateCreation}</h4></h:outputLabel>
+						
+					</p:panelGrid> 					
+                      <p:separator/>
+                     <p:panelGrid  columns="1" cellpadding="4" style="margin:0 auto;">
+                     
+                     	     <h:outputLabel value="#{msg['role.groupe']}:"></h:outputLabel>
+                     		<p:dataTable  var="groupe" value="#{roleBean.groupListDataModel}" 
+				                        paginator="true" rows="10" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				                       rowsPerPageTemplate="10" selectionMode="false"  emptyMessage="#{msg['global.msgsearch']}">
+				                      
+				                <p:column   >
+				                    <f:facet name="header">
+				                        <h:outputText value="#{msg['group.code']}" />
+				                    </f:facet>
+				                    <h:outputText value="#{groupe.idGroup}" />
+				                </p:column>
+				                
+				                <p:column   >
+				                    <f:facet name="header">
+				                        <h:outputText value="#{msg['group.nom']}" />
+				                    </f:facet>
+				                    <h:outputText value="#{groupe.groupName}" />
+				                </p:column>
+				                       
+				             </p:dataTable>
+                     		
+                     </p:panelGrid>
+                      
+                <p:panelGrid columns="1" cellpadding="4" style="margin:0 auto;">
+                    <f:facet name="footer">
+                           
+                             <p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;" value="#{msg['button.close']}" oncomplete="PF('editDialog').hide()" />
+                	
+                    </f:facet>
+                </p:panelGrid>
+                
+             </h:form>
+          </p:dialog> 
+          
+          <!-- DIALOG D'AJOUT ET MISE A JOUR -->
+             
+          <p:dialog header="#{msg['glabel.ajouter']}" widgetVar="addDialog" resizable="false" id="newRoleDlg" modal="true" width="650px"> 
+              <h:form id="newRoleForm">  
+              	<p:focus for="roleName"/>
+              	       <f:facet name="header">
+                        <i><h:outputLabel value="#{msg['global.label.obligatoire']}"/></i>
+                    </f:facet>
+                <p:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">                				
+						<h:outputText value="#{msg['role.nom']}*"></h:outputText>
+						 <p:inputText value="#{roleBean.role.roleName}"  id="roleName" required="true" requiredMessage="#{msg['role.nom.require']}"
+						 	validator="#{roleBean.validateName}"
+						  />
+						 
+						 <h:outputText value="#{msg['role.date']}"></h:outputText>
+						 <p:inputText value="#{roleBean.role.dateCreation}"  id="datecreation" disabled="true" />
+                       
+                    <f:facet name="footer">
+                            <div style="float:left">
+                    		    <p:commandLink styleClass="btn btn-primary btn-block btn-flat" style="color:#ffffff;" value="#{msg['button.sauvegarder']}" update=":formroles, :growl"   oncomplete="PF(handleSubmitRequest(xhr, status, args, 'newRoleDlg','newRoleForm'));"  actionListener="#{roleBean.create}"  />
+                           
+                         </div>
+                    	<div style="float:right">
+                    		 <p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;" value="#{msg['button.close']}" oncomplete="PF('addDialog').hide()" />
+                    	</div>
+                                            
+                    </f:facet>
+                </p:panelGrid>  
+              </h:form>
+          </p:dialog> 
+          
+          <!-- DIALOG DE CONFIRMATION DE LA SUPPRESSION -->
+          
+          <h:form id="deleteFrom">
+        	 <p:confirmDialog  header="#{msg['global.supprimer']}"
+			message="#{msg['global.supprimer.label']}" severity="alert"  widgetVar="deleteDialog">			
+			<p:commandButton value="#{msg['button.oui']}" update=":formroles,:growl"   actionListener="#{roleBean.delete(actionEvent) }" 
+			 oncomplete="PF('deleteDialog').hide();"/>			
+			<p:commandButton value="#{msg['button.non']}" onclick="deleteDialog.hide();" type="button" /> 
+			</p:confirmDialog> 
+        
+        </h:form>
+        
+        <!-- DIALOG DE CONFIRMATION DE LA SUPPRESSION DE TOUS LES GROUPES -->
+          
+          <h:form id="deleteFromGroup">
+        	 <p:confirmDialog  header="#{msg['global.supprimer']}"
+			message="#{msg['role.groupe.deleted']}" severity="alert"  widgetVar="deleteDialogGroup">			
+			<p:commandButton value="#{msg['button.oui']}" update=":formroles,:growl"   actionListener="#{roleBean.deleteGroup(actionEvent) }" 
+			 oncomplete="PF('deleteDialogGroup').hide();"/>			
+			<p:commandButton value="#{msg['button.non']}" onclick="deleteDialogGroup.hide();" type="button" /> 
+			</p:confirmDialog> 
+        
+        </h:form>
+        
+        <!-- DIALOG DE CONFIRMATION DE L'AJOUT  DE NOUVEAU GROUPES -->
+          
+          <h:form id="addFromGroup">
+        	 <p:confirmDialog  header="#{msg['global.supprimer']}"
+			message="#{msg['role.groupe.add.confirm']}" severity="alert"  widgetVar="addDialogGroup">			
+			<p:commandButton value="#{msg['button.oui']}" update=":formroles,:growl"   actionListener="#{roleBean.addGroup(actionEvent) }" 
+			 oncomplete="PF('addDialogGroup').hide();"/>			
+			<p:commandButton value="#{msg['button.non']}" onclick="addDialogGroup.hide();" type="button" /> 
+			</p:confirmDialog> 
+        
+        </h:form>
+        
+         <!-- DIALOG D'AJOUT DES GROUPES A UN ROLE-->
+        
+        <p:dialog header="#{msg['glabel.ajouter']}" widgetVar="group2RoleDialog" resizable="false" id="group2RoleDlg" modal="true" width="650px" > 
+              <h:form id="newGoup2RoleForm"> 
+                <p:panelGrid id="display" columns="1" cellpadding="4" style="margin:0 auto;"> 
+                	<h:outputLabel >#{msg['role.groupe.seleted']}#{roleBean.role.identifier} (#{roleBean.role.roleName})</h:outputLabel>
+                	<p:dataTable  var="groupe" value="#{roleBean.groupListDataModel}" widgetVar="groupTable" rowKey="#{groupe.idGroup}"
+		                        paginator="true" rows="10" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+		                        emptyMessage="#{msg['global.msgsearch']}"
+		                       selection="#{roleBean.selectedGroups}">
+		                       
+		                        <p:column selectionMode="multiple" style="width:35px;text-align:center" />  
+		               
+		              <!--   <p:column  sortBy="#{groupe.idGroup}" filterBy="#{groupe.idGroup}" filterMatchMode="contains"  >
+		                    <f:facet name="header">
+		                        <h:outputText value="#{msg['group.code']}" />
+		                    </f:facet>
+		                    <h:outputText value="#{groupe.idGroup}" />
+		                </p:column> -->
+		                
+		                <p:column  sortBy="#{groupe.groupName}" filterBy="#{groupe.groupName}" filterMatchMode="contains"  >
+		                    <f:facet name="header">
+		                        <h:outputText value="#{msg['group.nom']}" />
+		                    </f:facet>
+		                    <h:outputText value="#{groupe.groupName}" />
+		                </p:column>
+		                       
+		             </p:dataTable>
+                	               				
+						
+                    <f:facet name="footer">
+                    		<div style="float:left">
+	                       	<!-- <p:commandLink styleClass="btn btn-primary btn-block btn-flat" style="color:#ffffff;" value="#{msg['button.sauvegarder']}" update=":growl"   oncomplete="group2RoleDialog.hide()"  actionListener="#{roleBean.AddGroup2Role()}"  /> -->
+	                       	<p:commandLink styleClass="btn btn-primary btn-block btn-flat" style="color:#ffffff;" value="#{msg['button.sauvegarder']}" update=":growl"   oncomplete="PF('group2RoleDialog').hide()"  actionListener="#{roleBean.addGroup(actionEvent)}"  />
+                           
+	                       </div>
+	                       <div style="float:right">
+	                       	                         
+	         				 <p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;" value="#{msg['button.close']}"  oncomplete="PF('group2RoleDialog').hide()" />
+	                       </div>
+                                                        
+                    </f:facet>
+                </p:panelGrid>  
+              </h:form>
+          </p:dialog> 
+      
+
+   </ui:define>
+  </ui:composition>
+</html>

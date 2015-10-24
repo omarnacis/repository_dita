@@ -1,0 +1,168 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets">
+  <ui:composition template="layout.xhtml"
+  xmlns:sec="http://www.springframework.org/security/facelets/tags">
+  <ui:define name="contenu">
+  
+  
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+         <h1>
+         #{msg['dashboard']}
+         </h1>
+          <ol class="breadcrumb">
+            <li><a href="${request.contextPath}/faces/index.xhtml"><i class="fa fa-dashboard"></i>#{msg['dashboard']}</a></li>
+            
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+          <!-- Small boxes (Stat box) -->
+          <div class="row">
+          <sec:ifAnyGranted  roles="ROLE_courrier"> 
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-aqua">
+                <div class="inner">
+                  <h3>#{msg['menu.courrier']}</h3>
+                  <p>#{msg['index.gestionCourriers']}</p>
+                </div>
+                <div class="icon">
+                  <i class="fa fa-envelope"></i>
+                </div>
+               <a href="${request.contextPath}/faces/courrier.xhtml" class="small-box-footer"> #{msg['global.entre']}<i class="fa fa-arrow-circle-right"></i></a>
+				
+              </div>
+            </div><!-- ./col -->
+           </sec:ifAnyGranted>
+           <sec:ifAnyGranted  roles="ROLE_users,ROLE_ADMIN">
+			<div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-yellow">
+                <div class="inner">
+                  <h3>#{msg['menu.utilisateur']}</h3>
+                  <p> #{msg['index.gestionUtilisateurs']}</p>
+                </div>
+                <div class="icon">
+                  <i class="fa fa-group"></i>
+                </div>
+                <a href="${request.contextPath}/faces/user/users.xhtml" class="small-box-footer"> #{msg['global.entre']}<i class="fa fa-arrow-circle-right"></i></a>
+				
+              </div>
+            </div><!-- ./col -->
+            </sec:ifAnyGranted>
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+             <sec:ifAnyGranted  roles="ROLE_statistique,ROLE_ADMIN">
+              <div class="small-box bg-green">
+                <div class="inner">
+                  <h3>#{msg['menu.statistiques']}</h3>
+                  <p>#{msg['index.gestionStatistiques']}</p>
+<!--                   <h3>Reporting<sup style="font-size: 20px"></sup></h3>
+                  <p>impressions et statistiques</p> -->
+                </div>
+                <div class="icon">
+                  <i class="fa fa-bar-chart-o"></i>
+                </div>
+                <a href="${request.contextPath}/faces/statistique.xhtml" class="small-box-footer"> #{msg['global.entre']}<i class="fa fa-arrow-circle-right"></i></a>
+				
+              </div>
+             </sec:ifAnyGranted>
+            </div><!-- ./col -->
+           <sec:ifAnyGranted  roles="ROLE_preferences,ROLE_ADMIN"> 
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-red">
+                <div class="inner">
+                  <h3>#{msg['menu.preferences']}</h3>
+                  <p>#{msg['index.gestionPrametre']}</p>
+                </div>
+                <div class="icon">
+                  <i class="fa fa-cogs"></i>
+                </div>
+                <a href="${request.contextPath}/faces/preferences.xhtml" class="small-box-footer">#{msg['global.entre']} <i class="fa fa-arrow-circle-right"></i></a>
+              </div>
+              
+            </div><!-- ./col -->
+           </sec:ifAnyGranted>
+          </div><!-- /.row -->
+          
+          <div class="row">
+            <!-- <div class="col-lg-3 col-xs-6"> -->
+               <!-- small box -->
+         <!--     <div class="small-box bg-purple">
+                <div class="inner">
+                  <h3>#{msg['menu.notification']}</h3>
+                  <p>#{msg['index.gestionNotification']}</p>
+                </div>
+                <div class="icon">
+                  <i class="fa  fa-bell"></i>
+                </div>
+                <a href="${request.contextPath}/faces/notification.xhtml" class="small-box-footer">#{msg['global.entre']} <i class="fa fa-arrow-circle-right"></i></a>
+              </div> -->
+            <!-- </div> -->
+            <sec:ifAnyGranted  roles="ROLE_espaces,ROLE_ADMIN">
+            <div class="col-lg-3 col-xs-6"> 
+              <!-- small box -->
+              <div class="small-box bg-green">
+                <div class="inner">
+                  <h3>#{msg['menu.espaces']}<sup style="font-size: 20px"></sup></h3>
+                  <p>#{msg['index.gestionEspace']}</p>
+                </div>
+                <div class="icon">
+                  <i class="fa fa-pencil-square"></i>
+                </div>
+                <a href="${request.contextPath}/faces/user/espaces.xhtml" class="small-box-footer">#{msg['global.entre']} <i class="fa fa-arrow-circle-right"></i></a>
+              </div>
+			 </div>
+			 </sec:ifAnyGranted>
+			<sec:ifAnyGranted  roles="ROLE_mouchard,ROLE_ADMIN">
+			 <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-maroon">
+                <div class="inner">
+                  <h3>#{msg['menu.Tracabilite']}<sup style="font-size: 20px"></sup></h3>
+                  <p>#{msg['index.mouchard']}</p>
+<!--                   <h3>Traçabilité<sup style="font-size: 20px"></sup></h3>
+                  <p>suivi des utilisateurs</p> -->
+                </div>
+                <div class="icon">
+                  <i class="fa fa-mail-forward"></i>
+                </div>
+                <a href="${request.contextPath}/faces/mouchard.xhtml" class="small-box-footer">#{msg['global.entre']} <i class="fa fa-arrow-circle-right"></i></a>
+              </div>
+             </div>
+            </sec:ifAnyGranted>
+             <sec:ifAnyGranted  roles="ROLE_bordereaus,ROLE_ADMIN">
+			<div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-yellow">
+                <div class="inner">
+                  <h3>#{msg['menu.bordereau']}</h3>
+                  <p> #{msg['index.gestionBordereaus']}</p>
+                </div>
+                <div class="icon">
+                  <i class="fa fa-group"></i>
+                </div>
+                <a href="${request.contextPath}/faces/bordereaux.xhtml" class="small-box-footer"> #{msg['global.entre']}<i class="fa fa-arrow-circle-right"></i></a>
+				
+              </div>
+            </div><!-- ./col -->
+           </sec:ifAnyGranted>
+          </div><!-- /.row -->
+         
+          
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+   
+   </ui:define>
+  </ui:composition>
+</html>

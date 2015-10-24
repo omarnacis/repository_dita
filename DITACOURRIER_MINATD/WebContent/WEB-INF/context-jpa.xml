@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context" 
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+
+	 <context:component-scan base-package="cm.dita.entities" />    
+	<tx:annotation-driven  />
+	<jpa:repositories base-package="cm.dita.dao" />
+	
+	 <!-- ============================= -->
+	<!-- PROPERTIES TO ACCESS BD                   -->
+	<!-- ============================= -->	
+	
+	 <bean 
+		   class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		   <property name="location">
+				<value>WEB-INF/database-config/db.properties</value>
+		   </property>
+		</bean>
+	
+     
+     
+     <!-- ============================= -->
+	<!-- DATASOURCE                    -->
+	<!-- ============================= -->	
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="${jdbc.driverClassName}" />
+        <property name="jdbcUrl" value="${jdbc.url}" />
+        <property name="user" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+        <property name="initialPoolSize" value="5"/>
+        <property name="minPoolSize" value="5"/>
+		<property name="maxPoolSize" value="50"/>
+    </bean>
+     
+     
+
+
+    <!-- ============================= -->
+	<!-- ENTITY MANAGER                -->
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+    	<property name="dataSource" ref="dataSource" />
+        <property name="persistenceUnitName" value="springDataJPA" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+        </property>
+        <property name="jpaProperties">
+            <props>
+                
+                 <!-- <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop> -->
+              <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+                <prop key="hibernate.connection.release_mode">auto</prop>
+                <prop key="hibernate.bytecode.provider">javassist</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.cache.use_second_level_cache">true</prop>
+
+ 				<prop key="hibernate.hbm2ddl.auto">update</prop><!--     
+ 				<prop key="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</prop>   
+ 				<prop key="hibernate.c3p0.validate">true</prop>
+ 				<prop key="hibernate.connection.autoReconnect">true</prop>         
+ 				<prop key="hibernate.connection.autoReconnectForPools">true</prop> 
+ 				<prop key="hibernate.connection.is.connection-validation-required">true</prop> --> 				
+ 				<prop key="hibernate.c3p0.timeout">1800</prop>		 
+                
+            </props>
+        </property>
+    </bean>
+    
+    <!-- ============================= -->
+	<!-- TRANSACTION MANAGER           -->
+	<!-- ============================= -->	
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+    
+    <!-- persistence -->
+	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+    
+    <!-- ============================= -->
+	<!-- SESSION FACTORY               -->
+	<!-- ============================= -->	
+	<bean id="sessionFactory" factory-bean="entityManagerFactory" factory-method="getSessionFactory" />
+	
+</beans>

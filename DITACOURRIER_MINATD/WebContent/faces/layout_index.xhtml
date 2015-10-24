@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets">
+  
+  <f:view locale="#{sessionScope['SS_USER'].langue}" >
+	  <h:head>
+		
+		<title>#{applicationBean.NOM_ENTREPRISE}</title>	
+	    <link rel="icon" type="image/png" href="#{facesContext.externalContext.requestContextPath}#{applicationBean.LOGO}"/>
+		<!--  fichier head_css -->
+			       <ui:include src="include/head_css.xhtml"/>
+		<!-- end fichier css  -->
+			
+	   </h:head>
+	
+	   <h:body class="skin-blue sidebar-collapse fixed">
+		 <div class="wrapper">
+				<!-- fichier header contient barre menu -->	
+				 <ui:include src="include/header.xhtml"/>
+				<!-- end fichier header contient barre menu -->
+			
+			    <!-- fichier aside_gauche -->	
+				 <ui:include src="include/aside_gauche.xhtml"/>
+				<!-- end fichier  aside_gauche -->
+			
+					<!-- content starts -->
+					<ui:insert name="contenu"></ui:insert>
+					
+		       	<!-- fichier footer -->
+				       <ui:include src="include/footer.xhtml"/>
+				<!-- end fichier footer -->
+				       
+		  </div><!-- ./wrapper -->
+		  
+		<!--  fichier afterfooterjs -->
+			       <ui:include src="include/after_footer_js.xhtml"/>
+		<!--  end fichier afterfooterjs  -->		
+      </h:body>
+  </f:view>  
+
+</html>

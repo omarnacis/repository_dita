@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets">
+  
+  <f:view locale="#{changeLocale.locale}" >
+	  <h:head>
+		
+		<title>#{applicationBean.NOM_ENTREPRISE}</title>	
+		<link rel="icon" type="image/png" href="#{facesContext.externalContext.requestContextPath}#{applicationBean.LOGO}"/>
+	
+		<!--  fichier head_css -->
+			       <ui:include src="include/head_css.xhtml"/>
+		<!-- end fichier css  -->
+			<link rel="stylesheet" href="${request.contextPath}/css/style.css" type="text/css" media="screen" />
+	   </h:head>
+	
+	   <h:body class="login-page">
+	  
+	   <img alt="" src="#{facesContext.externalContext.requestContextPath}#{applicationBean.IMG_FOND}" class="superbg" />
+		  <script src="${request.contextPath}/css/background.js" type="text/javascript"></script>
+		    
+			
+					<!-- content starts -->
+					<ui:insert name="contenu"></ui:insert>					
+		     
+		  
+					<!--  fichier afterfooterjs -->
+						       <ui:include src="include/after_footer_js.xhtml"/>
+					<!--  end fichier afterfooterjs  -->		
+      </h:body>
+  </f:view>  
+
+</html>

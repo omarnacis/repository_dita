@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:p="http://primefaces.org/ui"
+   xmlns:c="http://java.sun.com/jsp/jstl/core"
+   xmlns:sec="http://www.springframework.org/security/facelets/tags"
+  xmlns:ui="http://java.sun.com/jsf/facelets">
+  
+      <!-- Left side column. contains the logo and sidebar -->
+      <aside class="main-sidebar">
+      		
+      
+	        <!-- sidebar: style can be found in sidebar.less -->
+	        <section class="sidebar">    
+	         
+	         
+	          <!-- search form -->
+	          <h:form  class="sidebar-form">
+	            <div class="input-group">
+	             
+	              <p:inputText value="#{searchCourrierBean.search}"   styleClass="form-control"/>
+	              <span class="input-group-btn">
+	               
+	              	 <p:commandButton icon="ui-icon-search"  styleClass="btn btn-flat"  actionListener="#{searchCourrierBean.searchMethod}" >
+	              	 	
+	              	 </p:commandButton>
+                           
+	              </span>
+	            </div>
+	          </h:form>
+	          <!-- /.search form -->
+	          
+	          <!-- sidebar menu: : style can be found in sidebar.less -->
+	          <ul class="sidebar-menu">
+	            <li class="header">MENU PRINCIPAL</li>
+	           
+	          </ul><h:form>
+	          <p:panelMenu>
+	              <p:separator />
+	              
+	              	<sec:ifAnyGranted  roles="ROLE_preferences,ROLE_ADMIN">
+				        <p:submenu label="#{msg['menu.preferences']}" >  
+		                     <p:menuitem  icon="ui-icon-wrench" value="#{msg['preference.liste']}" url="/faces/preferences.xhtml"  />                
+		                	
+		                     <!--  <p:menuitem>	                   
+		                   <h:commandLink value="export BD" action="#{exportBean.export}"
+		                   	styleClass="ui-menuitem-link ui-corner-all"/>
+	                   </p:menuitem>   -->              
+		                   
+				        </p:submenu>
+			        </sec:ifAnyGranted>
+			        
+			        <sec:ifAnyGranted  roles="ROLE_espaces,ROLE_ADMIN">
+				        <p:submenu label="#{msg['menu.espaces']}"  >  
+		                    <p:menuitem value="#{msg['espace.liste']}" url="/faces/user/espaces.xhtml"  icon="ui-icon-folder-collapsed"/>
+		                    
+				        </p:submenu>
+				    </sec:ifAnyGranted>
+				    
+				    <sec:ifAnyGranted  roles="ROLE_users,ROLE_ADMIN">
+				        <p:submenu label="#{msg['menu.utilisateur']}" >  
+		                    <p:menuitem value="#{msg['user.liste']}" url="/faces/user/users.xhtml" icon="ui-icon-person" />
+		                     <p:menuitem value="#{msg['role.liste']}" url="/faces/user/roles.xhtml" icon="ui-icon-key"/>
+		                    <p:menuitem value="#{msg['group.liste']}" url="/faces/user/groups.xhtml" icon="ui-icon-copy" />              
+		                  
+				        </p:submenu>
+			        </sec:ifAnyGranted>
+			        
+			        <sec:ifAnyGranted  roles="ROLE_correspondants,ROLE_ADMIN">
+				        <p:submenu label="#{msg['menu.correspondant']}"  >  
+		                    <p:menuitem value="#{msg['correspondant.liste']}" icon="ui-icon-extlink" url="/faces/correspondant.xhtml"  />	                    
+		                	
+				        </p:submenu>
+			        </sec:ifAnyGranted>
+	              
+			         <sec:ifAnyGranted  roles="ROLE_courrier">     
+				       <!--  <p:submenu label="#{msg['menu.courrier']}">  
+		                    <p:menuitem value="#{msg['courrier.liste']}" url="/faces/courrier.xhtml" icon="ui-icon-mail-closed" />
+		                    <p:menuitem value="#{msg['courrier.suivi']}" url="/faces/suivi.xhtml" icon="ui-icon-shuffle" />
+		                    <p:menuitem value="Action2" url="/faces/courrier.xhtml"  />	 -->                	
+				        <p:submenu label="#{msg['menu.courrier']}" >  
+		                   
+		                     <p:menuitem icon="ui-icon-mail-closed" value="#{msg['courrier.liste']}" action="#{courrierControllerBean.showCourrier}"/>	                   
+			                   <!-- <h:commandLink 
+			                   	styleClass="ui-icon-mail-closed"  /> 
+		                   </p:menuitem>   -->
+		                     <p:menuitem value="#{msg['courrier.suivi']}" url="/faces/suivi.xhtml" icon="ui-icon-shuffle"  />                 
+		                   
+		                     <p:menuitem icon="ui-icon-contact" value="#{msg['bordereau.liste']}" action="#{bordereauControllerBean.showBordereau}"/>	                   
+			                             	
+				        </p:submenu>
+				        <p:separator />
+				      </sec:ifAnyGranted>  
+				      
+					    <sec:ifAnyGranted  roles="ROLE_statistique,ROLE_ADMIN">
+					        <p:submenu label="#{msg['statistique.title']}">  
+			                    <p:menuitem value="#{msg['statistique.liste.contain']}"  icon="ui-icon-signal" action="#{statistiqueControllerBean.showStatistique}" />	                    
+			                	
+					        </p:submenu>
+				        </sec:ifAnyGranted>
+			        
+				        <sec:ifAnyGranted  roles="ROLE_mouchard,ROLE_ADMIN">
+					        <p:submenu label="#{msg['menu.Tracabilite']}"  >  
+			                    <p:menuitem value="#{msg['menu.Tracabilite']}" icon="ui-icon-extlink" url="/faces/mouchard.xhtml"  />	                    
+			                	
+					        </p:submenu>
+				        </sec:ifAnyGranted>
+			        
+			        
+			    </p:panelMenu> </h:form>
+	          
+	          
+	        </section>
+	        <!-- /.sidebar -->
+	      </aside>
+	  
+</html>

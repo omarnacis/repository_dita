@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:p="http://primefaces.org/ui"
+   xmlns:c="http://java.sun.com/jsp/jstl/core"
+   xmlns:sec="http://www.springframework.org/security/facelets/tags"
+  xmlns:ui="http://java.sun.com/jsf/facelets">
+	       <h:form>
+	         <p:poll interval="4" listener="#{authenBean.verifie()}"  
+            update=":athenPDialog" widgetVar="poll"  autoStart="#{authenBean.stop}" global="false"/> 
+	      </h:form> 
+	       <p:dialog header="#{msg['authen.cle']}" id="athenPDialog" width="400" resizable="false" widgetVar="athenDialog" modal="true" closable="false" visible="#{!authenBean.product}">
+ 				 
+ 				 <h:form id="authenForm">
+ 				 	<p:focus for="athenText"/>
+ 				 <h:panelGrid  columns="1" cellpadding="4"  style="margin:0 auto;">                   
+                    	<h:outputText for="athenText"  value="#{msg['authen.cle.label']}"></h:outputText>
+                 		<p:inputMask mask="****-****-****-****" id="athenText" size="50" value="#{authenBean.valeur}" required="true" requiredMessage="#{msg['authen.cle.text']}" />
+                </h:panelGrid>
+                <p:separator/>
+                <p:commandButton styleClass="btn btn-small btn-success" value="Valider"  update=":athenPDialog, :msgErreur" actionListener="#{authenBean.valid(actionEvent) }"
+                 />
+                 
+                  <p:commandButton styleClass="btn btn-small btn-success" style="float:right;" immediate="true" value="Version d'évaluation"  update=":athenPDialog, :msgErreur" actionListener="#{authenBean.evaluation(actionEvent) }"
+                      rendered="#{authenBean.afficEval}" />
+	               
+                  </h:form>                
+                 <h:messages showDetail="false" style="color: red;" id="msgErreur"  />
+              </p:dialog>
+</html>

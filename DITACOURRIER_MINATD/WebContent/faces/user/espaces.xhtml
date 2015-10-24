@@ -1,0 +1,207 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets">
+  <ui:composition template="../layout.xhtml"
+  xmlns:sec="http://www.springframework.org/security/facelets/tags">
+  <ui:define name="contenu">
+  
+  
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+          #{msg['espace']}
+            <small></small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="${request.contextPath}/faces/index.xhtml"><i class="fa fa-dashboard"></i>#{msg['dashboard']}</a></li>            
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title">#{msg['espace.liste']}</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                   
+                                                                 
+                   
+                 <h:form id="formEspaces"> 
+		                <p:dataTable id="dataTable" var="espace" value="#{espaceBean.espaceListDataModel}" widgetVar="espaceTable"
+		                        paginator="true" rows="10" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		                         emptyMessage="#{msg['global.msgsearch']}"
+		                       selection="#{espaceBean.selectedEspace}">
+		              
+		              	<f:facet name="header">
+		              
+		              	<div class="row rigth">
+              				<div class="col-sm-12">   
+              				<div class="col-sm-3"> 
+              					
+              				 	               				  		
+				              	<div class="btn-group">
+		                            <button type="button" class="btn btn-default btn-sm btn-flat dropdown-toggle" data-toggle="dropdown">
+		                              Action <span class="caret"></span>
+		                            </button>
+		                            <ul class="dropdown-menu" role="menu">
+		                              <li>
+	                               		<sec:ifAnyGranted  roles="ROLE_espaces.add,ROLE_ADMIN">  
+					            				<p:commandLink value="#{msg['button.add']}" update=":newEspaceForm" oncomplete="PF('addDialog').show()" actionListener="#{espaceBean.ajoutEvent(actionEvent)}"  title="Creates new user"/>		                        
+					                  	</sec:ifAnyGranted> 
+		                              </li>		                             
+		                             <!--  <li class="divider"></li>
+		                              <li>
+		                              	   <sec:ifAnyGranted  roles="ROLE_espaces.delete,ROLE_ADMIN">  
+		                              	 		<p:commandLink value="#{msg['button.delete']}" oncomplete="deleteDialog.show()" />
+		         							</sec:ifAnyGranted>
+		                              </li> -->
+		                             
+		                            </ul>
+		                          </div>
+		                       </div>
+              				 <div class="col-sm-9">	
+              				 	<div class="input-group search-taille">                         
+	                            	<p:outputPanel>						                       
+				                        <p:inputText id="globalFilter" onkeyup="espaceTable.filter()" styleClass="form-control input-sm"  />                           
+				                    </p:outputPanel>
+				                 </div>	                            
+	                            
+	                       </div>
+	                        </div>
+	                     </div>
+		              		 
+		              	</f:facet>
+		              
+		               <!--  <p:column selectionMode="multiple" style="width:18px" />  
+		                -->
+		             <!--    <p:column  sortBy="#{espace.id}" filterBy="#{espace.id}" filterMatchMode="contains"  >
+		                    <f:facet name="header">
+		                        <h:outputText value="#{msg['espace.code']}" />
+		                    </f:facet>
+		                    <h:outputText value="#{espace.id}" />
+		                </p:column>
+		                
+		                 -->
+		
+		                <p:column sortBy="#{espace.nomespace}" filterBy="#{espace.nomespace}" filterMatchMode="contains">
+		                    <f:facet name="header">
+		                        <h:outputText value="#{msg['espace.nom']}" />
+		                    </f:facet>
+		                    <h:outputText value="#{espace.nomespace}" />
+		                </p:column>
+		                
+		                <p:column sortBy="#{espace.dateCreation}" filterBy="#{espace.dateCreation}" filterMatchMode="contains">
+		                    <f:facet name="header">
+		                        <h:outputText value="#{msg['espace.date']}" />
+		                    </f:facet>
+		                    <h:outputText value="#{espace.dateCreation}" />
+		                </p:column>
+		                
+		                 <p:column>
+		                    <f:facet name="header">
+		                        <h:outputText value="" />
+		                    </f:facet>
+		                    <sec:ifAnyGranted  roles="ROLE_espaces.view,ROLE_ADMIN">  
+                        	 		<p:commandButton  actionListener="#{espaceBean.detailsEvent(espace)}" oncomplete="PF('editDialog').show()" update=":espaceDetailForm:display" icon="ui-icon-info" styleClass="btn-info" title="#{msg['global.detail']}" />
+   							</sec:ifAnyGranted>
+		                    <sec:ifAnyGranted  roles="ROLE_espaces.edit,ROLE_ADMIN">  
+                        	 		<p:commandButton  actionListener="#{espaceBean.editEvent(espace)}" oncomplete="PF('addDialog').show()" update=":newEspaceForm:display" icon="ui-icon-pencil" styleClass="btn-success" title="#{msg['global.modifier']}" disabled="#{espace.id==1?true:false}" />
+   							</sec:ifAnyGranted>
+		                   	<sec:ifAnyGranted  roles="ROLE_espaces.delete,ROLE_ADMIN">  
+                        	 		<p:commandButton  actionListener="#{espaceBean.editEvent(espace)}" oncomplete="PF('deleteDialog').show()"  icon="ui-icon-trash" styleClass="btn-danger" title="#{msg['global.supprimer']}" disabled="#{espace.id==1?true:false}" />
+   							</sec:ifAnyGranted>
+		                </p:column>		
+		            </p:dataTable>
+			         </h:form> 
+                </div><!-- /.box-body -->
+              
+              </div><!-- /.box -->
+
+           </div> 
+          </div><!-- /.row -->
+   
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+      
+       <p:growl id="growl" showDetail="false" life="20000" />
+      
+      <!-- DIALOG DE DETAILS -->
+      
+		<p:dialog header="#{msg['global.detail']}" widgetVar="editDialog" resizable="false" id="userDlg" modal="true"> 
+               <h:form id="espaceDetailForm">
+                <p:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">   
+						<h:outputText value="#{msg['espace.code']}"></h:outputText>
+						<h:outputText value="#{espaceBean.espace.id}"></h:outputText>
+						
+						<h:outputText value="#{msg['espace.nom']}"></h:outputText>
+						<h:outputText value="#{espaceBean.espace.nomespace}"></h:outputText>
+						
+						<h:outputText value="#{msg['espace.date']}"></h:outputText>
+						<h:outputText value="#{espaceBean.espace.dateCreation}"></h:outputText>
+                  </p:panelGrid>     
+ 				<p:panelGrid columns="1" cellpadding="4" style="margin:0 auto;">
+                    <f:facet name="footer">
+                            <p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;" value="#{msg['button.close']}" oncomplete="PF('editDialog').hide()" />
+                    </f:facet>
+                </p:panelGrid> 
+             </h:form>
+          </p:dialog> 
+          
+          <!-- DIALOG D'AJOUT ET MISE A JOUR -->
+             
+          <p:dialog header="#{msg['glabel.ajouter']}" widgetVar="addDialog" resizable="false" id="newEspaceDlg" modal="true"> 
+              <h:form id="newEspaceForm">  
+              	<p:focus for="nomespace"/>
+              	       <f:facet name="header">
+                        <i><h:outputLabel value="#{msg['global.label.obligatoire']}"/></i>
+                    </f:facet>
+                <p:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">                				
+						<h:outputText value="#{msg['espace.nom']}*"></h:outputText>
+						 <p:inputText value="#{espaceBean.espace.nomespace}"  id="nomespace" required="true" requiredMessage="#{msg['espace.nom.require']}" 
+						 	validator="#{espaceBean.validateName}"
+						 />
+						 
+						 <h:outputText value="#{msg['espace.date']}"></h:outputText>
+						 <p:inputText value="#{espaceBean.espace.dateCreation}"  id="datecreation" disabled="true" />
+                       
+                    <f:facet name="footer">
+                    	<div style="float:left">
+                    		 <p:commandLink styleClass="btn btn-primary btn-block btn-flat" style="color:#ffffff;" value="#{msg['button.sauvegarder']}" update=":formEspaces, :growl"   oncomplete="PF(handleSubmitRequest(xhr, status, args, 'newEspaceDlg','newEspaceForm'));"  actionListener="#{espaceBean.create}"  />
+                           
+                    	</div>
+                        <div style="float:right">   
+                            <p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;" value="#{msg['button.close']}" oncomplete="PF('addDialog').hide()" />                            
+                   		</div>
+                    </f:facet>
+                </p:panelGrid>  
+              </h:form>
+          </p:dialog> 
+          
+          <!-- DIALOG DE CONFIRMATION DE LA SUPPRESSION -->
+          
+          <h:form id="deleteFrom">
+        	 <p:confirmDialog  header="#{msg['global.supprimer']}"
+			message="#{msg['global.supprimer.label']}" severity="alert"  widgetVar="deleteDialog">			
+			<p:commandButton value="#{msg['button.oui']}" update=":formEspaces,:growl"   actionListener="#{espaceBean.delete(actionEvent) }" 
+			 oncomplete="PF('deleteDialog').hide();"/>			
+			<p:commandButton value="#{msg['button.non']}" onclick="deleteDialog.hide();" type="button" /> 
+			</p:confirmDialog> 
+        
+        </h:form>
+      
+		
+		
+		
+   
+   </ui:define>
+  </ui:composition>
+</html>

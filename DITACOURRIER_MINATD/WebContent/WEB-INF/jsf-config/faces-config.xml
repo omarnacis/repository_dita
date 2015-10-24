@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+    http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+    version="2.0">
+  	
+  	<!-- JSF and Spring are integrated -->
+  	<application>
+    	<el-resolver>
+    		org.springframework.web.jsf.el.SpringBeanFacesELResolver
+    	</el-resolver>
+  	</application>
+	
+  	<application>
+  		<locale-config>
+         <default-locale>en</default-locale>
+         <supported-locale>fr</supported-locale>
+      </locale-config>
+  		
+  	    <resource-bundle>
+  	        <base-name>messages</base-name>
+  	        <var>msg</var>
+  	    </resource-bundle>
+  	   <!--  <message-bundle>messages</message-bundle> -->
+  	</application>
+  	
+  
+	<!-- configuration of navigation rules -->	
+	
+    
+	<navigation-rule>
+	    <from-view-id>/faces/login.xhtml</from-view-id> 
+	    <navigation-case>
+	        <from-outcome>success</from-outcome>
+            <to-view-id>/faces/index.xhtml</to-view-id>
+            <redirect></redirect>
+            
+        </navigation-case>	    
+    </navigation-rule>
+    
+    <navigation-rule>
+	    <from-view-id>*</from-view-id> 
+	    <navigation-case>
+	    	<from-action>#{forgetPassBean.changePass}</from-action>
+	        <from-outcome>ok</from-outcome>
+            <to-view-id>/faces/login.xhtml</to-view-id>
+            <redirect></redirect>
+            
+        </navigation-case>	    
+    </navigation-rule>
+    
+    
+    <navigation-rule>
+	    <from-view-id>/faces/listpersonne.xhtml</from-view-id> 	    
+    </navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+		<from-action>#{searchCourrierBean.searchMethod}</from-action>
+		<from-outcome>ok</from-outcome>
+		<to-view-id>/faces/courrier.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	 <navigation-rule>
+	    <from-view-id>*</from-view-id> 
+	    <navigation-case>
+	        <from-action>#{courrierControllerBean.showCourrier}</from-action>
+	        <from-outcome>ok</from-outcome>
+            <to-view-id>/faces/courrier.xhtml</to-view-id>
+            <redirect></redirect>
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+	    <from-view-id>*</from-view-id> 
+	    <navigation-case>
+	        <from-action>#{statistiqueControllerBean.showStatistique}</from-action>
+	        <from-outcome>bon</from-outcome>
+            <to-view-id>/faces/statistique.xhtml</to-view-id>
+            <redirect></redirect>
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+	    <from-view-id>*</from-view-id> 
+	    <navigation-case>
+	        <from-action>#{bordereauControllerBean.showBordereau}</from-action>
+	        <from-outcome>ok</from-outcome>
+            <to-view-id>/faces/bordereaux.xhtml</to-view-id>
+            <redirect></redirect>
+        </navigation-case>
+    </navigation-rule>
+    
+    <!-- 
+     <navigation-rule>
+	    <from-view-id>*</from-view-id> 
+	    <navigation-case>
+	        <from-action>#{manageCompte.redirecToManageComptePage}</from-action>
+	        <from-outcome>ok</from-outcome>
+            <to-view-id>/faces/manageComptePlanComptable.xhtml</to-view-id>
+            <redirect></redirect>
+        </navigation-case>
+    </navigation-rule>
+    
+     <navigation-rule>
+	    <from-view-id>/faces/manageComptePlanComptable.xhtml</from-view-id> 
+	    <navigation-case>
+	        <from-action>#{manageCompte.cancel}</from-action>
+	        <from-outcome>ok</from-outcome>
+            <to-view-id>/faces/index.xhtml</to-view-id>
+            <redirect></redirect>
+        </navigation-case>
+    </navigation-rule>
+    	
+    
+     <navigation-rule>
+	    <from-view-id>*</from-view-id> 
+	    <navigation-case>
+	        <from-action>#{notificationBean.showFactureCLientNotifCritique}</from-action>
+	        <from-outcome>ok</from-outcome>
+            <to-view-id>/faces/listNotifCritique.xhtml</to-view-id>
+            <redirect></redirect>
+        </navigation-case>
+    </navigation-rule> -->
+    
+    <!-- <converter>
+		<converter-for-class>cm.socogel.entities.InfosCaisse</converter-for-class>
+		<converter-class>cm.socogel.controller.managed.bean.caisse.InfosCaisseConverter</converter-class>
+	</converter> -->
+    
+  
+	
+</faces-config>

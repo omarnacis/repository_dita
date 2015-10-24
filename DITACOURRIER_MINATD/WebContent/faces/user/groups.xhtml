@@ -1,0 +1,302 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets">
+  <ui:composition template="../layout.xhtml"
+  xmlns:sec="http://www.springframework.org/security/facelets/tags">
+  <ui:define name="contenu">
+  
+  
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+          #{msg['groups']}
+            <small></small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="${request.contextPath}/faces/index.xhtml"><i class="fa fa-dashboard"></i>#{msg['dashboard']}</a></li>            
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title">#{msg['group.liste']}</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                   
+                                                                 
+                   
+                 <h:form id="formgroups"> 
+		                <p:dataTable id="dataTable" var="group" value="#{groupBean.groupListDataModel}" widgetVar="groupTable"
+		                        paginator="true" rows="10" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		                         emptyMessage="#{msg['global.msgsearch']}"
+		                       selection="#{groupBean.selectedGroup}">		              
+		              	<f:facet name="header">
+		              
+		              	<div class="row rigth">
+              				<div class="col-sm-12">   
+              				<div class="col-sm-3"> 
+              					
+              				 	               				  		
+				              	<div class="btn-group">
+		                            <button type="button" class="btn btn-default btn-sm btn-flat dropdown-toggle" data-toggle="dropdown">
+		                              Action <span class="caret"></span>
+		                            </button>
+		                            <ul class="dropdown-menu" role="menu">
+		                              <li>
+	                               		<sec:ifAnyGranted  roles="ROLE_groups.add,ROLE_ADMIN">  
+					            				<p:commandLink value="#{msg['button.add']}" update=":newGroupForm" oncomplete="PF('addDialog').show()" actionListener="#{groupBean.ajoutEvent(actionEvent)}" />		                        
+					                  	</sec:ifAnyGranted> 
+		                              </li>		                             
+		                          <!--    <li class="divider"></li>
+		                               <li>
+		                              	   <sec:ifAnyGranted  roles="ROLE_groups.delete,ROLE_ADMIN">  
+		                              	 		<p:commandLink value="#{msg['button.delete']}" oncomplete="deleteDialog.show()" />
+		         							</sec:ifAnyGranted>
+		                              </li> -->
+		                             
+		                            </ul>
+		                          </div>
+		                       </div>
+              				 <div class="col-sm-9">	
+              				 	<div class="input-group search-taille">                         
+	                            	<p:outputPanel>						                       
+				                        <p:inputText id="globalFilter" onkeyup="groupTable.filter()" styleClass="form-control input-sm"  />                           
+				                    </p:outputPanel>
+				                 </div>	                            
+	                            
+	                       </div>
+	                        </div>
+	                     </div>
+		              		 
+		              	</f:facet>
+		              
+		               <!--  <p:column selectionMode="multiple" style="width:18px" />   -->
+		               
+		              <!--   <p:column  sortBy="#{group.idGroup}" filterBy="#{group.idGroup}" filterMatchMode="contains"  >
+		                    <f:facet name="header">
+		                        <h:outputText value="#{msg['group.code']}" />
+		                    </f:facet>
+		                    <h:outputText value="#{group.idGroup}" />
+		                </p:column>
+		                 -->
+		                
+		
+		                <p:column sortBy="#{group.groupName}" filterBy="#{group.groupName}" filterMatchMode="contains">
+		                    <f:facet name="header">
+		                        <h:outputText value="#{msg['group.nom']}" />
+		                    </f:facet>
+		                    <h:outputText value="#{group.groupName}" />
+		                </p:column>
+		                
+		                <p:column sortBy="#{group.dateCreation}" filterBy="#{group.dateCreation}" filterMatchMode="contains">
+		                    <f:facet name="header">
+		                        <h:outputText value="#{msg['group.date']}" />
+		                    </f:facet>
+		                    <h:outputText value="#{group.dateCreation}" />
+		                </p:column>
+		                
+		                 <p:column>
+		                    <f:facet name="header">
+		                        <h:outputText value="" />
+		                    </f:facet>
+		                    <sec:ifAnyGranted  roles="ROLE_groups.view,ROLE_ADMIN">  
+                        	 		<p:commandButton  actionListener="#{groupBean.editEvent(group)}" oncomplete="PF('editDialog').show()" update=":groupDetailForm" icon="ui-icon-info" styleClass="bg-blue" title="#{msg['global.detail']}" />
+   							</sec:ifAnyGranted>
+		                    <sec:ifAnyGranted  roles="ROLE_groups.edit,ROLE_ADMIN">  
+                        	 		<p:commandButton  actionListener="#{groupBean.editEvent(group)}" oncomplete="PF('addDialog').show()" update=":newGroupForm" icon="ui-icon-pencil" styleClass="bg-olive" title="#{msg['global.modifier']}" />
+   							</sec:ifAnyGranted>
+   							
+   							<sec:ifAnyGranted  roles="ROLE_groups.add.access,ROLE_ADMIN">  
+                        	 		<p:commandButton  actionListener="#{groupBean.AddRessources2GroupEvent(group)}" oncomplete="PF('group2AccessDialog').show()" update=":newGoup2AccessForm" icon="ui-icon-person" styleClass="bg-purple" title="#{msg['group.access.add']}" />
+   							</sec:ifAnyGranted>
+   							
+   							
+   							
+		                   	<sec:ifAnyGranted  roles="ROLE_groups.delete,ROLE_ADMIN">  
+                        	 		<p:commandButton  actionListener="#{groupBean.editEvent(group)}" oncomplete="PF('deleteDialog').show()"  icon="ui-icon-trash" styleClass="bg-red" title="#{msg['global.supprimer']}" />
+   							</sec:ifAnyGranted>
+		                </p:column>		
+		            </p:dataTable>
+			         </h:form> 
+                </div><!-- /.box-body -->
+              
+              </div><!-- /.box -->
+
+           </div> 
+          </div><!-- /.row -->
+   
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+      
+       <p:growl id="growl" showDetail="false" life="5000" />
+      
+      <!-- DIALOG DE DETAILS -->
+      
+		<p:dialog header="#{msg['global.detail']}" widgetVar="editDialog" resizable="false" id="userDlg" modal="true" width="650px"> 
+               <h:form id="groupDetailForm">
+                <p:panelGrid id="display" columns="6" cellpadding="4" style="margin:0 auto;">   
+						<h:outputLabel value="#{msg['group.code']}:"></h:outputLabel>						
+						<h:outputLabel>  <h4>#{groupBean.group.idGroup}</h4></h:outputLabel>
+						
+						<h:outputLabel value="#{msg['group.nom']}:"></h:outputLabel>
+						<h:outputLabel>  <h4>#{groupBean.group.groupName}</h4></h:outputLabel>
+						
+						
+						<h:outputLabel value="#{msg['group.date']}:"></h:outputLabel>
+						<h:outputLabel>  <h4>#{groupBean.group.dateCreation}</h4></h:outputLabel>
+						
+					</p:panelGrid> 					
+                      <p:separator/>
+                     <p:panelGrid  columns="1" cellpadding="4" style="margin:0 auto;">
+                     
+                     	     <h:outputLabel value="#{msg['group.access']}:"></h:outputLabel>
+                     		<p:dataTable  var="access" value="#{groupBean.ressourcesListDataModel}" widgetVar="accessTable"
+		                        paginator="true" rows="10" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		                       rowsPerPageTemplate="10"   emptyMessage="#{msg['global.msgsearch']}">
+		                       
+		                       
+		               
+		                <p:column>
+		                    <f:facet name="header">
+		                        <h:outputText value="#{msg['access.code']}" />
+		                    </f:facet>
+		                    <h:outputText value="#{access.idRessource}" />
+		                </p:column>
+		                
+		                <!-- <p:column   >
+		                    <f:facet name="header">
+		                        <h:outputText value="#{msg['access.nom']}" />
+		                    </f:facet>
+		                    <h:outputText value="#{access.ressourceName}" />
+		                </p:column> -->
+		                
+		               <p:column   >
+		                    <f:facet name="header">
+		                        <h:outputText value="#{msg['access.libelle']}" />
+		                    </f:facet>
+		                    <h:outputText value="#{access.ressourceDetail}" />
+		                </p:column>
+		                       
+		             </p:dataTable>
+                     		
+                     </p:panelGrid>
+                      
+                <p:panelGrid columns="1" cellpadding="4" style="margin:0 auto;">
+                    <f:facet name="footer">
+                            <p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;" value="#{msg['button.close']}" oncomplete="PF('editDialog').hide()" />
+                    </f:facet>
+                </p:panelGrid>
+             </h:form>
+          </p:dialog> 
+          
+          <!-- DIALOG D'AJOUT ET MISE A JOUR -->
+             
+          <p:dialog header="#{msg['glabel.ajouter']}" widgetVar="addDialog" resizable="false" id="newGroupDlg" modal="true"> 
+              <h:form id="newGroupForm">  
+              	<p:focus for="groupName"/>
+              	       <f:facet name="header">
+                        <i><h:outputLabel value="#{msg['global.label.obligatoire']}"/></i>
+                    </f:facet>
+                <p:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">                				
+						<h:outputText value="#{msg['group.nom']}*"></h:outputText>
+						 <p:inputText value="#{groupBean.group.groupName}"  id="groupName" required="true" requiredMessage="#{msg['group.nom.require']}" 
+						 validator="#{groupBean.validateName}"
+						 />
+						 
+						 <h:outputText value="#{msg['group.date']}"></h:outputText>
+						 <p:inputText value="#{groupBean.group.dateCreation}"  id="datecreation" disabled="true" />
+                       
+                    <f:facet name="footer">
+                    	<div style="float:left">
+                            <p:commandLink styleClass="btn btn-primary btn-block btn-flat" style="color:#ffffff;" value="#{msg['button.sauvegarder']}" update=":formgroups, :growl"   oncomplete="PF(handleSubmitRequest(xhr, status, args, 'newGroupDlg','newGroupForm'));"  actionListener="#{groupBean.create}"  />
+                        </div>
+                        <div style="float:right">    
+                            <p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;" value="#{msg['button.close']}" oncomplete="PF('addDialog').hide()" />
+                         </div>                  
+                    </f:facet>
+                </p:panelGrid>  
+              </h:form>
+          </p:dialog> 
+          
+          <!-- DIALOG DE CONFIRMATION DE LA SUPPRESSION -->
+          
+          <h:form id="deleteFrom">
+        	 <p:confirmDialog  header="#{msg['global.supprimer']}"
+			message="#{msg['global.supprimer.label']}" severity="alert"  widgetVar="deleteDialog">			
+			<p:commandButton value="#{msg['button.oui']}" update=":formgroups,:growl"   actionListener="#{groupBean.delete(actionEvent) }" 
+			 oncomplete="PF('deleteDialog').hide();"/>			
+			<p:commandButton value="#{msg['button.non']}" onclick="deleteDialog.hide();" type="button" /> 
+			</p:confirmDialog> 
+        
+        </h:form>
+        
+         <!-- DIALOG D'AJOUT DES ACCESS A UN GROUPE-->
+        
+        <p:dialog header="#{msg['glabel.ajouter']}" widgetVar="group2AccessDialog" resizable="false" id="group2AccessDlg" modal="true" width="650px"> 
+              <h:form id="newGoup2AccessForm"> 
+                <p:panelGrid id="display" columns="1" cellpadding="4" style="margin:0 auto;"> 
+                	
+                	
+                	<h:outputLabel >#{msg['group.access.seleted']} #{groupBean.group.idGroup} (#{groupBean.group.groupName})</h:outputLabel>
+                	<p:dataTable  var="access" value="#{groupBean.ressourcesListDataModel}" widgetVar="accessTable" rowKey="#{access.idRessource}"
+		                        paginator="true" rows="10" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+		                        emptyMessage="#{msg['global.msgsearch']}"
+		                        selection="#{groupBean.selectedRessources}">
+		                       
+		                        <p:column selectionMode="multiple" style="width:40px;text-align:center" />  
+		               
+		               <!--  <p:column  sortBy="#{access.idRessource}" filterBy="#{access.idRessource}" filterMatchMode="contains"  >
+		                    <f:facet name="header">
+		                        <h:outputText value="#{msg['access.code']}" />
+		                    </f:facet>
+		                    <h:outputText value="#{access.idRessource}" />
+		                </p:column> -->
+		                
+		               <!--  <p:column  sortBy="#{access.ressourceName}" filterBy="#{access.ressourceName}" filterMatchMode="contains"  >
+		                    <f:facet name="header">
+		                        <h:outputText value="#{msg['access.nom']}" />
+		                    </f:facet>
+		                    <h:outputText value="#{access.ressourceName}" />
+		                </p:column> -->
+		                
+		                <p:column  sortBy="#{access.ressourceDetail}" filterBy="#{access.ressourceDetail}" filterMatchMode="contains"  >
+		                    <f:facet name="header">
+		                        <h:outputText value="#{msg['access.libelle']}" />
+		                    </f:facet>
+		                    <h:outputText value="#{access.ressourceDetail}" />
+		                </p:column>
+		                       
+		             </p:dataTable>
+                	               				
+						
+                    <f:facet name="footer">
+                    
+                    	<div style="float:left">
+                    		 <p:commandLink styleClass="btn btn-primary btn-block btn-flat" style="color:#ffffff;" value="#{msg['button.sauvegarder']}" update=":growl"   oncomplete="PF('group2AccessDialog').hide()"  actionListener="#{groupBean.AddGroup2Access()}"  />
+                          
+                    	</div>
+                    	<div style="float:right">
+                    		 <p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;"  value="#{msg['button.close']}"  oncomplete="PF('group2AccessDialog').hide()" />                         
+     
+                    	</div>
+                    </f:facet>
+                </p:panelGrid>  
+              </h:form>
+          </p:dialog>  
+		
+		
+		
+   
+   </ui:define>
+  </ui:composition>
+</html>

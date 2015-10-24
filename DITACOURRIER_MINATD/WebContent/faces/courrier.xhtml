@@ -1,0 +1,1230 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+  xmlns:c="http://java.sun.com/jsp/jstl/core">
+  
+  <ui:composition template="layout.xhtml"
+  xmlns:sec="http://www.springframework.org/security/facelets/tags">
+  <ui:define name="contenu">
+  
+  
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+          #{msg['courrier']}
+            <small></small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="${request.contextPath}/faces/index.xhtml"><i class="fa fa-dashboard"></i>#{msg['dashboard']}</a></li>            
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title">#{msg['courrier.liste']}</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                			             
+                   <!-- Begin message Ã©phÃ©mere pour les messages de validations -->
+					<p:growl id="growl" showDetail="true" sticky="false" life="20000"/>
+				<!-- End message Ã©phÃ©mere pour les messages de validations -->
+				
+				<!-- <sec:ifAnyGranted  roles="ROLE_ADMIN">
+		           <h:form id="formEspace">
+		           								           						
+		             <p:panelGrid columns="2" layout="grid">
+		                	<p:selectOneMenu value="#{espaceCourrierControllerBean.idEspacecourant}">  
+		        				<f:selectItems value="#{espaceCourrierControllerBean.listeEspace}" var="espace" itemLabel="#{espace.nomespace}" itemValue="#{espace.id}"/>  
+		           			</p:selectOneMenu> 
+		      				<p:commandButton value="#{msg['courrier.valider']}" action="#{espaceCourrierControllerBean.afficherNumero}" update=":formList:tabEspaceCourrier, :growl"/>
+		      				<h:outputText id="info"  value="#{espaceCourrierControllerBean.idEspacecourant}" />
+		     		 </p:panelGrid>	
+		     		 
+		     		 </h:form>
+     		 </sec:ifAnyGranted>  -->
+                 <h:form id="formList">
+		                <p:dataTable var="courrier" value="#{courrierControllerBean.listEspaceCourrierMeta}" id="tabEspaceCourrier" widgetVar="CourrierTable"
+                         emptyMessage="Pas de courrier diponible" paginator="true" rowStyleClass="#{courrier.recu==false? 'old' : null}" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rows="10" selection="#{espaceCourrierControllerBean.espacecourrierList}"> 
+                      
+                      <!-- DEBUT METHODE PERMETTANT D'AFFICHER LA BOITE DE DETAIL DU COURRIER  -->   
+              <!--      <p:ajax event="rowSelect" listener="#{espaceCourrierControllerBean.onRowSelect}" update=":editCourrier:dialogCourrier" oncomplete="PF('courrierEdit').show();" />  -->
+                      <!-- FIN METHODE PERMETTANT D'AFFICHER LA BOITE DE DETAIL DU COURRIER  -->  
+                     	
+                     	 <!-- MENU DES OPTIONS SUR UNE COLLECTION DE COURRIER --> 
+                     	<f:facet name="header">
+		              
+		              	<div class="row rigth">
+              				<div class="col-sm-12">   
+              				<div class="col-sm-3"> 
+              					                  				  		
+				              	<div class="btn-group">
+		                            <button type="button" class="btn btn-default btn-sm btn-flat dropdown-toggle" data-toggle="dropdown">
+		                              Action <span class="caret"></span>
+		                            </button>
+		                            <ul class="dropdown-menu" role="menu">
+		                              <li>
+	                               		<sec:ifAnyGranted  roles="ROLE_courrier.add">  
+					            			  <p:commandLink value="#{msg['courrier.add']}" update=":newcourrierForm" oncomplete="PF('addDialog').show()" actionListener="#{courrierControllerBean.ajoutEvent()}" />		                        
+					                  	</sec:ifAnyGranted> 
+		                              </li>		                             
+		                              <li class="divider"></li>	
+		                              <!-- <li>
+	                               		<sec:ifAnyGranted  roles="ROLE_courrier.transferer,ROLE_ADMIN"> 
+					            			 <p:commandLink value="#{msg['courrier.transfer']}" update=":transfertform" oncomplete="PF('transfertDialog').show()" actionListener="#{espaceCourrierControllerBean.updateSelected()}" />		                        
+					                  	</sec:ifAnyGranted>  
+		                              </li>		                             
+		                              <li class="divider" ></li> -->
+		                              <li>
+		                              	    <sec:ifAnyGranted  roles="ROLE_courrier.rejeter">   
+		                              	 		<p:commandLink value="#{msg['courrier.rejet']}" oncomplete="PF('rejetDialog').show()" update=":rejetform" action="#{espaceCourrierControllerBean.updateSelectedRejet}" />
+		         							</sec:ifAnyGranted>
+		                              </li>
+		                              <li class="divider"></li>
+		                              <li>
+		                              	    <sec:ifAnyGranted  roles="ROLE_courrier.deleteTrans">   
+		                              	 		<p:commandLink value="#{msg['button.delete']}" oncomplete="PF('deleteDialog').show()" />
+		         							</sec:ifAnyGranted> 
+		                              </li>
+		                             <li class="divider"></li>
+		                              <li>
+		                              	    <sec:ifAnyGranted  roles="ROLE_courrier.deleteTrans">   
+		                              	 		<p:commandLink value="#{msg['button.liste.transferer']}" oncomplete="PF('rejetDialog1').show()" update=":rejetform1" action="#{espaceCourrierControllerBean.updatetransfere}" />
+		         							</sec:ifAnyGranted> 
+		                              </li>
+		                            </ul>
+		                          </div>
+		                       </div>
+              				 <div class="col-sm-9">	
+              				 	<div class="input-group search-taille">                         
+	                            	<p:outputPanel>						                       
+				                        <p:inputText id="globalFilter" onkeyup="CourrierTable.filter()" styleClass="form-control input-sm"  />                           
+				                    </p:outputPanel>
+				                 </div>	                            
+	                            
+	                       </div>
+	                        </div>
+	                     </div>
+		              		 
+		              	</f:facet>
+		              	
+               		<!-- FIN MENU DES OPTIONS SUR UNE COLLECTION DE COURRIER --> 
+               		<!-- style="width:16px;text-align:center" -->
+ 				<p:column selectionMode="multiple" style="width:16px;text-align:center" />
+                <p:column headerText="#{msg['courrier.reference']}" filterBy="#{courrier.courrier.refid}" sortBy="#{courrier.courrier.refid}" filterMatchMode="contains" >
+                    	<f:facet name="filter">
+                			<p:spinner onchange="PF('CourrierTable').filter()" styleClass="year-spinner">
+                    			<f:converter converterId="javax.faces.Integer" />
+               				 </p:spinner>
+            			</f:facet>
+                    <h:outputText value="#{courrier.courrier.refid}" />
+                </p:column>
+                
+                                
+                <p:column headerText="#{msg['courrier.priorite']}" filterBy="#{courrier.courrier.priorite.prioriteordre}" sortBy="{courrier.courrier.priorite.prioriteordre}" filterMatchMode="contains" >
+                    
+                    <p:rating value="#{courrier.courrier.priorite.prioriteordre}" stars="#{courrierControllerBean.nombreDePriorite}" readonly="true" />
+                </p:column>
+                
+                <p:column headerText="Type"  filterBy="#{courrier.courrier.typecourrier.typecourdesignation}" sortBy="{courrier.courrier.typecourrier.typecourdesignation}" filterMatchMode="contains" >
+                    <h:outputText value="#{courrier.courrier.typecourrier.typecourdesignation}" />
+                </p:column>
+                
+               
+                <p:column headerText="#{msg['courrier.corres']}"  filterBy="#{courrier.courrier.usersender.infosPersonne.nom}" filterMatchMode="contains" >
+                    <h:outputText value="#{courrier.courrier.usersender.infosPersonne.nom}" rendered="#{courrier.courrier.usersender!=null}" />
+                	<h:outputText value="#{courrier.courrier.correspondantsender.nom}" rendered="#{courrier.courrier.correspondantsender!=null}"/>
+                </p:column>
+                
+                  <p:column headerText="#{msg['courrier.statut']}" filterBy="#{courrier.statut.statutdesignation}" filterOptions="#{espaceCourrierControllerBean.lesStatuts}" sortBy="#{courrier.statut.statutdesignation}" filterMatchMode="exact" >
+                  	<h:outputText value="#{courrier.statut.statutdesignation}" />
+                </p:column>
+                
+                <p:column headerText="Actions" >
+                                
+                			    <sec:ifAnyGranted  roles="ROLE_courrier.view">  
+	                        	 	
+	                        	 		<p:commandButton style="color:#fff;" update=":viewform:viewCourrier" icon="ui-icon-circle-zoomout" styleClass="btn-info"  oncomplete="PF('viewDialog').show();" title="#{msg['courrier.visualiser']}" actionListener="#{espaceCourrierControllerBean.viewEvent(courrier.id)}" />
+	   							</sec:ifAnyGranted>
+	   							
+			                    <sec:ifAnyGranted  roles="ROLE_courrier.edit">  
+	                        	 		<p:commandButton  actionListener="#{courrierControllerBean.editEvent(courrier.courrier.id)}" oncomplete="PF('addDialog').show()" update=":newcourrierForm" icon="ui-icon-pencil" styleClass="btn-success" title="#{msg['global.modifier']}" rendered="#{courrier.statut.id!=1 and (courrier.recu==true or courrier.recu==null)}" />
+	                        	 		
+	   							</sec:ifAnyGranted>
+	   							
+	   						    <sec:ifAnyGranted  roles="ROLE_courrier.addPJ">  
+	                        	 		<p:commandButton  actionListener="#{courrierControllerBean.addAndViewPJEvent(courrier.courrier.id)}" oncomplete="PF('addPJCourrierDialog').show()" update=":dialogAddPJCourrierForm" icon="ui-icon-document" styleClass="btn-success" title="#{msg['global.courrier.addpj']}" rendered="#{courrier.statut.id!=1 and (courrier.recu==true or courrier.recu==null) and courrier.confidentialite==false}" />
+	                        	 		
+	   							</sec:ifAnyGranted>
+	   							
+	   			                <sec:ifAnyGranted  roles="ROLE_courrier.viewPJ">  
+	                        	 		<p:commandButton  actionListener="#{courrierControllerBean.addAndViewPJEvent(courrier.courrier.id)}" oncomplete="PF('viewDeletePJCourrierDialog').show()" update=":viewDeletePJCourrierForm" icon="ui-icon-folder-open" styleClass="btn-success" title="#{msg['global.courrier.viewdelete']}" rendered="#{courrier.statut.id!=1 and (courrier.recu==true or courrier.recu==null) and courrier.confidentialite==false}"/>
+	                        	 		<!-- <p:commandLink value="#{msg['courrier.add']}" update=":newcourrierForm" oncomplete="addDialog.show()" actionListener="#{courrierControllerBean.ajoutEvent()}" /> -->
+	   							</sec:ifAnyGranted>
+	   							
+			                   	<sec:ifAnyGranted  roles="ROLE_courrier.delete">  
+	                        	 		<p:commandButton  actionListener="#{suivieControllerBean.suivreCourrier(courrier.courrier.refid)}"  update=":formsuivi" oncomplete="PF('suiviDialog').show()"  icon="ui-icon-arrowreturnthick-1-n" title="#{msg['courrier.suivi.view']}" styleClass="bg-blue" rendered="#{(courrier.recu==true or courrier.recu==null) and courrier.confidentialite==false}" />
+	                        	 		
+	   							</sec:ifAnyGranted>
+	   							<sec:ifAnyGranted  roles="ROLE_courrier.delete">  
+	                        	 		<p:commandButton id="related" actionListener="#{suiviESControllerBean.suivi(courrier.courrier.refid)}"  update=":formsuivi2"  oncomplete="PF('suiviDialog2').show()"  icon="ui-icon-refresh" title="#{msg['courrier.related.title']}" styleClass="bg-yellow" rendered="#{(courrier.recu==true or courrier.recu==null)and courrier.confidentialite==false}" />
+	   									<p:tooltip for="related"/>
+	   							</sec:ifAnyGranted>
+	   							<sec:ifAnyGranted  roles="ROLE_courrier.transferer"> 
+	   										
+		                        	 		<p:commandButton  actionListener="#{espaceCourrierControllerBean.transfertView(courrier.id)}" update=":transfertform" oncomplete="PF('transfertDialog').show()" icon="ui-icon-circle-arrow-e" title="#{msg['courrier.transferone']}" styleClass="bg-green" rendered="#{courrier.statut.id!=1 and (courrier.recu==true or courrier.recu==null)}">
+		                        	 			<p:ajax update=":transfertform:espace1" global="false"/> 
+		                        	 		</p:commandButton>
+		   									
+		   							</sec:ifAnyGranted>
+		   			
+						    	 <sec:ifAnyGranted  roles="ROLE_courrier.view">  
+						    	                         	 		
+			                        	 		<p:commandButton style="color:#fff;" update=":rejetform2" icon="ui-icon-check" styleClass="btn-info" title="#{msg['courrier.recu.info']}" oncomplete="PF('rejetDialog2').show()" actionListener="#{espaceCourrierControllerBean.editObservation(courrier.id)}" rendered="#{courrier.recu==false}"/>
+			                       	
+			   						</sec:ifAnyGranted>
+				    
+                </p:column> 
+                		<!-- background:#3c8dbc;color:#fff; -->
+                </p:dataTable>
+			  </h:form> 
+                </div><!-- /.box-body -->
+              
+              </div><!-- /.box -->
+
+           </div> 
+          </div><!-- /.row -->
+   
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+      
+       
+       <!--  MODAL LE TRANSFERT DES COURRIER -->
+       	<h:form id="transfertform">
+       	  <p:dialog header="#{msg['courrier.transfer.head']}"  widgetVar="transfertDialog" resizable="true" id="transferCourrier" modal="true" width="650px">
+       	  			
+       		            
+						<p:dataTable var="mail" value="#{espaceCourrierControllerBean.listecourriersfilter}" rows="5"
+                         paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+									<f:facet name="header">
+           								 #{msg['courrier.transfer.title']}
+       								 </f:facet>
+							    <p:column headerText="#{msg['courrier.reference']}">
+							        <h:outputText value="#{mail.courrier.refid}" />
+							    </p:column>
+							 
+							    <p:column headerText="#{msg['courrier.firstenrg']}">
+							        <h:outputText value="#{mail.courrier.courdatenreg}" />
+							    </p:column>
+							 
+							    <p:column headerText="#{msg['courrier.user.receiver']}" > <!-- rendered="#{mail.courrier.userreceiver.infosPersonne.nom}!=''" -->
+							        <h:outputText value="#{mail.courrier.userreceiver.infosPersonne.nom}" />
+							    </p:column>
+							    <p:column headerText="#{msg['courrier.user.receiver.corresp']}">  <!-- rendered="#{mail.courrier.correspondantreceiver.nom}!=''" -->
+							        <h:outputText value="#{mail.courrier.correspondantreceiver.nom}" />
+							    </p:column>
+							 
+							</p:dataTable>
+							<p:separator/>
+									<p:panelGrid columns="5" cellpadding="10" >		
+									 <p:panel header="Definir la destination"> 
+									 <p:panelGrid columns="6" cellpadding="10" >	           
+					                <p:selectOneMenu id="espace1" immediate="true" valueChangeListener="#{espaceCourrierControllerBean.ChangeListener}" value="#{espaceCourrierControllerBean.idEspaceTransfert}" required="true">  
+					                	<f:selectItem itemLabel="#{msg['courrier.transfer.espace']}" itemValue="" />
+	        							<f:selectItems value="#{espaceCourrierControllerBean.listeEspace}" var="espace" itemLabel="#{espace.nomespace}" itemValue="#{espace.id}"/> 
+	        							<p:ajax update=":transfertform:user1" global="false"/> 
+	           						</p:selectOneMenu>
+	           						
+	           							<h:outputText value="    A    "/>
+	           							  								      						
+	           								<p:selectOneMenu id="user1"  value="#{espaceCourrierControllerBean.userLoad}">  
+		           							<f:selectItem itemLabel="#{msg['courrier.transfer.user']}" itemValue="" />
+		        							<f:selectItems value="#{espaceCourrierControllerBean.listeUser}" var="user" itemLabel="#{user.infosPersonne.nom} #{user.infosPersonne.prenom}" itemValue="#{user.id}"/>  
+	           								</p:selectOneMenu>
+	           							<h:outputText value="    "/>
+	           								<p:selectOneMenu id="bordereau1"  value="#{espaceCourrierControllerBean.idBordereau}">  
+		           							<f:selectItem itemLabel="#{msg['bordereau.select']}" itemValue="" />
+		        							<f:selectItems value="#{espaceCourrierControllerBean.listeBordereau}" var="bordereau" itemLabel="#{bordereau.numbordereau}" itemValue="#{bordereau.id}"/>  
+	           						</p:selectOneMenu>
+	           						 <p:commandLink styleClass="btn btn-warning pull-left" value="#{msg['bordereau.add']}" style="color:#ffffff;" id="idbordereau"  oncomplete="PF('addConfirmeDialog').show()" title="#{msg['bordereau.add.titre']}"/>
+	           						
+	           						</p:panelGrid>
+	           						
+	           						
+	           						 <h:panelGroup>
+	           						  <h:outputText value=" " />
+					              	<h4>#{msg['courrier.transfer.obser']}</h4>
+					                <p:inputTextarea rows="6" cols="100" value="#{espaceCourrierControllerBean.courrierObservation}" autoResize="false"  />
+					                </h:panelGroup>
+					                
+					                 </p:panel>
+					              
+					   			</p:panelGrid>
+					   				<p:separator/>
+					           <p:commandLink styleClass="btn btn-primary pull-left" value="#{msg['courrier.transfer']}" id="idtransfert" style="color:#ffffff;" update=":formList:tabEspaceCourrier, :growl" actionListener="#{espaceCourrierControllerBean.manyTransfert}" oncomplete="PF('transfertDialog').hide()" />
+								 <p:commandLink styleClass="btn btn-danger pull-right" value="#{msg['button.close']}" style="color:#ffffff;" oncomplete="PF('transfertDialog').hide()" global="false"/>
+			</p:dialog>
+					            
+       	</h:form>
+       <!--  FIN MODAL LE TRANSFERT DES COURRIER -->
+       
+       <!--  MODAL DE VISUALISATION DE L'OBSERVATION DE RECEPTION-->
+       	<h:form id="rejetform3">
+	       <p:dialog header="#{msg['observation.receiver.title']} du courrier #{espaceCourrierControllerBean.espacecourriercourant.courrier.refid}" id="rejetCourrier3" resizable="true" widgetVar="rejetDialog3" modal="true">
+       		<p:inputTextarea style="opacity:1;" id="viewObs" cols="45" value="#{espaceCourrierControllerBean.espacecourriercourant.observeReceiver}" disabled="true"/>
+       	  
+       	  <p:separator/>
+       	   
+		   <p:commandLink styleClass="btn btn-danger pull-right" value="#{msg['button.close']}" style="color:#ffffff;" oncomplete="PF('rejetDialog3').hide()" global="false"/>
+       		</p:dialog>
+       	</h:form>
+       <!--  FIN MODAL DE VISUALISATION DE L'OBSERVATION DE RECEPTION-->
+       
+       <!--  MODAL DE DEFINITION DE L'OBSERVATION DE RECEPTION-->
+       	<h:form id="rejetform2">
+	       <p:dialog header="#{msg['observation.receiver.title']} du courrier #{espaceCourrierControllerBean.espacecourriercourant.courrier.refid}" id="rejetCourrier2" resizable="true" widgetVar="rejetDialog2" modal="true">
+       		<p:inputTextarea cols="45" value="#{espaceCourrierControllerBean.observeReceiver}"  required="true" requiredMessage="#{msg['observation.required']}"/>
+       	  
+       	  <p:separator/>
+       	   <p:commandLink styleClass="btn btn-primary pull-left" value="#{msg['courrier.valider']}" id="idobserver" style="color:#ffffff;" update=":formList:tabEspaceCourrier, :growl" actionListener="#{espaceCourrierControllerBean.changeReceptionStatut()}" oncomplete="PF('rejetDialog2').hide()" />
+		   <p:commandLink styleClass="btn btn-danger pull-right" value="#{msg['button.close']}" style="color:#ffffff;" oncomplete="PF('rejetDialog2').hide()" global="false"/>
+       		</p:dialog>
+       	</h:form>
+       <!--  MODAL DE DEFINITION DE L'OBSERVATION DE RECEPTION-->
+       
+       
+        <!--  MODAL DE VISUALISATION DES COURRIERS TRANSMIS--> 
+       <h:form id="rejetform1">
+	       <p:dialog header="#{msg['courrier.title.traite']}" id="rejetCourrier1" resizable="true" widgetVar="rejetDialog1" modal="true" width="650px">
+	       
+	       					<p:dataTable var="mail" value="#{espaceCourrierControllerBean.listecourrierstraite}" rows="5"
+                         paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+									<f:facet name="header">
+           								 #{msg['courrier.title.traite']}
+       								 </f:facet>
+							    <p:column headerText="#{msg['courrier.reference']}">
+							        <h:outputText value="#{mail.courrier.refid}" />
+							    </p:column>
+							 
+							    <p:column headerText="#{msg['courrier.datearrive']}">
+							        <h:outputText value="#{mail.datearrive}" />
+							    </p:column>
+							    
+							   
+							     <p:column headerText="#{msg['courrier.traitement.date']}">
+							        <h:outputText value="#{mail.datesortie}" />
+							    </p:column>
+							 
+							    <p:column headerText="#{msg['courrier.corres']}">
+							        <h:outputText value="#{mail.courrier.usersender.infosPersonne.nom}" rendered="#{mail.courrier.usersender!=null}" />
+                					<h:outputText value="#{mail.courrier.correspondantsender.nom}" rendered="#{mail.courrier.correspondantsender!=null}"/>
+							    </p:column>
+							    <p:column headerText="#{msg['courrier.recu.title']}" filterBy="#{mail.recu}" filterOptions="#{espaceCourrierControllerBean.estrecu}" sortBy="#{mail.recu}" filterMatchMode="exact">
+							        <h:outputText value="#{msg['courrier.recu.non']}" rendered="#{mail.recu==false}" />
+                					<h:outputText value="#{msg['courrier.recu.oui']}" rendered="#{mail.recu==true}"/>
+							    </p:column>
+							    <p:column headerText="#{msg['courrier.recu.date']}">
+							        <h:outputText value="#{mail.recepationDate}" rendered="#{mail.recu==true}" /> 
+                					
+							    </p:column>
+							    <p:column headerText="Observation">
+							        <p:commandButton style="color:#000;" update=":rejetform3" value="#{msg['courrier.observer.voir']}" icon="ui-icon-circle-zoomout" styleClass="btn-info"  oncomplete="PF('rejetDialog3').show();" title="#{msg['courrier.visualiser']}" actionListener="#{espaceCourrierControllerBean.editObservation(mail.id)}" rendered="#{!(empty mail.observeReceiver)}"/>
+							    </p:column>
+							    <p:column headerText="Actions" >
+	                
+	                			    <sec:ifAnyGranted  roles="ROLE_courrier.view">  
+		                        	 	<p:commandButton style="color:#fff;" update=":viewform:viewCourrier" icon="ui-icon-circle-zoomout" styleClass="btn-info"  oncomplete="PF('viewDialog').show();" title="#{msg['courrier.visualiser']}" actionListener="#{espaceCourrierControllerBean.viewEvent(mail.id)}" />
+		   							</sec:ifAnyGranted>
+				                   
+				                   	<sec:ifAnyGranted  roles="ROLE_courrier.delete">  
+		                        	 		<p:commandButton  actionListener="#{suivieControllerBean.suivreCourrier(mail.courrier.refid)}"  update=":formsuivi" oncomplete="PF('suiviDialog').show()"  icon="ui-icon-arrowreturnthick-1-n" title="#{msg['courrier.suivi.view']}" styleClass="bg-blue" />
+		   							</sec:ifAnyGranted>
+		   							<sec:ifAnyGranted  roles="ROLE_courrier.delete">  
+		                        	 		<p:commandButton  actionListener="#{suiviESControllerBean.suivi(mail.courrier.refid)}"  update=":formsuivi2" oncomplete="PF('suiviDialog2').show()"  icon="ui-icon-refresh" title="#{msg['courrier.related.title']}" styleClass="bg-yellow" />
+		   							</sec:ifAnyGranted>
+		   							
+                 
+              			 		 </p:column> 
+							 
+							</p:dataTable>
+	       			
+	     	<p:separator/>
+	     	<h:panelGrid style="margin:auto;">
+	     <p:commandLink global="false"  styleClass="btn btn-primary pull-left" value="#{msg['button.close']}" style="color:#ffffff;" onclick="rejetDialog1.hide();" action="#{courrierControllerBean.init()}"  />
+	       </h:panelGrid>
+	       </p:dialog>
+       </h:form>
+       
+        <!--  MODAL DU SUIVI DU COURRIER--> 
+       <h:form id="formsuivi">
+	       <p:dialog header="#{msg['courrier.suivi']}" id="suivi" resizable="false" widgetVar="suiviDialog" modal="true" width="650px">
+	       
+	       					<p:dataTable var="courrier" value="#{suivieControllerBean.listeSuiviCourrier}" rows="10"
+                         paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+									<p:column headerText="Reference"  >
+                    	
+                    <h:outputText value="#{courrier.courrier.refid}" />
+                </p:column>
+                
+                <p:column headerText="#{msg['espace.nom']}" filterBy="#{courrier.espace.nomespace}" sortBy="{courrier.espace.nomespace}" filterMatchMode="contains" >
+                    <h:outputText value="#{courrier.espace.nomespace}" />
+                </p:column>
+                
+                <p:column headerText="#{msg['courrier.statut']}"  filterBy="#{courrier.statut.statutdesignation}" sortBy="{courrier.statut.statutdesignation}" filterMatchMode="contains" >
+                    <h:outputText value="#{courrier.statut.statutdesignation}" />
+                </p:column>
+                
+                <p:column headerText="#{msg['courrier.datearrive']}"  filterBy="#{courrier.datearrive}" filterMatchMode="contains" >
+                    <h:outputText value="#{courrier.datearrive}" />
+                </p:column>
+                
+                  <p:column headerText="#{msg['courrier.courobservation']}" filterBy="#{courrier.observation}" sortBy="#{courrier.observation}" >
+                  	
+                  	<h:outputText value="#{courrier.observation}" />
+                  
+                </p:column>
+                
+							 
+				</p:dataTable>
+	       			
+	     	<p:separator/>
+	     <p:commandLink global="false" styleClass="btn btn-primary pull-right" value="#{msg['button.close']}" style="color:#ffffff;" onclick="suiviDialog.hide();"/>
+	       </p:dialog>
+       </h:form>
+           <!--  MODAL DES COURRIERS EN RELATION--> 
+       <h:form id="formsuivi2">
+	       <p:dialog header="#{msg['courrier.relation']} #{suiviESControllerBean.reference}" id="suivi2" resizable="false" widgetVar="suiviDialog2" modal="true" width="650px">
+	       
+	       					<p:dataTable var="courrier" value="#{suiviESControllerBean.listeSuiviCourrier}" rows="10"
+                         paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+				<p:column headerText="Reference"  >
+                    	
+                    <h:outputText value="#{courrier.refid}" />
+                </p:column>
+                
+                <p:column headerText="#{msg['courrier.courobjet']}" filterBy="#{courrier.courobjet}" sortBy="{courrier.courobjet}" filterMatchMode="contains" >
+                    <h:outputText value="#{courrier.courobjet}" />
+                </p:column>
+                
+                <p:column headerText="#{msg['courrier.courobservation']}"  filterBy="#{courrier.courobservation}" sortBy="{courrier.courobservation}" filterMatchMode="contains" >
+                    <h:outputText value="#{courrier.courobservation}" />
+                </p:column>
+                
+                <p:column headerText="#{msg['courrier.datenreg']}"  filterBy="#{courrier.courdatenreg}" filterMatchMode="contains" >
+                    <h:outputText value="#{courrier.courdatenreg }" />
+                </p:column>
+                                             
+                
+				</p:dataTable>
+	       			
+	     	<p:separator/>
+	     <p:commandLink global="false"  styleClass="btn btn-primary pull-right" value="#{msg['button.close']}" style="color:#ffffff;" onclick="suiviDialog2.hide();" />
+	       </p:dialog>
+       </h:form>
+	   
+	   
+        <!--  MODAL DE REJET DE PLUSIEURS COURRIERS --> 
+       <h:form id="rejetform" >
+	       <p:dialog header="#{msg['courrier.rejet.head']}" id="rejetCourrier" resizable="true" widgetVar="rejetDialog" modal="true" width="650px">
+	       
+	       					<p:dataTable var="mail" value="#{espaceCourrierControllerBean.listecourriersfilter}" rows="5"
+                         paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+									<f:facet name="header">
+           								 #{msg['courrier.rejet.title']}
+       								 </f:facet>
+							    <p:column headerText="#{msg['courrier.reference']}">
+							        <h:outputText value="#{mail.courrier.refid}" />
+							    </p:column>
+							 
+							    <p:column headerText="#{msg['courrier.firstenrg']}">
+							        <h:outputText value="#{mail.courrier.courdatenreg}" />
+							    </p:column>
+							 
+							    <p:column headerText="#{msg['courrier.corres']}">
+							        <h:outputText value="#{mail.courrier.usersender.infosPersonne.nom}" />
+							    </p:column>
+							 
+							</p:dataTable>
+	       			<p:separator/>
+		        <h:panelGrid columns="3" cellpadding="10">
+		       		 <h:panelGroup>
+					     <h4>#{msg['courrier.rejet.motif.title']}</h4>
+						 <p:inputTextarea rows="6" required="true" requiredMessage="#{msg['courrier.rejet.required']}" id="rejet" cols="60" value="#{espaceCourrierControllerBean.rejetText}"/>
+						 <p:message for="rejet" styleClass="error" />
+					</h:panelGroup>
+					 						
+				</h:panelGrid>
+	     <p:separator/>
+	     <h:commandButton  styleClass="btn btn-primary pull-left" value="#{msg['courrier.rejet.btn']}" update=":formList:tabEspaceCourrier, :growl" actionListener="#{espaceCourrierControllerBean.rejeter()}" oncomplete="PF(handleSubmitRequest2(xhr, status, args, 'rejetCourrier','rejetform'));"/>
+	       </p:dialog>
+       </h:form>
+ 		                   
+      <!--  FIN MODAL DE REJET DE PLUSIEURS COURRIERS --> 
+       
+       <!--  PORTION DE CHARGEMENT LORS DE L"EXECUTION D'UN ELEMENT -->   
+       <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+ 
+		<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+		<img src="${request.contextPath}/faces/img/ajaxloadingbar.gif" />
+ 	  	 </p:dialog> 
+		<!--  FIN PORTION DE CHARGEMENT LORS DE L"EXECUTION D"UN ELEMENT -->  
+		
+		
+   	<!--  MODAL DE VISUALISATION DES DETAILS DU COURRIER -->
+   	<h:form id="viewform">
+		   	<p:dialog header="#{msg['courrier.datail.head']} #{espaceCourrierControllerBean.espacecourriercourant.courrier.refid}"  widgetVar="viewDialog" resizable="true" id="viewCourrier" modal="true" width="650px">
+		   		 
+		           <c:choose>
+		               <c:when test="#{espaceCourrierControllerBean.confidentialite =='true'}">  
+				    	<h:outputText value="#{msg['courrier.confident.info']}"/>
+				    	<p:separator/>
+				    		<p:panelGrid columns="2" style="margin:0 auto;">
+				    			<h:panelGroup>
+				            		 <strong> #{msg['courrier.mail.receiver']}</strong>
+                      			 	<h:outputText value="#{espaceCourrierControllerBean.espacecourriercourant.courrier.userreceiver.infosPersonne.mailAddress}" styleClass="form-control" />
+				            	 </h:panelGroup>
+				    			<h:panelGroup>
+				            		 <strong> #{msg['courrier.user.receiver.corresp']}</strong>
+                      			 	<h:outputText value="#{espaceCourrierControllerBean.espacecourriercourant.courrier.correspondantreceiver.nom}" styleClass="form-control" />
+				            	 </h:panelGroup>
+				            </p:panelGrid>
+				    	<p:separator/>
+				    	
+				    <p:panelGrid columns="3" style="margin-bottom:10px" cellpadding="5">
+       								<!-- <h:outputText value="Marquer comme terminé: " rendered="#{espaceCourrierControllerBean.estTermine}"/>
+      							 		 <p:selectBooleanCheckbox value="#{espaceCourrierControllerBean.endvalue}"  rendered="#{espaceCourrierControllerBean.estTermine}" /> -->
+				              		<p:commandLink global="false" styleClass="btn btn-primary pull-left" value="#{msg['button.close']}" style="color:#ffffff;" update=":formList:tabEspaceCourrier, :growl" actionListener="#{espaceCourrierControllerBean.fermerView() }" oncomplete="PF('viewDialog').hide()" />
+				     </p:panelGrid>
+				    </c:when>
+				    <c:otherwise>  
+				      <p:tabView effect="fade" effectDuration="fast">
+		                    <p:tab title="Détail du courrier">
+		                    <p:panelGrid columns="2" cellpadding="2" style="margin:0 auto;">
+		                    <f:facet name="header">
+		                       		 <h4><h:outputLabel value="#{msg['courrier.detail']}" styleClass="fa fa-envelope-o"/></h4>
+		                    	</f:facet> 
+		                    <h:panelGroup>
+                			<h3> #{msg['courrier.objet']}</h3>
+                			<p:inputTextarea style="opacity:1;"  rows="4" cols="35" value="#{espaceCourrierControllerBean.espacecourriercourant.courrier.courobjet}"  disabled="true" autoResize="false" scrollHeight="10"  maxlength="50" />
+		                       </h:panelGroup>
+		                        <h:panelGroup>
+		                       <h3> #{msg['courrier.obsv']}</h3>
+		                      
+                    			<p:inputTextarea style="opacity:1;"  rows="4" cols="35" value="#{espaceCourrierControllerBean.espacecourriercourant.courrier.courobservation}"  disabled="true" autoResize="false" scrollHeight="10"  maxlength="50" />
+               					<!-- <h:outputText value="#{espaceCourrierControllerBean.espacecourriercourant.courrier.courobservation}" styleClass="form-control" /> -->
+            					</h:panelGroup>
+            					</p:panelGrid>
+		                    <p:panelGrid columns="3" cellpadding="4" style="margin:0 auto;">  
+		                    	 
+                    			
+            					
+            					<h:panelGroup>
+                    			<strong> #{msg['courrier.priorite']}</strong>
+               					<h:outputText value="#{espaceCourrierControllerBean.espacecourriercourant.courrier.priorite.priodesignation}" styleClass="form-control" />
+            					</h:panelGroup>
+            					
+            					<h:panelGroup>
+                    			<strong> #{msg['courrier.reference']}</strong>
+            					 <h:outputText  value="#{espaceCourrierControllerBean.espacecourriercourant.courrier.refid}" styleClass="form-control" />
+                      			</h:panelGroup>
+                      			 
+                      			
+                      			 <h:panelGroup>
+                    			 <strong> #{msg['courrier.email.corrs']}</strong>
+                      			  <h:outputText value="#{espaceCourrierControllerBean.espacecourriercourant.courrier.usersender.infosPersonne.mailAddress}" styleClass="form-control" />
+				            	</h:panelGroup>
+				            	
+				            	 <h:panelGroup>
+                      			 <strong> #{msg['courrier.datenreg']}</strong>
+                      			 <h:outputText value="#{espaceCourrierControllerBean.espacecourriercourant.courrier.courdatenreg}" styleClass="form-control" />
+				            	 </h:panelGroup>
+				            	 <h:panelGroup>
+                      			 <strong> #{msg['courrier.mail.situation']}</strong>
+                      			 <h:outputText value="#{espaceCourrierControllerBean.espacecourriercourant.statut.statutdesignation}" styleClass="form-control" />
+				            	 </h:panelGroup>
+				            	 <h:panelGroup>
+				            		 <strong> Type</strong>
+                      			 	<h:outputText value="#{espaceCourrierControllerBean.espacecourriercourant.courrier.typecourrier.typecourdesignation}" styleClass="form-control" />
+				            	 </h:panelGroup> 
+				            </p:panelGrid>
+				            	 </p:tab>
+				            	<p:tab title="#{msg['courrier.corresp.detail']}">
+				            		<f:facet name="header">
+		                       		 	<h4><h:outputLabel value="#{msg['courrier.detail.user']}" styleClass="fa fa-user-o"/></h4>
+		                    	    </f:facet> 
+		                    	    <p:panelGrid columns="2" style="margin:0 auto;">
+		                    	  <h:panelGroup>
+				            		 <strong> #{msg['courrier.user.receiver']}</strong>
+                      			 	<h:outputText value="#{espaceCourrierControllerBean.espacecourriercourant.courrier.userreceiver.infosPersonne.nom}" styleClass="form-control" />
+				            	 </h:panelGroup>
+				            	 <h:panelGroup>
+				            		 <strong> #{msg['courrier.mail.receiver']}</strong>
+                      			 	<h:outputText value="#{espaceCourrierControllerBean.espacecourriercourant.courrier.userreceiver.infosPersonne.mailAddress}" styleClass="form-control" />
+				            	 </h:panelGroup>
+				            	  <h:panelGroup>
+				            		 <strong> #{msg['courrier.user.sender']}</strong>
+                      			 	<h:outputText value="#{espaceCourrierControllerBean.espacecourriercourant.courrier.usersender.infosPersonne.nom}" styleClass="form-control" />
+				            	 </h:panelGroup>
+				            	 <h:panelGroup>
+				            		 <strong> #{msg['courrier.mail.sender']}</strong>
+                      			 	<h:outputText value="#{espaceCourrierControllerBean.espacecourriercourant.courrier.usersender.infosPersonne.mailAddress}" styleClass="form-control" />
+				            	 </h:panelGroup>
+				            	 </p:panelGrid>
+				            	 <p:separator/> 
+				            	 <p:outputLabel styleClass="ui-icon-extlink" value="Correpondants externe au systeme" />
+				            	 <p:panelGrid columns="2" style="margin:0 auto;">
+				            	 <h:panelGroup>
+				            		 <strong> #{msg['courrier.user.receiver.corresp']}</strong>
+                      			 	<h:outputText value="#{espaceCourrierControllerBean.espacecourriercourant.courrier.correspondantreceiver.nom}" styleClass="form-control" />
+				            	 </h:panelGroup>
+				            	 <h:panelGroup>
+				            		 <strong> #{msg['courrier.mail.receiver.corresp']}</strong>
+                      			 	<h:outputText value="#{espaceCourrierControllerBean.espacecourriercourant.courrier.correspondantreceiver.mailAddress}" styleClass="form-control" />
+				            	 </h:panelGroup>
+				            	  <h:panelGroup>
+				            		 <strong> #{msg['courrier.user.sender.corresp']}</strong>
+                      			 	<h:outputText value="#{espaceCourrierControllerBean.espacecourriercourant.courrier.correspondantsender.nom}" styleClass="form-control" />
+				            	 </h:panelGroup>
+				            	 <h:panelGroup>
+				            		 <strong> #{msg['courrier.mail.sender.corresp']}</strong>
+                      			 	<h:outputText value="#{espaceCourrierControllerBean.espacecourriercourant.courrier.correspondantsender.mailAddress}" styleClass="form-control" />
+				            	 </h:panelGroup>
+				            	 </p:panelGrid>
+				            	 
+				            	</p:tab>
+				            	<p:tab title="#{msg['mail.piece.detail']}">
+				            <!-- 	<p:dataTable var="mail" value="#{espaceCourrierControllerBean.listePiecejointes}">
+															   
+							     <p:column headerText="#{msg['mail.piecedate']}">
+							        <h:outputText value="#{mail.piecedate}" />
+							    </p:column>
+							    
+							    <p:column headerText="#{msg['mail.piece.taille']}">
+							        <h:outputText value="#{mail.piecedescription}"/>
+							     </p:column>
+							     
+							     <p:column headerText="#{msg['mail.piece.nom']}">
+							        <h:outputText value="#{mail.piecetitre}"/>
+							     </p:column>
+							   
+							    <p:column headerText="#{msg['courrier.download']}">
+							    	<p:commandButton id="downloadLink" value="#{msg['courrier.downloadItem']}" ajax="false">
+    										<p:fileDownload value="#{espaceCourrierControllerBean.prepDownload(mail.pieceid)}" />
+ 									 </p:commandButton>
+							     </p:column>
+							 
+							</p:dataTable> -->
+							     <p:dataTable rows="4" value="#{courrierControllerBean.piecesjointes}" var="file2" rowIndexVar="rowIndex" type="unordered" itemType="none" paginator="true" styleClass="paginated"
+	                                           id="data_file5" >
+									        <!-- <f:facet name="header">
+									              #{msg['File.upload.exist']}
+									        </f:facet> -->
+									        <p:column  >				                   
+							                    <h:outputText value="#{file2.piecetitre}" />
+							                </p:column>
+							                <p:column headerText="#{msg['mail.piece.nom']}" >				                   
+							                    <h:outputText value="#{file2.piecedescription} octets" />
+							                </p:column>
+							                <sec:ifAnyGranted  roles="ROLE_courrier.downloadPJ,ROLE_ADMIN">
+							                <p:column headerText="#{msg['courrier.download']}" >				                   
+							                      <p:commandButton id="downloadLink" value="#{msg['courrier.dowloadPJ.button']}" ajax="false">
+												    <p:fileDownload value="#{courrierControllerBean.prepDownload(file2.pieceid)}" />
+												  </p:commandButton>
+							                </p:column>
+							                </sec:ifAnyGranted>
+							                
+							    </p:dataTable>
+				            	</p:tab>
+							
+				       </p:tabView>
+				            	
+						
+								
+								<p:separator/> 				
+				            <p:panelGrid columns="3" style="margin-bottom:10px" cellpadding="5">
+       								<h:outputText value="Marquer comme terminé: " rendered="#{espaceCourrierControllerBean.estTermine}"/>
+      							 		 <p:selectBooleanCheckbox value="#{espaceCourrierControllerBean.endvalue}"  rendered="#{espaceCourrierControllerBean.estTermine}" />
+				              		<p:commandLink global="false" styleClass="btn btn-primary pull-left" value="#{msg['button.close']}" style="color:#ffffff;" update=":formList:tabEspaceCourrier, :growl" actionListener="#{espaceCourrierControllerBean.fermerView() }" oncomplete="PF('viewDialog').hide()" />
+				            </p:panelGrid>
+				      
+                	</c:otherwise>
+				</c:choose> 
+		   	</p:dialog>
+   	</h:form>
+   	<!--  FIN MODAL DE VISUALISATION DES DETAILS DU COURRIER -->
+ 			
+ 	<!-- DIALOG D'AJOUT ET MISE A JOUR DE COURRIER-->
+         <div class="modal_courrier" >  
+          
+          <p:dialog header="#{msg['glabel.ajouter']}" widgetVar="addDialog" resizable="false" width="800" height="500" id="newcourrierDlg" modal="true"   > 
+             
+             <h:form id="newcourrierForm"  enctype="multipart/form-data" title="#{msg['courrier.infos.processus.enregistrement']}" >
+              
+              <p:focus for="courobjetAdd"/>
+               <p:wizard flowListener="#{courrierControllerBean.onFlowProcess}" widgetVar="wiz"> 
+                  <p:tab id="detailCourrierAdd" title="#{msg['courrier.onglet.tiltle.detail']}" titletip="eee" styleClass="taille_tab_wizard">                   
+                  
+                  		<p:growl />
+                  		 <p:panelGrid  columns="1" cellpadding="4" style="margin:0 auto;">
+		                        <i>#{msg['global.label.obligatoire']}</i>
+		                   </p:panelGrid>
+                  		 <p:panelGrid columns="4" cellpadding="4" style="margin:0 auto;" >
+                  		                   		 
+                  			  <h:outputLabel for="typecourrierAdd" value="#{msg['courrier.add.typecourrier.label']}" />
+							  <h:outputLabel for="prioriteAdd" value="#{msg['courrier.add.priorite.label']}" />
+							  <h:outputLabel for="courmotsAdd" value="#{msg['courrier.add.motclerech.label']}" />
+							  <h:outputLabel for="confidentielAdd" value="#{msg['courrier.add.confidentiel.label']}" />
+     					      
+     					       <p:selectOneMenu  value="#{courrierControllerBean.courrier.typecourrier}"   id="typecourrierAdd" converter="typescourriersConverter"  >									
+									<!-- <p:ajax  listener="#{courrierControllerBean.afficheTypeExpediteur}" update="expediteurTbUserLabelPanel, expediteurTbCorrespondantLabelPanel, expediteurTbUserSelectPanel, expediteurTbCorrespondantSelectPanel, destiFinaleAddLabelPanel, userRecepteurSLabelPanel, correspondantRecepteurLabelPanel, destiFinaleAddSelectPanel, userRecepteurSelectPanel, correspondantRecepteurSelectPanel" />
+									 -->
+									 <p:ajax  listener="#{courrierControllerBean.afficheTypeExpediteur}" update="newcourrierForm" global="false"/>
+									 
+							    <c:if test="#{courrierControllerBean.operation==1}">
+		                            <f:selectItem itemLabel="#{msg['global.selection']}" itemDisabled="true"/>
+		                        </c:if>
+		                        
+		                        <c:if test="#{courrierControllerBean.operation==2}">
+		                            <f:selectItem itemLabel="#{courrierControllerBean.courrier.typecourrier.typecourdesignation}" itemValue="#{courrierControllerBean.courrier.typecourrier}" />
+		                        </c:if>		                         
+									 							
+									 <f:selectItems  var="typescourrier"  value="#{courrierControllerBean.listTypescourriers}"  itemLabel="#{typescourrier.typecourdesignation}"  itemValue="#{typescourrier}"/>
+								     
+								</p:selectOneMenu>
+     					      
+     						  <p:selectOneMenu   value="#{courrierControllerBean.courrier.priorite}"   id="prioriteAdd"   converter="prioritesConverter" required="true" requiredMessage="#{msg['courrier.priorite.require']}">
+     						  <!-- <p:selectOneMenu   value="#{courrierControllerBean.courrier.priorite}"   id="prioriteAdd"   converter="prioritesConverter"> -->	
+     						  	
+     						  	<c:if test="#{courrierControllerBean.operation==1}">
+		                            <f:selectItem itemLabel="#{msg['global.selection']}" itemDisabled="true"/>
+		                        </c:if>
+		                        
+		                        <c:if test="#{courrierControllerBean.operation==2}">
+		                            <f:selectItem itemLabel="#{courrierControllerBean.courrier.priorite.priodesignation}" itemValue="#{courrierControllerBean.courrier.priorite}" />
+		                        </c:if>		                        
+																
+									<f:selectItems  var="p"  value="#{courrierControllerBean.listPriorites}"  itemLabel="#{p.priodesignation}" itemValue="#{p}"/>
+							          
+							   </p:selectOneMenu>
+							   
+							   <p:autoComplete id="courmotsAdd"  value="#{courrierControllerBean.courrier.courmots}" completeMethod="#{courrierControllerBean.completeMotsClesRechCourrier}" 
+     										          var="courmot" itemLabel="#{courmot}" itemValue="#{courmot}" global="false">
+     										                 <!-- <f:validateRegex pattern="([A-Za-z0-9-\+])(,\s*\[A-Za-z0-9-\+])*"/> -->
+     										 	<p:ajax event="itemSelect" listener="#{courrierControllerBean.onItemSelect}" global="false" />
+     						   </p:autoComplete>
+     						   
+     						    <p:selectBooleanButton value="#{courrierControllerBean.courrier.confidentiel}" id="confidentielAdd" onLabel="#{msg['button.oui']}" offLabel="#{msg['button.non']}" />
+		                   			   
+						</p:panelGrid>
+						<p:separator/>
+                  		  <p:panelGrid columns="2" cellpadding="4" style="margin:0 auto;" >                   		                   		 	  
+                  		 	<p:panelGrid columns="1" rendered="#{courrierControllerBean.orderAfficheCpExpediteurTbUtil}" id="expediteurTbUserLabelPanel"><!-- CONTROL AFFICHAGE Expediteur User LABEL-->      						  
+							    <p:outputLabel value="#{msg['courrier.add.expediteur.label']}" for="expediteurTbUserSelect" />
+						    </p:panelGrid>
+						    
+						    <p:panelGrid columns="1" rendered="#{courrierControllerBean.orderAfficheCpExpediteurTbCorresp}" id="expediteurTbCorrespondantLabelPanel"><!-- CONTROL AFFICHAGE Expediteur Correspondant LABEL-->      						  
+							    <p:outputLabel value="#{msg['courrier.add.expediteur.label']}" for="expediteurTbCorrespondantSelect" />
+						    </p:panelGrid>
+						    	    				 
+    						<h:outputLabel  value="#{msg['courrier.add.DateCourrier.label']}" />
+    					     	
+							<p:panelGrid columns="1" rendered="#{courrierControllerBean.orderAfficheCpExpediteurTbUtil}" id="expediteurTbUserSelectPanel"><!-- CONTROL AFFICHAGE Expediteur User SELECT-->
+      							     	
+								<p:selectOneMenu  value="#{courrierControllerBean.courrier.usersender}"   id="expediteurTbUserSelect" required="true" requiredMessage="#{msg['user.espace.require']}"  converter="userConverter">
+										<c:if test="#{courrierControllerBean.operation==1}">
+				                            <f:selectItem itemLabel="#{msg['global.selection']}" itemDisabled="true"/>
+				                        </c:if>
+				                        
+				                        <c:if test="#{courrierControllerBean.operation==2}">
+				                            <f:selectItem itemLabel="#{courrierControllerBean.courrier.usersender.infosPersonne.nom.concat(' ').concat(courrierControllerBean.courrier.usersender.infosPersonne.prenom)}" itemValue="#{courrierControllerBean.courrier.usersender}" />
+				                        </c:if>
+																
+									<f:selectItems  var="expediteur"  value="#{courrierControllerBean.listExpediteursUser}"  itemLabel="#{expediteur.infosPersonne.nom.concat(' ').concat(expediteur.infosPersonne.prenom)}"  itemValue="#{expediteur}"/>
+								     
+								</p:selectOneMenu>
+								
+							</p:panelGrid>	
+							
+							<p:panelGrid columns="1" rendered="#{courrierControllerBean.orderAfficheCpExpediteurTbCorresp}" id="expediteurTbCorrespondantSelectPanel"><!-- CONTROL AFFICHAGE Expediteur Correspondant SELECT-->
+     							<p:selectOneMenu value="#{courrierControllerBean.courrier.correspondantsender}"   id="expediteurTbCorrespondantSelect" required="true" requiredMessage="#{msg['user.espace.require']}"  converter="correspondantConverter">
+     							
+     									<c:if test="#{courrierControllerBean.operation==1}">
+				                            <f:selectItem itemLabel="#{msg['global.selection']}" itemDisabled="true"/>
+				                        </c:if>
+				                        
+				                        <c:if test="#{courrierControllerBean.operation==2}">
+				                            <f:selectItem itemLabel="#{courrierControllerBean.courrier.correspondantsender.nom}" itemValue="#{courrierControllerBean.courrier.correspondantsender}" />
+				                        </c:if>
+																
+									<f:selectItems  var="expediteur2"  value="#{courrierControllerBean.listExpediteursCorrespondant}"  itemLabel="#{expediteur2.nom}"  itemValue="#{expediteur2}"/>
+								     
+								</p:selectOneMenu>
+								<!-- **********************LIEN AJOUT CORRESPONDANT********************** -->
+			                               		<sec:ifAnyGranted  roles="ROLE_correspondants.add">  
+							            				<p:commandButton value="#{msg['button.add']}"   oncomplete="PF('addDialog2').show()" actionListener="#{courrierControllerBean.ajoutEventCorrespondant(actionEvent)}" title="#{msg['courrier.button.add.correspondant.title']}" />		                        
+							                  	</sec:ifAnyGranted>	
+							     <!-- **********************FIN LIEN AJOUT CORRESPONDANT********************** -->             		 
+					        </p:panelGrid>
+					        				    	   
+							    <p:calendar value="#{courrierControllerBean.courrier.courdate}"    id="courdateAdd" locale="fr" navigator="true" 
+                                  pattern="dd-MM-yyyy"  mode="popup" showOn="button" required="true" requiredMessage="#{msg['courrier.add.DateCourrier.requi']}"/>
+                                
+                        </p:panelGrid> 
+                        <p:separator/>
+                         <p:panelGrid  columns="2" cellpadding="4" style="margin:0 auto;" columnClasses="value">
+                         
+                                    <p:panelGrid columns="1" rendered="#{courrierControllerBean.orderAfficheCpDestinationTbEspace}" id="destiFinaleAddLabelPanel" ><!-- CONTROL AFFICHAGE LABEL DESTINATION FINALE -->    						       	
+										 <p:outputLabel for="destiFinaleAdd" value="#{msg['courrier.add.Destinationfinale.label']}" />
+    						        </p:panelGrid>
+    						       		 
+    						       	<p:panelGrid columns="1" rendered="#{courrierControllerBean.orderAfficheCpRecepteurTbUtil}" id="userRecepteurSLabelPanel" ><!-- CONTROL AFFICHAGE LABEL DESTINATION FINALE -->  	 
+    						       		<p:outputLabel value="#{msg['courrier.add.recepteurFinale.label']}" for="userRecepteurSelect" />
+    						       	</p:panelGrid>
+    						       	
+    						        <p:panelGrid columns="1" rendered="#{courrierControllerBean.orderAfficheCpRecepteurTbCorresp}" id="correspondantRecepteurLabelPanel" ><!-- CONTROL AFFICHAGE LABEL DESTINATION FINALE -->  	 
+    						       		<p:outputLabel value="#{msg['courrier.add.recepteurFinale.label']}" for="correspondantRecepteurSelect" />
+    						       	</p:panelGrid>
+    						       	
+    						       	<p:panelGrid columns="1" rendered="#{courrierControllerBean.orderAfficheCpDestinationTbEspace}" id="destiFinaleAddSelectPanel"><!-- CONTROL AFFICHAGE DESTINATION FINALE SELECT-->
+    						       		 <p:selectOneMenu  value="#{courrierControllerBean.courrier.espacedestf}"   id="destiFinaleAdd" converter="espaceConverter" required="true" requiredMessage="#{msg['user.espace.require']}"  >									
+											<p:ajax  listener="#{courrierControllerBean.afficheUsersRecepteur}"  update="userRecepteurSelect" global="false" />
+											
+											    <c:if test="#{courrierControllerBean.operation==1}">
+						                            <f:selectItem itemLabel="#{msg['global.selection']}" itemDisabled="true" /> 
+						                        </c:if>
+						                        
+						                        <c:if test="#{courrierControllerBean.operation==2}">
+						                            <f:selectItem itemLabel="#{courrierControllerBean.courrier.espacedestf.nomespace}" itemValue="#{courrierControllerBean.courrier.espacedestf}" />
+						                        </c:if>
+											
+											<f:selectItems  var="espace"  value="#{courrierControllerBean.listEspaces}"  itemLabel="#{espace.nomespace}"  itemValue="#{espace}"/>								     
+										</p:selectOneMenu>
+      							    </p:panelGrid>
+      							     
+      							    <p:panelGrid columns="1" rendered="#{courrierControllerBean.orderAfficheCpRecepteurTbUtil}" id="userRecepteurSelectPanel"><!-- CONTROL AFFICHAGE USER RECEPTEUR FINAL SELECT-->      							     
+      							      <p:selectOneMenu   disabled="#{courrierControllerBean.orderActivationUserRecepteur}" value="#{courrierControllerBean.userrecieverid}"   id="userRecepteurSelect"  >
+      							      
+      							      			<c:if test="#{courrierControllerBean.operation==1}">
+						                            <f:selectItem itemLabel="#{msg['global.selection']}" itemDisabled="true"/>
+						                        </c:if>
+						                        
+						                        <c:if test="#{courrierControllerBean.operation==2}">
+						                            <f:selectItem itemLabel="#{courrierControllerBean.courrier.userreceiver.infosPersonne.nom.concat(' ').concat(courrierControllerBean.courrier.userreceiver.infosPersonne.prenom)}" itemValue="#{courrierControllerBean.courrier.userreceiver.id}" />
+						                        </c:if>						                        
+																		
+											<f:selectItems  var="recepteur2"  value="#{courrierControllerBean.listRecepteursUser}"  itemLabel="#{recepteur2.infosPersonne.nom.concat(' ').concat(recepteur2.infosPersonne.prenom)}"  itemValue="#{recepteur2.id}"/>
+										     
+										</p:selectOneMenu>
+      							    </p:panelGrid>
+      							     
+      							    <p:panelGrid columns="2" rendered="#{courrierControllerBean.orderAfficheCpRecepteurTbCorresp}" id="correspondantRecepteurSelectPanel"><!-- CONTROL AFFICHAGE CORRESPONDANT RECEPTEUR FINAL SELECT-->
+      							      <p:selectOneMenu   value="#{courrierControllerBean.correspondantrecieverid}"   id="correspondantRecepteurSelect"  >
+      							      
+      							                <c:if test="#{courrierControllerBean.operation==1}">
+						                            <f:selectItem itemLabel="#{msg['global.selection']}" itemDisabled="true"/>
+						                        </c:if>
+						                        
+						                        <c:if test="#{courrierControllerBean.operation==2}">
+						                            <f:selectItem itemLabel="#{courrierControllerBean.courrier.correspondantreceiver.nom}" itemValue="#{courrierControllerBean.courrier.correspondantreceiver.id}" />
+						                        </c:if>	
+																	
+											<f:selectItems  var="recepteur3"  value="#{courrierControllerBean.listRecepteursCorrespondant}"  itemLabel="#{recepteur3.nom}"  itemValue="#{recepteur3.id}"/>
+										     
+										</p:selectOneMenu>
+								<!-- **********************LIEN AJOUT CORRESPONDANT********************** -->
+			                               		<sec:ifAnyGranted  roles="ROLE_correspondants.add">			                               		  
+			                               		   	<p:commandButton  value="#{msg['button.add']}" oncomplete="PF('addDialog2').show()" actionListener="#{courrierControllerBean.ajoutEventCorrespondant(actionEvent)}"  title="#{msg['courrier.button.add.correspondant.title']}" />		                        
+							            
+							            		</sec:ifAnyGranted>	
+							                 
+							                  	
+							     <!-- **********************FIN LIEN AJOUT CORRESPONDANT********************** -->
+      							    </p:panelGrid>
+      							  		
+    						
+                  		 </p:panelGrid>
+                  		   <p:separator/> 
+                  		   <!-- <h:commandButton  styleClass="btn btn-primary pull-right" value="#{msg['button.close']}" onComplete="addDialog.hide()"/> -->
+    							  <!-- <h:outputText value="Aller à la fin: " />
+                        
+                                  <h:selectBooleanCheckbox value="#{courrierControllerBean.skip}" /> -->
+                  	
+                  </p:tab>
+                  
+                   <p:tab id="observation" title="#{msg['courrier.add.observation.tab']}" >
+			            
+			                <p:growl  />
+			                <h:panelGrid columns="1" cellpadding="4" style="margin:0 auto;" styleClass="taille_tab_wizard observ">
+			                
+			                  <c:if test="#{courrierControllerBean.operation==1}">
+			                   <h:outputLabel for="courrierparentidAdd" value="#{msg['courrier.add.referentParent.label']}" title="#{msg['courrier.add.referentParent.title']}" />				               
+     						   <p:selectOneMenu id="courrierparentidAdd" value="#{courrierControllerBean.courrier.courrierparentid}" panelStyle="width:180px"
+						                         effect="fade"  style="width:160px" filter="true" filterMatchMode="startsWith"  >
+						             <f:selectItem itemLabel="#{msg['global.selection']}"/>
+						            <f:selectItems value="#{courrierControllerBean.listCourriersEspace}" var="c" itemLabel="#{c.refid}" itemValue="#{c.id}" />						           
+						        </p:selectOneMenu>
+						      </c:if>  
+     						   
+			                
+			                   <h:outputLabel for="courobjetAdd" value="#{msg['courrier.add.objet.label']}"  />
+				               <p:autoComplete id="courobjetAdd"  value="#{courrierControllerBean.courrier.courobjet}" completeMethod="#{courrierControllerBean.completeObjetCourrier}" 
+     										                 var="courobjet" itemLabel="#{courobjet}" itemValue="#{courobjet}" required="true" requiredMessage="element necessaire" styleClass="taille_tab_wizard"  global="false">
+     										 	<p:ajax event="itemSelect" listener="#{courrierControllerBean.onItemSelect}" global="false"/>
+     						   </p:autoComplete>
+				               
+				               <h:outputLabel for="courobservationAdd" value="#{msg['courrier.add.observation.label']}" />
+							   <p:inputTextarea id="courobservationAdd" value="#{courrierControllerBean.courrier.courobservation}"  autoResize="false" scrollHeight="200"  counter="display" maxlength="200" counterTemplate="{0}"  />
+								 <br />
+                               <h:outputText id="display" />
+			                </h:panelGrid>
+			                <p:separator/> 
+                  		    <!-- <h:commandButton  styleClass="btn btn-primary pull-right" value="#{msg['button.close']}" onComplete="addDialog.hide()"/> -->
+			            
+			        </p:tab>
+                  
+                  <p:tab id="pieceJointeMult" title="#{msg['courrier.add.piecesjointes.tab']}">
+                  
+		                <!-- <p:messages /> -->
+		                <h:panelGrid columns="1" cellpadding="4" style="margin:0 auto;" width="800">
+		                   <div id="uniform-undefined" class="uploader" title="#{msg['courrier.add.piecesjointes.title']}">
+					    	<p:fileUpload fileUploadListener="#{courrierControllerBean.handleFileUpload}" value="#{courrierControllerBean.files}" mode="advanced" dragDropSupport="false"
+                                  multiple="true" auto="true"  update="data_file2" sizeLimit="#{courrierControllerBean.taille_max_de_un_fichier_uploade}" fileLimit="3"  cancelLabel="#{msg['courrier.add.piecesjointes.annuler']}"
+                                                                  label="#{msg['courrier.add.piecesjointes.choisir']}" style="font-size: x-small" /> 
+                           </div>
+                        
+                         <!--    <p:dataList value="#{courrierControllerBean.files}" var="file" rowIndexVar="rowIndex" type="unordered" itemType="none" paginator="true" rows="10" styleClass="paginated"
+                                           id="data_file" >
+						        <f:facet name="header">
+						              #{msg['File.upload']}
+						        </f:facet>
+						        <img src="#{file.inputstream}" />
+						        <h:outputText value="#{file.fileName}" style="display:inline-block"/>
+						        <h:outputText value="#{file.size/1024} ko" style="display:inline-block"/>
+						        <h:outputText value="         " style="display:inline-block"/>
+						        <p:commandButton actionListener="#{courrierControllerBean.dropTempFileByIndex(rowIndex)}"  icon="ui-icon-trash" update="data_file" />
+						    </p:dataList> -->
+						    
+						    <p:dataTable rows="4" value="#{courrierControllerBean.files}" var="file" rowIndexVar="rowIndex" type="unordered" itemType="none" paginator="true" styleClass="paginated"
+                                           id="data_file2" >
+						        <f:facet name="header">
+						              #{msg['File.upload']}
+						        </f:facet>
+						        <p:column  >				                   
+				                    <h:outputText value="#{file.fileName}" />
+				                </p:column>
+				                <p:column  >				                   
+				                    <h:outputText value="#{file.size} octets" />
+				                </p:column>
+				                <p:column  >
+				                 <c:if test="#{courrierControllerBean.operation==1}">
+				                 	<p:commandButton actionListener="#{courrierControllerBean.dropTempFileByIndex(rowIndex)}"  icon="ui-icon-trash" update="data_file2" title="#{msg['infos.suppressionpj.sans.confirmation.title']}" />
+				                 </c:if>
+				                 <c:if test="#{courrierControllerBean.operation==2}">
+				                 	<p:commandButton actionListener="#{courrierControllerBean.dropTempFileByIndex(rowIndex)}"  icon="ui-icon-trash"  update="data_file2" title="#{msg['infos.suppressionpj.sans.confirmation.title']}" />
+				                 </c:if>
+						        	
+						  		</p:column>
+						    </p:dataTable>
+						    
+	                        <c:if test="#{courrierControllerBean.operation==2}">
+		                          <p:dataTable rows="2" value="#{courrierControllerBean.piecesjointes}" var="file1" rowIndexVar="rowIndex" type="unordered" itemType="none" paginator="true" styleClass="paginated"
+	                                           id="data_file3" >
+							        <f:facet name="header">
+							              #{msg['File.upload.exist']}
+							        </f:facet>
+							        <p:column  >				                   
+					                    <h:outputText value="#{file1.piecetitre}" />
+					                </p:column>
+					                <p:column  >				                   
+					                    <h:outputText value="#{file1.piecedescription} octets" />
+					                </p:column>
+					                <!-- <p:column  >				                   
+					                      <p:commandButton id="downloadLink" value="Download" ajax="false">
+										    <p:fileDownload value="#{courrierControllerBean.prepDownload(file1.pieceid)}" />
+										  </p:commandButton>
+					                </p:column> -->
+					                <sec:ifAnyGranted  roles="ROLE_courrier.deletePJ"> 
+						                <p:column  >
+								        <p:commandButton actionListener="#{courrierControllerBean.dropExistFile(file1.pieceid)}"  icon="ui-icon-trash" update="data_file3" title="#{msg['infos.suppressionpj.sans.confirmation.title']}"/>
+								        <!-- <p:commandButton icon="ui-icon-trash"  oncomplete="PF('deletePJDialog').show();"  actionListener="#{courrierControllerBean.envoiIdPieceJointe(file1.pieceid)}" /> -->
+								  		</p:column>
+							  		</sec:ifAnyGranted>
+							    </p:dataTable>
+	                        </c:if>
+                        
+					       <!--  <p:growl id="messages" showDetail="true" /> -->					    
+                               
+			             </h:panelGrid>
+			             <p:separator/> 
+                  		 <!-- <h:commandButton  styleClass="btn btn-primary pull-right" value="#{msg['button.close']}" onComplete="addDialog.hide()"/> -->
+			         
+                  </p:tab>
+                  
+                  <p:tab id="confirm" title="#{msg['courrier.add.confirmation.tab']}">
+                   
+			               <!-- <h:panelGrid columns="1" cellpadding="4" style="margin:0 auto;" styleClass="taille_tab_wizard observ">
+			                     <h:outputLabel  value="Objet:*" />
+				               <p:outputLabel  value="#{courrierControllerBean.courrier.courobjet}" />
+     						
+				               <h:outputLabel value="OBSERVATION:" />
+							   <p:inputTextarea  value="#{courrierControllerBean.courrier.courobservation}"  autoResize="false" scrollHeight="200" disabled="true"   />
+		
+			                </h:panelGrid>
+			               <h:panelGrid columns="1" cellpadding="4" style="margin:0 auto;" >		                 
+						    
+							    <p:dataTable value="#{courrierControllerBean.files}" var="file" rowIndexVar="rowIndex" type="unordered" itemType="none" paginator="true" rows="10" styleClass="paginated"
+	                                         >
+							        <f:facet name="header">
+							              #{msg['File.upload']}
+							        </f:facet>
+							        <p:column  >				                   
+					                    <h:outputText value="#{file.fileName}" />
+					                </p:column>
+					                <p:column  >				                   
+					                    <h:outputText value="#{file.size} octets" />
+					                </p:column>
+					               
+							    </p:dataTable>
+                        
+			             </h:panelGrid> -->
+			             
+			             <p:separator/>
+			             
+			             <h:panelGrid columns="1" cellpadding="4" style="margin:0 auto;" >
+			             
+			              <p:outputLabel  value="#{msg['courrier.finalisation.enregistrement']}" />
+			             
+			            </h:panelGrid>
+			             
+			              <p:separator/>
+			                  
+			              <h:panelGrid columns="1" cellpadding="4" style="margin:0 auto;" >
+			   				<f:facet name="footer">
+			   				
+					   			<c:if test="#{courrierControllerBean.operation==1}">
+		                            <!-- <p:commandButton value="#{msg['button.sauvegarder']}" style="float:left" update=":formcorrespondants, :growl"   oncomplete="PF('handleSubmitRequest(xhr, status, args, 'newcorrespondantDlg','newcorrespondantForm'));"  actionListener="#{correspondantControllerBean.create}"  /> -->
+		                            <p:commandLink style="color:#FFFFFF;" styleClass="btn btn-primary pull-left" value="#{msg['button.sauvegarder']}"  update="@parent,:formList, :growl, :dialogShowRefidCourrierId" actionListener="#{courrierControllerBean.ajoutCourrier(fileUploadEvent)}" oncomplete="PF('addDialog').hide()"  />
+		                        </c:if>
+		                        
+		                        <p:column>
+		                         <p:outputLabel value="  " />
+		                        </p:column>
+		                        
+		                        <c:if test="#{courrierControllerBean.operation==2}">
+		                        	<!-- <p:commandButton value="#{msg['button.sauvegarder']}" style="float:left" update=":formcorrespondants, :growl"   oncomplete="PF(handleSubmitRequest(xhr, status, args, 'newcorrespondantDlg','newcorrespondantForm'));"  actionListener="#{correspondantControllerBean.update()}"  /> -->
+		                            <p:commandLink style="color:#FFFFFF;" styleClass="btn btn-primary pull-left"  value="#{msg['button.sauvegarder']}"  update="@parent,:formList, :growl, :dialogShowRefidCourrierId" actionListener="#{courrierControllerBean.editCourrier(fileUploadEvent)}" oncomplete="PF('addDialog').hide()" action="#{espaceCourrierControllerBean.init}" />
+		                        </c:if> 
+		                        
+		                        <p:column>
+		                         <p:outputLabel value="  " />
+		                        </p:column>
+		                        	<p:commandLink style="color:#FFFFFF;float:right;" type="reset" styleClass="btn btn-primary pull-right" value="#{msg['button.vide']}" ></p:commandLink>
+		                        	
+		                        <p:column>
+		                         <p:outputLabel value="  " />
+		                        </p:column>	 
+		                                                   
+		                            <p:commandLink style="color:#FFFFFF;"  styleClass="btn btn-primary pull-right" value="#{msg['button.close']}" onComplete="addDialog.hide()"/>
+			   				
+			   				         <!-- <p:commandButton immediate="true" value="Submit" update="@parent,:form:userList" actionListener="#{userWizard.save}" oncomplete="PF(wiz.loadStep (wiz.cfg.steps [0], true));"/> -->
+			   				
+			                	   <!-- <h:commandButton styleClass="btn btn-primary pull-left" value="#{msg['button.add']}"  update=":formList, :growl, :dialogShowRefidCourrierId" actionListener="#{courrierControllerBean.ajoutCourrier(fileUploadEvent)}" oncomplete="PF('dialogShowRefidCourrier').show()"  /> -->
+			                	<!-- <h:commandButton  styleClass="btn btn-primary pull-left" value="Tranferer" id="idtransfert" update=":formList:tabEspaceCourrier, :growl" action="#{espaceCourrierControllerBean.manyTransfert}" oncomplete="PF('courrierEdit.hide()" /> -->
+			                </f:facet>
+			            </h:panelGrid>
+                  </p:tab>  
+                               
+               </p:wizard>        
+ 					 
+            </h:form> 
+           				                 
+          </p:dialog>
+         
+         </div>  
+         
+         <!--  MODAL D' AJOUT DE PIECES JOINTE -->
+ 			
+         <h:form id="dialogAddPJCourrierForm"   enctype="multipart/form-data" > 
+            <p:dialog header="Ajout des Pièces Jointes au courrier : #{courrierControllerBean.courrier.refid}"  widgetVar="addPJCourrierDialog" id="dialogAddPJCourrierId" modal="true">
+               		                
+		                <h:panelGrid columns="1" cellpadding="4" style="margin:0 auto;" width="800">
+		                   <div  class="uploader">
+					    	<p:fileUpload fileUploadListener="#{courrierControllerBean.handleFileUpload}" value="#{courrierControllerBean.files}" mode="advanced" dragDropSupport="false"
+                                  multiple="true" auto="true"  update="data_file4" sizeLimit="#{courrierControllerBean.taille_max_de_un_fichier_uploade}" fileLimit="3" cancelLabel="#{msg['courrier.add.piecesjointes.annuler']}"
+                                                                  label="#{msg['courrier.add.piecesjointes.choisir']}" style="font-size: x-small" /> 
+                           </div>
+                        
+						    <p:dataTable rows="4" value="#{courrierControllerBean.files}" var="file" rowIndexVar="rowIndex" type="unordered" itemType="none" paginator="true"  styleClass="paginated"
+                                           id="data_file4" >
+						        <f:facet name="header">
+						              #{msg['File.upload']}
+						        </f:facet>
+						        <p:column  >				                   
+				                    <h:outputText value="#{file.fileName}" />
+				                </p:column>
+				                <p:column  >				                   
+				                    <h:outputText value="#{file.size} octets" />
+				                </p:column>
+				                <p:column  >
+				                
+				                 	<p:commandButton actionListener="#{courrierControllerBean.dropTempFileByIndex(rowIndex)}"  icon="ui-icon-trash" update="data_file4" />
+				                
+						        	
+						  		</p:column>
+						    </p:dataTable>
+						    
+
+                        
+					        <!-- <p:growl /> -->					    
+                               
+			             </h:panelGrid>
+			         
+                 
+                   
+               
+                <p:separator/>
+                <h:commandButton styleClass="btn btn-primary pull-left" value="#{msg['button.add']}"  update=":formList, :growl, :dialogAddPJCourrierId" actionListener="#{courrierControllerBean.addPJ(fileUploadEvent)}" oncomplete="PF('addPJCourrierDialog').hide()"  />
+                <h:commandButton  styleClass="btn btn-primary pull-right" value="#{msg['button.close']}" onComplete="addPJCourrierDialog.hide()"/>
+              
+             
+            </p:dialog> 
+        </h:form>    
+      
+<!-- FIN MODAL D' AJOUT DE PIECES JOINTE -->
+
+<!--  MODAL DE VISUALISATION ET DE SUPPRESSION DE PIECE JOINTE -->
+ 			
+        <h:form id="viewDeletePJCourrierForm"> 
+ 			<p:dialog header="#{msg['courrier.visualiserPJ.headerDialog']} #{courrierControllerBean.courrier.refid}"  widgetVar="viewDeletePJCourrierDialog" id="dialogViewDeletePJCourrierId" modal="true">
+               
+                 <h:panelGrid columns="1" cellpadding="4" style="margin:0 auto;" width="800">
+                 
+		                          <p:dataTable rows="4" value="#{courrierControllerBean.piecesjointes}" var="file2" rowIndexVar="rowIndex" type="unordered" itemType="none" paginator="true" styleClass="paginated"
+	                                           id="data_file5" >
+									        <f:facet name="header">
+									              #{msg['File.upload.exist']}
+									        </f:facet>
+									        <p:column  >				                   
+							                    <h:outputText value="#{file2.piecetitre}" />
+							                </p:column>
+							                <p:column  >				                   
+							                    <h:outputText value="#{file2.piecedescription} octets" />
+							                </p:column>
+							                <sec:ifAnyGranted  roles="ROLE_courrier.downloadPJ">
+							                <p:column  >				                   
+							                      <p:commandButton id="downloadLink" value="#{msg['courrier.dowloadPJ.button']}" ajax="false">
+												    <p:fileDownload value="#{courrierControllerBean.prepDownload(file2.pieceid)}" />
+												  </p:commandButton>
+							                </p:column>
+							                </sec:ifAnyGranted>
+							                <sec:ifAnyGranted  roles="ROLE_courrier.deletePJ"> 
+								                <p:column  >
+										        <p:commandButton icon="ui-icon-trash"  oncomplete="PF('deletePJDialog').show();"  actionListener="#{courrierControllerBean.envoiIdPieceJointe(file2.pieceid)}"/>
+										        <!-- <c:set var="dropFileId" value="#{file2.pieceid}" scope="request" /> -->
+										  		</p:column>
+									  		</sec:ifAnyGranted>
+							    </p:dataTable>
+			         
+                     </h:panelGrid>
+                   
+               
+                <p:separator/>
+               <!--  <h:commandButton styleClass="btn btn-primary pull-left" value="#{msg['button.add']}"  oncomplete="viewDeletePJCourrierDialog.hide()"  /> -->
+               <h:panelGrid style="margin:auto;" >
+               		<p:commandLink ajax="true" styleClass="btn btn-primary pull-right" style="Color:ffffff;" value="#{msg['button.close']}" global="flase" onclick="viewDeletePJCourrierDialog.hide()"/>
+               </h:panelGrid>
+                
+              
+             
+            </p:dialog> 
+          </h:form>  
+      
+<!-- FIN  MODAL DE VISUALISATION ET DE SUPPRESSION DE PIECE JOINTE  -->
+
+
+          
+<!--  MODAL DE CREATION DéAFFICHAG DU NUMERO D4ENREGISTREMENT -->
+ 			
+        
+            <p:dialog header="Ajout d'Un Nouveau Correspondant"  widgetVar="dialogShowRefidCourrier" id="dialogShowRefidCourrierId" modal="true">
+                <h:form > 
+                <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;"> 
+                    <f:facet name="header">
+                        <i><h:outputLabel value="#{msg['global.label']}"/></i>
+                    </f:facet>
+                      
+                       #{msg['msg.fin.ajout.courrier']} #{courrierControllerBean.numeroEnregistrement}
+                   
+                </h:panelGrid>
+                <p:separator/>
+                <!-- <p:commandButton styleClass="btn btn-small btn-success" value="#{msg['button.add']}"  oncomplete="dialogShowRefidCourrier.hide()"  /> -->
+                <p:commandLink style="color:#FFFFFF;"  styleClass="btn btn-primary pull-right" value="#{msg['button.close']}" oncomplete="PF('dialogShowRefidCourrier').hide()"/>
+             </h:form>
+            </p:dialog> 
+            
+      
+<!-- FIN MODAL DE CREATION DéAFFICHAG DU NUMERO D4ENREGISTREMENT -->
+
+	    <!--  fichier ajoutCorrespondant.xhtml -->
+			      <ui:include src="ajoutCorrespondant2.xhtml"/>
+		<!-- end fichier ajoutCorrespondant.xhtml  -->
+
+<!-- *************************************************FIN AJOUT OMAR ********************************************************************************  -->
+    
+      
+      
+      <!-- COMPOSE MESSAGE MODAL -->
+      
+<!-- DIALOG DE CONFIRMATION DE LA SUPPRESSION de PJ -->
+          
+          <h:form id="deletePJFromID">
+        	 <p:confirmDialog  header="#{msg['global.supprimer']}"
+			message="#{msg['global.courrier.deletepj']} #{courrierControllerBean.courrier.refid}?" severity="alert"  widgetVar="deletePJDialog">			
+			<p:commandButton value="#{msg['button.oui']}" update=":formList,:growl,:viewDeletePJCourrierForm:data_file5"  actionListener="#{courrierControllerBean.dropExistFile(courrierControllerBean.idPieceJointeToDelete)}" oncomplete="PF('deletePJDialog').hide();"/>			
+			<p:commandButton value="#{msg['button.non']}" onclick="deletePJDialog.hide();" type="button" /> 
+			</p:confirmDialog>         
+       	 </h:form> 
+    
+    <!-- DIALOG DE CONFIRMATION D'AJOUT DE BORDEREAU -->
+     <h:form id="addConfirmeFrom">
+        	<p:confirmDialog  header="#{msg['glabel.ajouter']}" message="#{msg['global.bordereau.addconfirme']}" severity="alert"  widgetVar="addConfirmeDialog">			
+				<p:commandButton value="#{msg['button.oui']}" update=":transfertform:bordereau1,:growl"  actionListener="#{espaceCourrierControllerBean.create()}" 
+				 oncomplete="PF('addConfirmeDialog').hide();"/>
+						
+				<p:commandButton value="#{msg['button.non']}" onclick="addConfirmeDialog.hide();" type="button"/> 
+				
+				
+			</p:confirmDialog> 
+        
+        </h:form>
+          
+          <!-- DIALOG DE CONFIRMATION DE LA SUPPRESSION -->
+          
+          <h:form id="deleteFrom">
+        	 <p:confirmDialog  header="#{msg['global.supprimer']}"
+			message="#{msg['global.supprimer.label']}" severity="alert"  widgetVar="deleteDialog">			
+			<p:commandButton value="#{msg['button.oui']}" update=":formList,:growl"   actionListener="#{espaceCourrierControllerBean.delete(actionEvent)}" 
+			 oncomplete="PF('deleteDialog').hide();"/>			
+			<p:commandButton value="#{msg['button.non']}" onclick="deleteDialog.hide();" type="button" /> 
+			</p:confirmDialog> 
+        
+       	 </h:form> 
+      
+		
+
+		
+   
+   </ui:define>
+  </ui:composition>
+</html>

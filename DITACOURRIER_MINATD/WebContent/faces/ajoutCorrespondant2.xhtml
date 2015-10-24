@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:p="http://primefaces.org/ui"
+   xmlns:c="http://java.sun.com/jsp/jstl/core"
+   xmlns:sec="http://www.springframework.org/security/facelets/tags"
+  xmlns:ui="http://java.sun.com/jsf/facelets">
+  
+          <p:dialog header="#{msg['glabel.ajouter']}" widgetVar="addDialog2" resizable="false" id="newcorrespondantDlg" modal="true"> 
+              <h:form id="newcorrespondantForm">  
+              	<p:focus for="nom"/>
+              	   <p:panelGrid  columns="1" cellpadding="4" style="margin:0 auto;">
+                        <i>#{msg['global.label.obligatoire']}</i>
+                   </p:panelGrid>
+                   
+                
+                   <p:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">                     
+                     <h:outputLabel for="nom" title="#{msg['correspondant.nom']}" value="#{msg['correspondant.nom']}:*" />
+                     <p:inputText value="#{courrierControllerBean.correspondant.nom}"  id="nom" required="true" requiredMessage="#{msg['correspondant.nom.require']}"
+                     	validator="#{courrierControllerBean.validateName}"
+                     />             
+					</p:panelGrid>
+                    <p:separator/>
+                    
+                    <p:panelGrid  columns="4" cellpadding="4" style="margin:0 auto;"> 
+                    
+                    		<h:outputLabel for="mailAddress" title="#{msg['correspondant.mail']}" value="#{msg['correspondant.mail']}:*" />
+                    		<p:inputText value="#{courrierControllerBean.correspondant.mailAddress}"  id="mailAddress" validatorMessage="#{msg['correspondant.mail.validator']}"  required="true" requiredMessage="#{msg['correspondant.mail.require']}">
+		                    	<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+		                    </p:inputText>
+		                    
+		                    <h:outputLabel for="telephone" title="#{msg['correspondant.telephone']}" value="#{msg['correspondant.telephone']}:*" />
+		                    <p:inputText value="#{courrierControllerBean.correspondant.telephone}" id="telephone"  required="true" requiredMessage="#{msg['correspondant.telephone.require']}">
+		                      <f:convertNumber integerOnly="true" type="number"  />
+		                    </p:inputText>           
+  					</p:panelGrid>
+  					<p:separator/>
+  					
+  					<!-- <p:panelGrid  columns="2" cellpadding="4" style="margin:0 auto;">
+		                     
+		                      <h:outputLabel for="creationDate" title="#{msg['correspondant.datecreation']}" value="#{msg['correspondant.datecreation']} :" /> 
+		                      <p:inputText value="#{courrierControllerBean.correspondant.dateCreation}"   id="creationDate" disabled="true" />                    
+  					</p:panelGrid>
+                		              	 -->			
+				                  		      
+                    <f:facet name="footer">
+                                             
+                    </f:facet>
+               
+              			 <div style="float:left">
+                    		
+                           <p:commandLink styleClass="btn btn-primary btn-block btn-flat" style="color:#ffffff;" value="#{msg['button.sauvegarder']}"  update=":newcourrierForm:correspondantRecepteurSelect, :newcourrierForm:expediteurTbCorrespondantSelect, :growl"   oncomplete="PF('addDialog2').hide()"  actionListener="#{courrierControllerBean.createCorrespond}"  />
+                          
+                    	</div>
+                        <div style="float:right">   
+                            <p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;" value="#{msg['button.close']}" oncomplete="PF('addDialog2').hide()" />                            
+                   		</div>
+              </h:form>
+          </p:dialog> 
+          
+</html>          

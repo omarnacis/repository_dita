@@ -1,0 +1,165 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+  xmlns:c="http://java.sun.com/jsp/jstl/core">
+  
+  <ui:composition template="layout.xhtml"
+  xmlns:sec="http://www.springframework.org/security/facelets/tags">
+  <ui:define name="contenu">
+  		
+  
+  
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+          #{msg['statistique.info']}
+            <small></small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="${request.contextPath}/faces/index.xhtml"><i class="fa fa-dashboard"></i>#{msg['dashboard']}</a></li>            
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title">Statistiques</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                
+                   <!-- Begin message éphémere pour les messages de validations -->
+					
+				<!-- End message éphémere pour les messages de validations -->
+				
+				<sec:ifAnyGranted  roles="ROLE_statistique.view,ROLE_ADMIN">
+		           <!-- POUR LES STATISTIQUES GLOBAUX-->  
+		        <h:form id="formGraph">
+		        <p:panel>
+		        	<p:panelGrid columns="2">
+		        	<p:selectOneMenu id="espace1" immediate="true" value="#{statistiqueControllerBean.idEspaceCourant}">  
+		        			<p:ajax  listener="#{statistiqueControllerBean.ChangeListenerChart}" update=":viewform:ensortE" global="false" oncomplete="PF('viewDialog').show();"/>
+						    <!-- <f:selectItem itemLabel="#{msg['courrier.transfer.espace']}" itemDisabled="true"/> -->
+					        <f:selectItem itemLabel="#{msg['courrier.transfer.espace']}" itemValue="-1" />
+	        				<f:selectItems value="#{statistiqueControllerBean.listeEspace}" var="espace" itemLabel="#{espace.nomespace}" itemValue="#{espace.id}"/> 
+	        		</p:selectOneMenu>
+	           			<!-- <p:commandButton value="#{msg['courrier.valider']}"  update=":viewform:ensortE" oncomplete="viewDialog.show();"  action="#{statistiqueControllerBean.ChangeListenerChart()}"/> -->
+		        </p:panelGrid>
+		        </p:panel>
+		        
+		       <p:growl id="growl" showDetail="true" sticky="false" life="10000"/>
+		      <!--  , :viewform:tabensGlobal3 -->
+		       <p:poll interval="3" update="traitement,tabensGlobal,tabensGlobal2, info, :viewform:tabensGlobal3" id="poll" />
+     		  	<h:panelGrid columns="2" columnClasses="left,right" style="width:100%">
+     		  	  <p:pieChart value="#{statistiqueControllerBean.model}"  id="info" title="#{msg['courrier.statistiqueens']}" legendPosition="w" showDataLabels="true" sliceMargin="5" diameter="200" fill="true" style="width:600px;height:300px">
+				     <p:ajax event="itemSelect" listener="#{statistiqueControllerBean.itemSelect}" update="growl" />
+				  </p:pieChart>
+				<p:panel>
+				  <p:panelGrid style="margin-top:20px" id="tabensGlobal">
+				   	
+				    <f:facet name="header">
+				         <p:row>
+				            <p:column><h:outputText value="#{msg['courrier.nombreEntrant']}"/></p:column>
+				            <p:column><h:outputText value="#{msg['courrier.nombreSortant']}"/></p:column>
+				            <p:column><h:outputText value="#{msg['courrier.nombreEntrantSortant']}"/></p:column>
+				            <p:column><h:outputText value="#{msg['courrier.totalCourrier']}"/></p:column>
+				         </p:row>
+				 
+				    </f:facet>
+				 
+				    <p:row>
+				        <p:column style="font-weight: bold;"><h:outputText value="#{statistiqueControllerBean.nbCourrierTE}"/></p:column>
+				        <p:column style="font-weight: bold;"><h:outputText value="#{statistiqueControllerBean.nbCourrierTS}" /></p:column>
+				        <p:column style="font-weight: bold;"><h:outputText value="#{statistiqueControllerBean.nbCourrierTI}" /></p:column>
+				        <p:column style="font-weight: bold;"><h:outputText value="#{statistiqueControllerBean.nbCourrierTI+statistiqueControllerBean.nbCourrierTS+statistiqueControllerBean.nbCourrierTE}" /></p:column>
+				        
+				    </p:row>
+				 </p:panelGrid>
+ 			   </p:panel>
+				    <p:pieChart value="#{statistiqueControllerBean.model2}"  id="traitement" title="Statistique sur le traitement des courriers" legendPosition="w" showDataLabels="true" sliceMargin="5" diameter="200" fill="true" style="width:600px;height:300px">
+				    <p:ajax event="itemSelect" listener="#{statistiqueControllerBean.itemSelect}" update="growl" />
+				   </p:pieChart> 
+				   <p:panel>
+				   	   <p:panelGrid style="margin-top:20px" id="tabensGlobal2">
+				    <f:facet name="header">
+				         <p:row>
+				            <p:column><h:outputText value="#{msg['courrier.nombreTermine']}"/></p:column>
+				            <p:column><h:outputText value="#{msg['courrier.nombreEncours']}"/></p:column>
+				            <p:column><h:outputText value="#{msg['courrier.nombreRejete']}"/></p:column>
+				            <p:column><h:outputText value="#{msg['courrier.totalCourrier']}"/></p:column>
+				         </p:row>
+				 
+				    </f:facet>
+				 
+				    <p:row>
+				        <p:column style="font-weight: bold;"><h:outputText value="#{statistiqueControllerBean.nbCourrierTER}"/></p:column>
+				        <p:column style="font-weight: bold;"><h:outputText value="#{statistiqueControllerBean.nbCourrierENC}" /></p:column>
+				        <p:column style="font-weight: bold;"><h:outputText value="#{statistiqueControllerBean.nbCourrierREG}" /></p:column>
+				 		<p:column style="font-weight: bold;"><h:outputText value="#{statistiqueControllerBean.nbCourrierTER+statistiqueControllerBean.nbCourrierENC+statistiqueControllerBean.nbCourrierREG}" /></p:column>
+				        
+				    </p:row>
+				 </p:panelGrid>
+				  </p:panel>		
+				  	</h:panelGrid>
+			
+			  </h:form>
+			  
+			 <h:form id="viewform">
+			 
+			
+			   	 <p:dialog header="#{msg['statistique.pie.head']} "  widgetVar="viewDialog" resizable="true" id="viewCourrier" modal="true">
+			   		<!-- <p:pieChart  id ="ensortE" value="#{statistiqueControllerBean.modelE}" title="Statistique sur l'espace" legendPosition="w" showDataLabels="true" sliceMargin="5" diameter="200" fill="true" style="width:400px;height:300px">
+				   	 <p:ajax event="itemSelect"  listener="#{statistiqueControllerBean.itemSelect}" />
+				   </p:pieChart>   --> 
+				   
+				    <p:pieChart  id ="ensortE" value="#{statistiqueControllerBean.modelE}" title="Statistique sur les types de courriers" legendPosition="w" showDataLabels="true" sliceMargin="5" diameter="200" fill="true" style="width:600px;height:300px">
+				   	 <p:ajax event="itemSelect"  listener="#{statistiqueControllerBean.itemSelect}"/>
+				   </p:pieChart>
+				   <p:panel>
+				   	   <p:panelGrid style="margin-top:20px" id="tabensGlobal3">
+				    <f:facet name="header">
+				         <p:row>
+				            <p:column><h:outputText value="#{msg['courrier.nombreTermine']}"/></p:column>
+				            <p:column><h:outputText value="#{msg['courrier.nombreEncours']}"/></p:column>
+				            <p:column><h:outputText value="#{msg['courrier.nombreRejete']}"/></p:column>
+				            <p:column><h:outputText value="#{msg['courrier.totalCourrier']}"/></p:column>
+				         </p:row>
+				 
+				    </f:facet>
+				 
+				    <p:row>
+				        <p:column style="font-weight: bold;"><h:outputText value="#{statistiqueControllerBean.nbCourrierTERE}"/></p:column>
+				        <p:column style="font-weight: bold;"><h:outputText value="#{statistiqueControllerBean.nbCourrierENCE}" /></p:column>
+				        <p:column style="font-weight: bold;"><h:outputText value="#{statistiqueControllerBean.nbCourrierREGE}" /></p:column>
+				 		<p:column style="font-weight: bold;"><h:outputText value="#{statistiqueControllerBean.nbCourrierTERE+statistiqueControllerBean.nbCourrierENCE+statistiqueControllerBean.nbCourrierREGE}" /></p:column>
+				        
+				    </p:row>
+				 </p:panelGrid>
+				  </p:panel>	
+			   	</p:dialog> 
+   			 </h:form>
+			  </sec:ifAnyGranted> 
+                </div><!-- /.box-body -->
+              
+              </div><!-- /.box -->
+
+           </div> 
+          </div><!-- /.row -->
+   
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+      
+ 
+   
+   </ui:define>
+  </ui:composition>
+</html>

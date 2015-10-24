@@ -1,0 +1,16 @@
+nom;valeur;description
+PARAMETER_DATE_FORMAT_2;EEEE, dd-MM-yyyy HH:mm:ss;Format de la date
+LOGO;DITA COURRIER;Logo de l'entreprise
+TELEPHONE;675479637;Telephone de l'entreprise
+EMAIL;mbebruno@gmail.com;Mail de l'entreprise
+ADRESSE;Yaoundé ;Adresse de l'entreprise
+IMG_FOND;défaut;Image de fond de l'application
+DUREE_COURRIER;2;Durée du courrier
+COMPLEXE_PASSWORD;non;Complexifié le mot de passe
+NOM_ENTREPRISE;DITA COURRIER;Nom de l'entreprise
+SERVEUR_SMTP;smtp.mail.yahoo.com;Serveur SMTP
+PORT_SERVEUR_SMTP;465;Port du serveur
+ADRESSE_COMPTE_ENVOI_MAIL;omarnacis@yahoo.fr;Compte mail d'envoi
+PWD_COMPTE_ENVOI_MAIL;mot de passe;Mot de passe du compte mail
+CORPS_MAIL;Un courrier vous a été envoyé ou vous aviez envoyé;Corps du mail a envoyé
+OBJET_MAIL;Courrier envoyé par;Objet du mail 

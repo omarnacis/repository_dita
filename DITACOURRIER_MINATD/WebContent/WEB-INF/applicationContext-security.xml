@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+	
+	
+	<security:http auto-config="true" access-denied-page="/faces/error/denied.xhtml">
+		
+		<security:intercept-url pattern="/faces/login.xhtml" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<security:intercept-url pattern="/faces/forgetPassword.xhtml" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<security:intercept-url pattern="/WEB-INF/lib/*" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<security:intercept-url pattern="/faces/mailbox.xhtml" access="ROLE_ADMIN" />
+		<security:intercept-url pattern="/faces/index.xhtml" access="IS_AUTHENTICATED_FULLY" />
+		<security:intercept-url pattern="/faces/preferences.xhtml" access="ROLE_preferences,ROLE_ADMIN" />
+		<security:intercept-url pattern="/faces/user/users.xhtml" access="ROLE_users,ROLE_ADMIN" />
+		<security:intercept-url pattern="/faces/user/espaces.xhtml" access="ROLE_espaces,ROLE_ADMIN" />	
+		<security:intercept-url pattern="/faces/user/roles.xhtml" access="ROLE_roles,ROLE_ADMIN" />
+		<security:intercept-url pattern="/faces/user/groups.xhtml" access="ROLE_groups,ROLE_ADMIN" />	
+		<security:intercept-url pattern="/faces/user/*" access="IS_AUTHENTICATED_FULLY" />	
+		<security:intercept-url pattern="/faces/correspondant.xhtml" access="ROLE_correspondants,ROLE_ADMIN" />
+		<security:intercept-url pattern="/faces/courrier.xhtml" access="ROLE_courrier,ROLE_ADMIN" />
+		<security:intercept-url pattern="/faces/bordereaux.xhtml" access="ROLE_bordereaus,ROLE_ADMIN" />
+		<security:intercept-url pattern="/faces/suivi.xhtml" access="ROLE_suivi,ROLE_ADMIN" />
+		<security:intercept-url pattern="/faces/mouchard.xhtml" access="ROLE_ADMIN,ROLE_mouchard" />		
+		<security:intercept-url pattern="/faces/statistique.xhtml" access="ROLE_ADMIN,ROLE_statistique" />
+		<security:intercept-url pattern="/faces/notification.xhtml" access="ROLE_ADMIN,ROLE_notification" />		
+		
+		<!-- <security:form-login login-page="/faces/login.xhtml" authentication-failure-url="/faces/login.xhtml?error=true" />	 -->	
+	<!-- 	<security:remember-me key="dita-key" /> -->
+	<security:form-login login-page="/faces/login.xhtml" authentication-failure-handler-ref="customAuthenticationFailureHandler" />
+		<security:logout delete-cookies="JSESSIONID"  logout-success-url="/faces/login.xhtml"/>
+	
+		    <security:session-management>
+		   		 <security:concurrency-control max-sessions="1" />
+		    </security:session-management>
+		
+	</security:http>	
+	<bean id="logoutRedirectToAny" class="org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler">
+		<property name="targetUrlParameter" value="redirectTo"/>
+	</bean>
+	
+	<bean id="customAuthenticationFailureHandler"
+      class="cm.dita.controller.managed.bean.user.CustomAuthenticationFailureHandler">
+    <property name="defaultFailureUrl" value="/faces/login.xhtml?error=true"/>
+</bean>
+	
+	<!-- <security:authentication-manager>
+		<security:authentication-provider>
+			<security:user-service>
+				<security:user authorities="ROLE_ADMIN" name="admin" password="admin" />
+				
+			</security:user-service>
+		</security:authentication-provider>
+	</security:authentication-manager> -->
+	
+	<security:authentication-manager>
+			<security:authentication-provider user-service-ref="userService">
+				<security:password-encoder hash="md5"/>
+				
+			</security:authentication-provider>			
+	</security:authentication-manager>
+	
+	
+</beans>

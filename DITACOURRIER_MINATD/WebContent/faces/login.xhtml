@@ -1,0 +1,79 @@
+﻿<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:c="http://java.sun.com/jsp/jstl/core">
+  
+  <ui:composition template="layout_login.xhtml">
+  <ui:define name="contenu">
+
+ 
+    <div class="login-box">
+      <div class="login-logo">
+      <c:choose>
+      	<c:when test="{applicationBean.is_text_logo == 'true'}">
+      		<b>#{applicationBean.LOGO}</b>
+      	</c:when>
+      	<c:otherwise>
+      		<img alt="#{applicationBean.LOGO}" src="#{facesContext.externalContext.requestContextPath}#{applicationBean.LOGO}" width="200" height="50" />
+      	</c:otherwise>
+      </c:choose>
+       
+      
+      </div><!-- /.login-logo -->
+      <div class="login-box-body">
+        <p class="login-box-msg"> #{msg['global.connexion.msg']}</p>
+        <!-- <h:form action="#{facesContext.externalContext.requestContextPath}/j_spring_security_check" method="post"> -->
+        <h:form>
+           <p:focus for="j_username"/>
+            <h:outputText value="#{msg['global.login.nom']}" />
+          <div class="form-group has-feedback">
+              <h:inputText styleClass="form-control" id="j_username" value="#{loginBean.username}" required="true" title="#{msg['global.login.nom']}"
+              requiredMessage="#{msg['user.login.require']}"
+              />
+            <span class="glyphicon glyphicon-user form-control-feedback"></span>
+          </div>
+          
+          <h:outputText value="#{msg['global.login.password']}" />
+          <div class="form-group has-feedback">           
+            <h:inputSecret styleClass="form-control" id="j_password" value="#{loginBean.password}" required="true" title="#{msg['global.login.password']}"
+            requiredMessage="#{msg['user.password.require']}"
+            />
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+          </div>
+          <div class="row">
+            <!-- /.col -->
+            <div class="col-xs-6">
+            	<h:commandButton style="float:left;" action="#{loginBean.doLogin}" styleClass="btn btn-primary btn-block btn-flat" value="#{msg['global.connexion']}"/>
+             </div><!-- /.col -->
+             <div class="col-xs-6">    
+              
+                    <a  class="btn btn-primary btn-block btn-flat btn-warning" href="${request.contextPath}/faces/forgetPassword.xhtml" style="font-size: 11px;">                   
+                    #{msg['global.login.acceder']}
+                    </a>
+                              
+            </div>
+             
+          </div>
+          <br/>
+        <!--  <p:commandLink style="float:right;" update=":forgetPDialog" action="#{forgetPassBean.codeTRans()}" oncomplete="PF('forgetDialog').show()"  value="Mot de passe oublié ?"/>
+         -->  
+            <br/>  
+          <h:messages showDetail="false" style="color: red;" id="msgErreur"  />
+          <h:outputText value="#{msg['user.connexion.inconu']}" rendered="#{param.error}" style="color: red;"/>
+         
+        </h:form>
+      </div>
+    </div><!-- /.login-box -->
+  		
+  		<ui:include src="include/authen.xhtml"></ui:include>	
+  		
+  		
+  		
+				
+</ui:define>
+  </ui:composition>
+</html>
