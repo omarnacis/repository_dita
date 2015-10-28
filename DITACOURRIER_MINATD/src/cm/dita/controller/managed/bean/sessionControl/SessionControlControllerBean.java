@@ -13,7 +13,11 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 //import javax.swing.JOptionPane;
 
+import javax.swing.JOptionPane;
+
 import org.apache.log4j.Logger;
+
+import cm.dita.entities.user.User;
 
 
 /**
@@ -34,14 +38,16 @@ public class SessionControlControllerBean  implements Serializable{
 	
 	//Nombre de tentative de connexion avec echec
     private Integer nbLoginSuccessifEchoue;
+    private User user;
 	
 
 	//Initailisation des elements de la bean
 	@PostConstruct
 	public void init(){
 		try {
-			//JOptionPane.showMessageDialog(null,  "QUELQQUE CHOSES "+nbLoginSuccessifEchoue);
-			nbLoginSuccessifEchoue = 0;
+			user = new User();//initialisation de l'utilisateur
+			user.setEnabled(true);//par defaut un utilisateur est actif
+			nbLoginSuccessifEchoue = 0;//initialisation du nombre de tentative de connection avec echec
 				
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -63,6 +69,22 @@ public class SessionControlControllerBean  implements Serializable{
 	 */
 	public void setNbLoginSuccessifEchoue(Integer nbLoginSuccessifEchoue) {
 		this.nbLoginSuccessifEchoue = nbLoginSuccessifEchoue;
+	}
+
+
+	/**
+	 * @return the user
+	 */
+	public User getUser() {
+		return user;
+	}
+
+
+	/**
+	 * @param user the user to set
+	 */
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 

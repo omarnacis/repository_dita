@@ -78,8 +78,12 @@ public class User  extends OMBase{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
-	
+	    
+    @Column(name = "date_enable", nullable =true )
+    private String date_enable;
     
+    @Column(name = "ip_last_connection", nullable =true )
+    private String ip_last_connection;
     
     /**
      * The login of the user, used for authentication
@@ -274,11 +278,39 @@ public class User  extends OMBase{
 	public void setInit_pass(boolean init_pass) {
 		Init_pass = init_pass;
 	}
+
+
+	/**
+	 * @return the date_enable
+	 */
+	public String getDate_enable() {
+		return date_enable;
+	}
+
+
+	/**
+	 * @param date_enable the date_enable to set
+	 */
+	public void setDate_enable(String date_enable) {
+		this.date_enable = date_enable;
+	}
+
 	
-	
-	
-	
-	
+	/**
+	 * @return the ip_last_connection
+	 */
+	public String getIp_last_connection() {
+		return ip_last_connection;
+	}
+
+
+
+	/**
+	 * @param ip_last_connection the ip_last_connection to set
+	 */
+	public void setIp_last_connection(String ip_last_connection) {
+		this.ip_last_connection = ip_last_connection;
+	}
 	
 	
 }

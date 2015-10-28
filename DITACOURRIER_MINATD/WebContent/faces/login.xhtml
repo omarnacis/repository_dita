@@ -63,7 +63,11 @@
          -->  
             <br/>  
           <h:messages showDetail="false" style="color: red;" id="msgErreur"  />
-          <h:outputText value="#{msg['user.connexion.inconu']}" rendered="#{param.error}" style="color: red;"/>
+          
+          <c:if test="#{param.error}">
+          	          <h:outputText value="#{msg['user.connexion.inconu']}" rendered="#{sessionControlControllerBean.user.enabled}" style="color: red;"/>
+          			  <h:outputText value="#{msg['user.connexion.etat']}" rendered="#{!sessionControlControllerBean.user.enabled}" style="color: red;"/>          	
+          </c:if>
          
         </h:form>
       </div>

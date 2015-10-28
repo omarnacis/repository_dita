@@ -52,6 +52,8 @@ import javax.servlet.http.HttpServletRequest;
 
 
 
+import javax.swing.JOptionPane;
+
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -68,6 +70,7 @@ import org.primefaces.model.UploadedFile;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
+
 
 
 
@@ -187,6 +190,8 @@ public class BordereauControllerBean   implements Serializable{
 	@PostConstruct
 	public void init(){
 		try {
+			
+			JOptionPane.showMessageDialog(null,  "***********************************************QUELQUE CHOSES ");
 			
 			bordereau = new Bordereau();
 			

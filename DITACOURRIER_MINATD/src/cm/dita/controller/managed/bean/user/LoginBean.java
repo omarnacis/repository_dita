@@ -2,12 +2,17 @@ package cm.dita.controller.managed.bean.user;
 
 import java.io.Serializable;
 
+
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 
 import javax.faces.context.ExternalContext;
@@ -20,17 +25,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 //import javax.swing.JOptionPane;
 
+
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import cm.dita.constant.IConstance;
 import cm.dita.constant.ISessionConstant;
 import cm.dita.controller.managed.bean.sessionControl.SessionControlControllerBean;
 import cm.dita.entities.user.User;
 import cm.dita.service.domaine.inter.IMouchardRessourceService;
 import cm.dita.service.domaine.inter.user.IUserService;
-import cm.dita.utils.ApplicationContextHolder;
-import cm.dita.utils.Messages;
+
 import cm.dita.utils.VigenereCipher;
 
 @ManagedBean
@@ -48,6 +55,9 @@ public class LoginBean implements Serializable{
 	private String username;
     private String password;
     
+    //private Date dateCourante = new Date();
+    private String dateCourante =  (new SimpleDateFormat(IConstance.PARAMETER_DATE_FORMAT_2)).format(new Date()) ; 
+    
     @ManagedProperty(value="#{userService}")
 	IUserService userService;
     
@@ -60,14 +70,17 @@ public class LoginBean implements Serializable{
 //    private SessionControlControllerBean sessionControlControllerBean;
 	 
 	
-	private User user;
+	private User user = new User();
 	
 	private String codeTrans;
  
     public LoginBean() {
     }
+    
  
     public String doLogin() throws IOException, ServletException {
+    	
+    	    	
         ExternalContext context = FacesContext.getCurrentInstance()
                 .getExternalContext();
   
@@ -88,33 +101,70 @@ public class LoginBean implements Serializable{
         	//sessionControlControllerBean = (SessionControlControllerBean)springAppContext.getBean("sessionControlControllerBean");
         	//pour incrementer le nombre de tentative de connection successif avec echec
         	sessionControlControllerBean.setNbLoginSuccessifEchoue(sessionControlControllerBean.getNbLoginSuccessifEchoue()+1);
-        	
+        		
         	if(sessionControlControllerBean.getNbLoginSuccessifEchoue() > 3){//le nombre de tentative de connection a excedé 2, nous dvons automatiquement desactiver cet utilisateur et l'inviter à consulter un administrateur
 	        	User userTenteConnexion = new User();
 	        	userTenteConnexion.setLogin(username.trim());
 	        	if(userService.userExiste(userTenteConnexion)){
 	        		userTenteConnexion = userService.findByLogin(username.trim());
-	        		userTenteConnexion.setEnabled(false);
-	        		userService.update(userTenteConnexion);
-	        		sessionControlControllerBean.setNbLoginSuccessifEchoue(0);
+	        		userTenteConnexion.setEnabled(false);//bloquer l'utilisateur ce qui entraine une modification dans son enregistrement
+	        		userTenteConnexion.setDate_enable(dateCourante);
+	        		//user = userService.update(userTenteConnexion);//enregistrer la modification
+	        		sessionControlControllerBean.setNbLoginSuccessifEchoue(0);//reinitialiser le compteur du nombre de tentative de connection successif avec echec
 	        		mouchardRessourceService.tracage("Déxactivation de "+userTenteConnexion.getInfosPersonne().getNom()+" "+userTenteConnexion.getInfosPersonne().getPrenom()+"("
 							+userTenteConnexion.getLogin()+") du système pour cause de tentative multiple de connexion sans succes!", "déxactivation Automatique",userTenteConnexion.getDateUseToSortData(), "User");
 	        	}
 	        	
         	}
         	
-        	//JOptionPane.showMessageDialog(null,  "nbconnect"+sessionControlControllerBean.getNbLoginSuccessifEchoue());
+        	/**
+        	 * POUR POUVOIR RECUPERER LE enabled de l'utilisateur 
+        	 */
+        	user.setLogin(username);
+        	if(userService.userExiste(user))
+        		sessionControlControllerBean.setUser(userService.findByLogin(username.trim()));
+        	
+        	//JOptionPane.showMessageDialog(null,  "nbconnect  = "+sessionControlControllerBean.getNbLoginSuccessifEchoue()+"    utilisateur : = "+sessionControlControllerBean.getUser().getLogin()+ "  STATUS =  " +sessionControlControllerBean.getUser().isEnabled());
+        	//System.out.println("************************************************** nbsession "+sessionControlControllerBean.getNbLoginSuccessifEchoue());  
+        	
+        	/*
+        	 * Recupérer le nom et l'adresse ip reseau de la machine cliente 
+        	 */
+            String nomHote ;
+            String adresseIPLocale = null ;
+
+            try{
+               InetAddress inetadr = InetAddress.getLocalHost();
+               //nom de machine
+               nomHote = (String) inetadr.getHostName();
+               System.out.println("Nom de la machine = "+nomHote );
+               //adresse ip sur le réseau
+               adresseIPLocale = (String) inetadr.getHostAddress();
+               System.out.println("Adresse IP locale = "+adresseIPLocale );
+       
+            } catch (UnknownHostException e) {
+                   e.printStackTrace();
+            }
+            
+            
+            /**
+             * Mettre à jour les informations de connection du client
+             */
         	
         	try {
         		UserDetails user_secutity = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     			User userconnected =userService.findByLogin(username.trim());
-            	if(userconnected != null)
+            	//if(userconnected != null)
+    			//JOptionPane.showMessageDialog(null,  "utilisateur connecté"+user_secutity.getUsername());
+    			if(user_secutity != null){    				
+    				userconnected.setIp_last_connection(adresseIPLocale);
+	        		userService.update(userconnected);//enregistrer la modification
             		sessionControlControllerBean.setNbLoginSuccessifEchoue(0);
             		mouchardRessourceService.tracage("Connexion de "+userconnected.getInfosPersonne().getNom()+" "+userconnected.getInfosPersonne().getPrenom()+"("
 						+userconnected.getLogin()+") au système avec succes!", "Connexion",userconnected.getDateUseToSortData(), "User");
             		//JOptionPane.showMessageDialog(null,  "utilisateur connecté"+userconnected.getId());
-            		//JOptionPane.showMessageDialog(null,  "nbconnect"+sessionControlControllerBean.getNbLoginSuccessifEchoue());
-    			
+            		//JOptionPane.showMessageDialog(null,  "nbconnect"+sessionControlControllerBean.getNbLoginSuccessifEchoue());}
+    			}
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
@@ -254,6 +304,20 @@ public class LoginBean implements Serializable{
 	public void setSessionControlControllerBean(
 			SessionControlControllerBean sessionControlControllerBean) {
 		this.sessionControlControllerBean = sessionControlControllerBean;
+	}
+
+	/**
+	 * @return the dateCourante
+	 */
+	public String getDateCourante() {
+		return dateCourante;
+	}
+
+	/**
+	 * @param dateCourante the dateCourante to set
+	 */
+	public void setDateCourante(String dateCourante) {
+		this.dateCourante = dateCourante;
 	}
 
 	
