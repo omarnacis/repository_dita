@@ -21,6 +21,8 @@ import javax.faces.event.ActionEvent;
 import javax.faces.validator.ValidatorException;
 //import javax.swing.JOptionPane;
 
+import javax.swing.JOptionPane;
+
 import org.apache.log4j.Logger;
 import org.primefaces.context.RequestContext;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
@@ -114,6 +116,8 @@ public class UserBean implements Serializable{
 		RoleDataModel roleListDataModel;
 		
 		RessourcesDataModel ressourceListDataModel;
+		
+		private boolean limite_validite_compte;
    
  
 		public UserBean() {
@@ -124,7 +128,7 @@ public class UserBean implements Serializable{
 		
    @PostConstruct    
     public void init(){
-	 
+	   limite_validite_compte = false;
 	   userList=userService.listVersusEnabled(IConstance.FIELD_DELETE, new String[]{});		
 	   userListDataModel= new UserDataModel(userList);
 	   listSexe=Sexe.initialise();
@@ -133,7 +137,7 @@ public class UserBean implements Serializable{
     }
  
     public void ajoutEvent(ActionEvent actionEvent) {
-    	
+    	limite_validite_compte = false;
     	operation=1; //ajout
     	espace_id=0;
 		type_id=0;
@@ -147,6 +151,10 @@ public class UserBean implements Serializable{
     	listEspace=espaceService.listVersusEnabled(IConstance.FIELD_DELETE, new String[]{});
     	listType=typeService.listVersusEnabled(IConstance.FIELD_DELETE, new String[]{});
  
+    }
+    
+    public void afficheSelectDatesValidite(){
+    	limite_validite_compte &= true;
     }
   
     // modification du profil    
@@ -179,6 +187,12 @@ public class UserBean implements Serializable{
         listEspace=espaceService.listVersusEnabled(IConstance.FIELD_DELETE, new String[]{});
     	listType=typeService.listVersusEnabled(IConstance.FIELD_DELETE, new String[]{});
     	
+    	//pour initialiser la zone la zone d'affichage de date de debut de validité et date de fin de validité
+    	if(user.getDate_debut_validite() != null)
+    		limite_validite_compte = true;
+    	else
+    		limite_validite_compte = false;
+    	
     	this.roleListDataModel= new RoleDataModel(roleService.listOfRole4User(this.user));//role de l'utilisateur
     	this.ressourceListDataModel =new RessourcesDataModel(accessRessourceService.listAccess2User(this.user));
     
@@ -205,18 +219,22 @@ public class UserBean implements Serializable{
 					user.setPassword(cryptedPassword);
 			    	
 					//user.setEnabled(IConstance.ENABLE_UTILISATEUR_OFF);
+					
+					JOptionPane.showMessageDialog(null,  "debut de validite"+user.getDate_debut_validite()+"  Fin de validite"+user.getDate_fin_validite());
+					
 					user.setInfosPersonne(infosuser);					
 					user.setEspace(espaceService.load(this.espace_id));
 				//	user.setTypespersonnel(typeService.load(this.type_id));
 					user.setAutorithies(false);
 					user.setInit_pass(true);
-					user.setLangue("fr");
+					//user.setLangue("fr");
 			    	this.user=userService.save(user);	
 			    	
 			    	
 			    	
 			    //	passwordService.save(pwd);
 			    	init();//mise ï¿½ jour de la liste
+			    	limite_validite_compte = false;
 			    	
 			    	//HttpServletRequest req=(HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 			    	/*LOG.info("Ajout du compte \\("+user.getIdentifier()+"\\)"+user.getInfosuser().getNomRaisonSocial()+
@@ -229,7 +247,7 @@ public class UserBean implements Serializable{
 			    	message.setSeverity(FacesMessage.SEVERITY_INFO);
 			        context.addMessage(null, message);
 			       // requestContext.execute("msgDlg.show()");	
-		    
+			        
     	
     	 }catch(Exception e){
     		 e.printStackTrace();
@@ -244,6 +262,7 @@ public class UserBean implements Serializable{
      		type_id=0;
  	        user = new User();
  	        infosuser= new InfosPersonne();
+ 	       limite_validite_compte = false;
     	 }
     		
     }
@@ -268,6 +287,7 @@ public class UserBean implements Serializable{
 				//	user.setTypespersonnel(typeService.load(this.type_id));
 			    	userService.update(user);
 			    	init();//mise ï¿½ jour de la liste
+			    	limite_validite_compte = false;
 			    	mouchardRessourceService.tracage("Modification de l'utilisateur "+user.getInfosPersonne().getNom()+" "+user.getInfosPersonne().getPrenom()+"("+user.getLogin()+") ", "modification",user.getDateUseToSortData(), "User");
 					
 			    	FacesMessage message = Messages.getMessage("messages", "global.gestion.reussi", null);
@@ -285,6 +305,7 @@ public class UserBean implements Serializable{
    	 }finally{
    		user = new User();
         infosuser= new InfosPersonne();
+        limite_validite_compte = false;
    	 }
    	
 	     
@@ -739,6 +760,22 @@ public class UserBean implements Serializable{
 	public void setMouchardRessourceService(
 			IMouchardRessourceService mouchardRessourceService) {
 		this.mouchardRessourceService = mouchardRessourceService;
+	}
+
+
+	/**
+	 * @return the limite_validite_compte
+	 */
+	public boolean isLimite_validite_compte() {
+		return limite_validite_compte;
+	}
+
+
+	/**
+	 * @param limite_validite_compte the limite_validite_compte to set
+	 */
+	public void setLimite_validite_compte(boolean limite_validite_compte) {
+		this.limite_validite_compte = limite_validite_compte;
 	}
 
 	

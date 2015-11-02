@@ -39,15 +39,19 @@ public class SessionControlControllerBean  implements Serializable{
 	//Nombre de tentative de connexion avec echec
     private Integer nbLoginSuccessifEchoue;
     private User user;
+    private boolean notAccountExpired;
+    private boolean dSesionCourante_plusResenteQue_dDerniereSesion;
 	
 
 	//Initailisation des elements de la bean
 	@PostConstruct
 	public void init(){
 		try {
+			notAccountExpired = true;//par defaut, un compte n'a pas de durée de validité et les date de debut et de fin sont vides
 			user = new User();//initialisation de l'utilisateur
 			user.setEnabled(true);//par defaut un utilisateur est actif
 			nbLoginSuccessifEchoue = 0;//initialisation du nombre de tentative de connection avec echec
+			dSesionCourante_plusResenteQue_dDerniereSesion = true;//la date de la session courante doit être plus ressente que la date de la derniere session
 				
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -87,6 +91,41 @@ public class SessionControlControllerBean  implements Serializable{
 		this.user = user;
 	}
 
+
+	/**
+	 * @return the notAccountExpired
+	 */
+	public boolean isNotAccountExpired() {
+		return notAccountExpired;
+	}
+
+
+	/**
+	 * @param notAccountExpired the notAccountExpired to set
+	 */
+	public void setNotAccountExpired(boolean notAccountExpired) {
+		this.notAccountExpired = notAccountExpired;
+	}
+
+
+	/**
+	 * @return the dSesionCourante_plusResenteQue_dDerniereSesion
+	 */
+	public boolean isdSesionCourante_plusResenteQue_dDerniereSesion() {
+		return dSesionCourante_plusResenteQue_dDerniereSesion;
+	}
+
+
+	/**
+	 * @param dSesionCourante_plusResenteQue_dDerniereSesion the dSesionCourante_plusResenteQue_dDerniereSesion to set
+	 */
+	public void setdSesionCourante_plusResenteQue_dDerniereSesion(
+			boolean dSesionCourante_plusResenteQue_dDerniereSesion) {
+		this.dSesionCourante_plusResenteQue_dDerniereSesion = dSesionCourante_plusResenteQue_dDerniereSesion;
+	}
+
+
+	
 
 	
 }
