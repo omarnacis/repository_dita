@@ -165,6 +165,20 @@ public class MouchardControllerBean  implements Serializable{
 	public void setMouchardPrintDate(String mouchardPrintDate) {
 		this.mouchardPrintDate = mouchardPrintDate;
 	}
+
+	/**
+	 * @return the mouchard
+	 */
+	public Mouchard getMouchard() {
+		return mouchard;
+	}
+
+	/**
+	 * @param mouchard the mouchard to set
+	 */
+	public void setMouchard(Mouchard mouchard) {
+		this.mouchard = mouchard;
+	}
 	
 	
 	

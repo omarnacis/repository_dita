@@ -37,6 +37,7 @@ public class SessionControlControllerBean  implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	//Nombre de tentative de connexion avec echec
+	private String previousLogin;
     private Integer nbLoginSuccessifEchoue;
     private User user;
     private boolean notAccountExpired;
@@ -47,6 +48,7 @@ public class SessionControlControllerBean  implements Serializable{
 	@PostConstruct
 	public void init(){
 		try {
+			previousLogin = new String("");//est destiné à contenir le precedent login lors des connexion successives
 			notAccountExpired = true;//par defaut, un compte n'a pas de durée de validité et les date de debut et de fin sont vides
 			user = new User();//initialisation de l'utilisateur
 			user.setEnabled(true);//par defaut un utilisateur est actif
@@ -122,6 +124,22 @@ public class SessionControlControllerBean  implements Serializable{
 	public void setdSesionCourante_plusResenteQue_dDerniereSesion(
 			boolean dSesionCourante_plusResenteQue_dDerniereSesion) {
 		this.dSesionCourante_plusResenteQue_dDerniereSesion = dSesionCourante_plusResenteQue_dDerniereSesion;
+	}
+
+
+	/**
+	 * @return the previousLogin
+	 */
+	public String getPreviousLogin() {
+		return previousLogin;
+	}
+
+
+	/**
+	 * @param previousLogin the previousLogin to set
+	 */
+	public void setPreviousLogin(String previousLogin) {
+		this.previousLogin = previousLogin;
 	}
 
 
