@@ -27,7 +27,7 @@ import javax.servlet.http.HttpSession;
 
 
 
-import javax.swing.JOptionPane;
+//import javax.swing.JOptionPane;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -102,8 +102,8 @@ public class LoginBean implements Serializable{
          */
         
         User u = new User();
-        u.setLogin(username);//je mets au moins son nom d'utilisateur pour me rassurer que je peux verifier son existance
-        String valeurExactDuLoginSaisi = username;
+        u.setLogin(username.trim());//je mets au moins son nom d'utilisateur pour me rassurer que je peux verifier son existance
+        String valeurExactDuLoginSaisi = username.trim();
     	if(userService.userExiste(u)){    //me rassurer que l'utilisateur est bien dans la bd
     		
     			u = userService.findByLogin(username.trim());//on recupère l'utilisateur sachant son login
@@ -149,8 +149,10 @@ public class LoginBean implements Serializable{
         			sessionControlControllerBean.setNotAccountExpired(false);//sert a selectionner le message d'erreur qui sera affiché sur la vue
         			username += dateCourante;//je modifie volontairement le nom d'utilisateur pour provoquer l'echec de connection et ainsi nous serons automatiquement redirigé vers la page d'echec connection et le message d'erreur sera pris en compte
         		}
-        		sessionControlControllerBean.setUser(userService.findByLogin(username.trim()));
+        		
         	}
+        	
+        	sessionControlControllerBean.setUser(userService.findByLogin(valeurExactDuLoginSaisi.trim()));
     	}
     	
     	
@@ -168,21 +170,30 @@ public class LoginBean implements Serializable{
       /**
        * POUR VERROUILLER LE COMPTE DE L'UTILISATEUR LORSQUE LE NOMBRE DE TENTATIVE DE CONNECTION AVEC ECHEC EST DEPASSE
        */
-        	if(userService.userExiste(u)){ //l'utilisteur existe dans la bd, incrementer le compteur de nombre d'echec ou alors repositionner à 1
+        	User u1 = new User();
+        	u1.setLogin(valeurExactDuLoginSaisi);
+        	//JOptionPane.showMessageDialog(null,  "1. JE SUIS LA AVEC previous  = "+sessionControlControllerBean.getPreviousLogin()+"  UTILISATEUR = "+userService.userExiste(u)+" utilisateurID =" +u.getId() );
+        	
+        	if(userService.userExiste(u1)){ //l'utilisteur existe dans la bd, incrementer le compteur de nombre d'echec ou alors repositionner à 1
+        		//JOptionPane.showMessageDialog(null,  "2. *****JE SUIS LA AVEC previous  = "+sessionControlControllerBean.getPreviousLogin() );
 		        	if(   sessionControlControllerBean.getPreviousLogin() != null /*le precedent login est non vide*/
 		        	   && sessionControlControllerBean.getPreviousLogin().length()>0 /*le precedent login contient au moins un caractère*/
-		        	   && sessionControlControllerBean.getPreviousLogin().equalsIgnoreCase(username)){//le precedent login est egale au login courant
+		        	   && sessionControlControllerBean.getPreviousLogin().equalsIgnoreCase(valeurExactDuLoginSaisi.trim())){//le precedent login est egale au login courant
+		        		
+		        		//JOptionPane.showMessageDialog(null,  "JE SUIS LA AVEC nbconnect  = "+sessionControlControllerBean.getNbLoginSuccessifEchoue() );
 		        		sessionControlControllerBean.setNbLoginSuccessifEchoue(sessionControlControllerBean.getNbLoginSuccessifEchoue()+1);//on incremente le compteur d'echec
+		        		
 		        	}
 		        	else
-		        		if(   sessionControlControllerBean.getPreviousLogin() != null /*le precedent login est non vide*/
-		        	       && sessionControlControllerBean.getPreviousLogin().length() <= 0 /*le precedent login contient au moins un caractère*/){
+		        		
 		        			sessionControlControllerBean.setNbLoginSuccessifEchoue(1);//on suppose qu'il s'agit de la première tentative et que le login est bien dans la bd
-		        		}
+		        		        	
         	}
-        		else//l'utilisateur n'existe pas, c'est l'occasion de reinitialiser le nombre de compteur d'echec
+        		else{//l'utilisateur n'existe pas, c'est l'occasion de reinitialiser le nombre de compteur d'echec
+        			//JOptionPane.showMessageDialog(null,  "3. *****JE SUIS LA AVEC previous  = "+sessionControlControllerBean.getPreviousLogin() );
         			sessionControlControllerBean.setNbLoginSuccessifEchoue(0);//reinitialiser le compteur du nombre de tentative de connection successif avec echec parceque le login a changé
-        	
+        		}
+        	//JOptionPane.showMessageDialog(null,  "nbconnect  = "+sessionControlControllerBean.getNbLoginSuccessifEchoue()+"    utilisateur : = "+valeurExactDuLoginSaisi+ "  PREVIOUS =  "+sessionControlControllerBean.getPreviousLogin() );
         	sessionControlControllerBean.setPreviousLogin(valeurExactDuLoginSaisi);//on remplace le precedent login par le nouveau
         	
         		        	
@@ -201,6 +212,10 @@ public class LoginBean implements Serializable{
 	        	
         	}
         	
+        	
+        	if(userService.userExiste(u)){
+        		sessionControlControllerBean.setUser(userService.findByLogin(valeurExactDuLoginSaisi.trim()));
+        	}
         	
         	
         	//JOptionPane.showMessageDialog(null,  "nbconnect  = "+sessionControlControllerBean.getNbLoginSuccessifEchoue()+"    utilisateur : = "+sessionControlControllerBean.getUser().getLogin()+ "  STATUS =  " +sessionControlControllerBean.getUser().isEnabled());
@@ -257,6 +272,8 @@ public class LoginBean implements Serializable{
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
+        	
+        	
 			
         	/*
         	while(f.hasNext())

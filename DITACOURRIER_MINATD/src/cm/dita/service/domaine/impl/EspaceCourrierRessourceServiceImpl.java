@@ -91,7 +91,7 @@ public class EspaceCourrierRessourceServiceImpl  extends ServiceBaseImpl<EspaceC
 	/**
 	 * *retourne la liste des espacecourrier sachant l'idBordereau
 	 */
-	public List<EspaceCourrier> findByBordereauId(String bordereauId) {
+	public List<EspaceCourrier> findByBordereauId(Integer bordereauId) {
 		// TODO Auto-generated method
     	Map<String , Object> parameters = new HashMap<String, Object>();
 		parameters.put("bordereauid", bordereauId);

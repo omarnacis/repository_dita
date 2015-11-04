@@ -90,7 +90,7 @@ public class Courriers extends OMBase {
     @ManyToOne(optional = false)
     private User lastUserUpdate;
     
-    @Column(name = "courdatemodif")   
+    @Column(name = "courdatemodif", nullable=true)   
     private String courdatemodif;
  
     @Column(name = "idstatutcourantducour", nullable=false)
@@ -98,11 +98,7 @@ public class Courriers extends OMBase {
     
     @Column(name = "idespacecourantducour", nullable=false)
     private Integer idespacecourantducour;
-    
-
-    
-
-    
+        
     @Column(name = "courobservation",length=2000)
     private String courobservation;
     

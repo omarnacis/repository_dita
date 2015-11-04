@@ -321,7 +321,7 @@ public class BordereauControllerBean   implements Serializable{
 		//Omar ajout pour test jasper
 		TestJqspertRepport t = new TestJqspertRepport();
 		List<Courriers> listecour = new ArrayList<Courriers>();
-		for(EspaceCourrier epc : bordereau.getEspaceCourrierCollection()){
+		for(EspaceCourrier epc : espaceCourrierRessourceService.findByBordereauId(bordereau.getId())){
 			listecour.add(epc.getCourrier());
 			//System.out.println("les references "+epc.getCourrier().getRefid()+"   et l'objet est : "+epc.getCourrier().getCourobjet());
 		}

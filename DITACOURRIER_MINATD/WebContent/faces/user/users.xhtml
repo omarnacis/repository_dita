@@ -406,11 +406,11 @@
                     	<h:outputLabel id="labelDateDebutId" for="date_debut_validite" title="#{msg['user.datedebutValiditeCompteTitle']}" value="#{msg['user.datedebutValiditeCompteLabel']}:" rendered="#{userBean.limite_validite_compte}" />
                     		<h:outputLabel id="labelDateFinId" for="date_fin_validite" title="#{msg['user.dateFinValiditeCompteTitle']}" value="#{msg['user.dateFinValiditeCompteLabel']}:"   rendered="#{userBean.limite_validite_compte}" />
                     		
-	                    		<p:calendar value="#{userBean.user.date_debut_validite}"    id="date_debut_validite" locale="fr" navigator="true" 
+	                    		<p:calendar value="#{userBean.user.date_debut_validite}" timeZone="Europe/Paris"   id="date_debut_validite" locale="fr" navigator="true" 
 	                              lang="fr"   pattern="dd-MM-yyyy"  mode="popup" showOn="button" required="true" requiredMessage="#{msg['courrier.add.DateCourrier.requi']}"  rendered="#{userBean.limite_validite_compte}" />
 	                              
 	                            
-	                    		<p:calendar value="#{userBean.user.date_fin_validite}"    id="date_fin_validite" locale="fr" navigator="true" 
+	                    		<p:calendar value="#{userBean.user.date_fin_validite}" timeZone="Europe/Paris"   id="date_fin_validite" locale="fr" navigator="true" 
 	                               lang="fr"  pattern="dd-MM-yyyy"  mode="popup" showOn="button" required="true" requiredMessage="#{msg['courrier.add.DateCourrier.requi']}"  rendered="#{userBean.limite_validite_compte}" />
                               		       
                     	</p:panelGrid>		

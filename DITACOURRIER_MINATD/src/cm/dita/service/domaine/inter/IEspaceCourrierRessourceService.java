@@ -13,7 +13,7 @@ public interface IEspaceCourrierRessourceService extends IServiceBase<EspaceCour
 	public List<EspaceCourrier> listCourrierParEspace(int espace);
 	public List<EspaceCourrier> listCourrierParEspacefiltre(int espace, int iduser);
 	public List<EspaceCourrier> listCourrierUser(User user);
-	public List<EspaceCourrier> findByBordereauId(String bordereauId);
+	public List<EspaceCourrier> findByBordereauId(Integer bordereauId);
 	public List<EspaceCourrier> findByCourrierId(String courrier);
 	public List<EspaceCourrier> listCourrierParEspacetraite(int espace);
 	public List<EspaceCourrier> listCourrierSearch(int espace, int iduser,String chaine) ;
