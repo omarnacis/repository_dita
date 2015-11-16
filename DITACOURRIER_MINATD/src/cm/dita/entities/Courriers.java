@@ -82,23 +82,19 @@ public class Courriers extends OMBase {
     @JoinColumn(name = "usercreateid", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private User usercreate;
-    
-    @Column(name = "courdatenreg",nullable=false)    
-    private String courdatenreg;
-    
-    @JoinColumn(name = "lastuserupdateid", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private User lastUserUpdate;
-    
-    @Column(name = "courdatemodif", nullable=true)   
-    private String courdatemodif;
  
     @Column(name = "idstatutcourantducour", nullable=false)
     private Integer idstatutcourantducour;
     
     @Column(name = "idespacecourantducour", nullable=false)
     private Integer idespacecourantducour;
-        
+    
+    @Column(name = "courdatenreg",nullable=false)    
+    private String courdatenreg;
+    
+    @Column(name = "courdatemodif")   
+    private String courdatemodif;
+    
     @Column(name = "courobservation",length=2000)
     private String courobservation;
     
@@ -436,20 +432,6 @@ public class Courriers extends OMBase {
 	 */
 	public void setCourdatemodif(String courdatemodif) {
 		this.courdatemodif = courdatemodif;
-	}
-
-	/**
-	 * @return the lastUserUpdate
-	 */
-	public User getLastUserUpdate() {
-		return lastUserUpdate;
-	}
-
-	/**
-	 * @param lastUserUpdate the lastUserUpdate to set
-	 */
-	public void setLastUserUpdate(User lastUserUpdate) {
-		this.lastUserUpdate = lastUserUpdate;
 	}
     
 	
