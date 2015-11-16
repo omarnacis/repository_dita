@@ -12,14 +12,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 
-import cm.dita.entities.user.User;
+import javax.xml.bind.annotation.XmlRootElement;
 import cm.dita.object.model.OMBase;
 /**
  *
@@ -42,20 +39,6 @@ public class Activites extends OMBase {
     
     @Column(name = "libelle")
     private String libelle;
-    
-    @JoinColumn(name = "usercreateid", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private User userCreate;
-    
-    @Column(name = "datecreate",nullable=false)    
-    private String dateCreate;
-    
-    @JoinColumn(name = "lastuserupdateid", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private User lastUserUpdate;
-    
-    @Column(name = "lastdatemodif")   
-    private String lastDatemodif;
 
     public Activites() {
     }
@@ -99,62 +82,6 @@ public class Activites extends OMBase {
         }
         return true;
     }
-
-	/**
-	 * @return the userCreate
-	 */
-	public User getUserCreate() {
-		return userCreate;
-	}
-
-	/**
-	 * @param userCreate the userCreate to set
-	 */
-	public void setUserCreate(User userCreate) {
-		this.userCreate = userCreate;
-	}
-
-	/**
-	 * @return the dateCreate
-	 */
-	public String getDateCreate() {
-		return dateCreate;
-	}
-
-	/**
-	 * @param dateCreate the dateCreate to set
-	 */
-	public void setDateCreate(String dateCreate) {
-		this.dateCreate = dateCreate;
-	}
-
-	/**
-	 * @return the lastUserUpdate
-	 */
-	public User getLastUserUpdate() {
-		return lastUserUpdate;
-	}
-
-	/**
-	 * @param lastUserUpdate the lastUserUpdate to set
-	 */
-	public void setLastUserUpdate(User lastUserUpdate) {
-		this.lastUserUpdate = lastUserUpdate;
-	}
-
-	/**
-	 * @return the lastDatemodif
-	 */
-	public String getLastDatemodif() {
-		return lastDatemodif;
-	}
-
-	/**
-	 * @param lastDatemodif the lastDatemodif to set
-	 */
-	public void setLastDatemodif(String lastDatemodif) {
-		this.lastDatemodif = lastDatemodif;
-	}
 
     
     
