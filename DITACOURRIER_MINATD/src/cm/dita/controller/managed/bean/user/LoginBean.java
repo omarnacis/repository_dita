@@ -235,7 +235,7 @@ public class LoginBean implements Serializable{
                System.out.println("Nom de la machine = "+nomHote );
                //adresse ip sur le réseau
                adresseIPLocale = (String) inetadr.getHostAddress();
-               System.out.println("Adresse IP locale = "+adresseIPLocale );
+               System.out.println("Adresse IP locale de cliente = "+adresseIPLocale );
        
             } catch (UnknownHostException e) {
                    e.printStackTrace();
