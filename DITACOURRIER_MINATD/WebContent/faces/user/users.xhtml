@@ -304,15 +304,14 @@
                         <i>#{msg['global.label.obligatoire']}</i>
                    </p:panelGrid>
                 
-                <p:panelGrid id="display" columns="#{userBean.operation!=2 ? 4:3}" cellpadding="4" style="margin:0 auto;margin-top:-5px; ">  
+                <p:panelGrid id="display" columns="#{userBean.operation!=2 ? 3:2}" cellpadding="4" style="margin:0 auto;">  
                 
 	                	<h:outputLabel for="login"  value="#{msg['user.login']}:*" />  
 	                	<c:if test="#{userBean.operation!=2}">
 	                		 <h:outputLabel for="password" title="#{msg['user.password']}" value="#{msg['user.password']}:*" />	             		  		                
 		                	                
 	                	</c:if>    
-	                	<h:outputLabel for="enable"  value="#{msg['user.enable']}:*" />
-	                	<h:outputLabel for="selectLangueId" value="#{msg['user.langue']}"  id="labelLangueId" title="#{msg['labelLangueTitle']}" />                            
+	                	<h:outputLabel for="enable"  value="#{msg['user.enable']}:*" />                            
 	                      <p:inputText value="#{userBean.user.login}"  id="login" required="true" requiredMessage="#{msg['user.login.require']}" 
 	                        validator="#{userBean.validateName}" />
 	                    <c:if test="#{userBean.operation!=2}">
@@ -327,18 +326,12 @@
 		                </c:if>
 		                
 		                    <p:selectBooleanButton value="#{userBean.user.enabled}" id="enable" onLabel="#{msg['user.enable.actif']}" offLabel="#{msg['user.enable.bloque']}" />
-		                
-		               
-		                
-                        <h:selectOneMenu value="#{userBean.user.langue}"  id="selectLangueId"  >
-							<f:selectItem itemLabel="#{msg['global.langue.francais']}" itemValue="fr" />							
-							<f:selectItem itemLabel="#{msg['global.langue.anglaise']}" itemValue="en" />
-						</h:selectOneMenu>    
+		                    
 		               
 		              
                   </p:panelGrid>
-                    	<p:separator  style="margin-top:-2px" />
-                 <p:panelGrid columns="3" cellpadding="4" style=" margin:0 auto;margin-top:-5px; ">                     
+                    	<p:separator />
+                 <p:panelGrid columns="3" cellpadding="4" style="margin:0 auto;">                     
                      <h:outputLabel for="nom" title="#{msg['user.nom']}" value="#{msg['user.nom']}:*" />
                     <h:outputLabel for="prenom" title="#{msg['user.prenom']}" value="#{msg['user.prenom']}:*" /> 
                      <h:outputLabel for="sexe" title="#{msg['user.sexe']}" value="#{msg['user.sexe']}:" />                        
@@ -354,8 +347,8 @@
 					
                     	
                     </p:panelGrid>
-                    <p:separator  style="margin-top:-2px"/>
-                    <p:panelGrid  columns="3" cellpadding="4" style=" margin:0 auto;margin-top:-5px; "> 
+                    <p:separator/>
+                    <p:panelGrid  columns="3" cellpadding="4" style="margin:0 auto;"> 
                     		<h:outputLabel for="mailAddress" title="#{msg['user.mail']}" value="#{msg['user.mail']}:*" />
                     		<h:outputLabel for="telephone" title="#{msg['user.telephone']}" value="#{msg['user.telephone']}:*" />
 		                    <h:outputLabel for="localisation" title="#{msg['user.localisation']}" value="#{msg['user.localisation']}:" />                                    
@@ -371,9 +364,9 @@
 		                     
 		                                     
   					</p:panelGrid>
-  					<p:separator style="margin-top:-2px"/>
+  					<p:separator/>
   					
-  					<p:panelGrid  columns="2" cellpadding="4" style=" margin:0 auto;margin-top:-5px; "> 
+  					<p:panelGrid  columns="2" cellpadding="4" style="margin:0 auto;"> 
                     		<h:outputLabel for="espace" title="#{msg['user.espace']}" value="#{msg['user.espace']}:*" />
                     		
 		                     <h:selectOneMenu  value="#{userBean.espace_id}"   id="espace" required="true" requiredMessage="#{msg['user.espace.require']}" >
@@ -391,50 +384,22 @@
 		                      <h:outputLabel for="creationDate" title="#{msg['user.datecreation']}" value="#{msg['user.datecreation']} :" /> 
 		                       <p:inputText value="#{userBean.user.dateCreation}"   id="creationDate" disabled="true" />                    
   					</p:panelGrid>
-  					<p:separator style="margin-top:-2px"/>
-  					
-  				<p:panelGrid columns="2" style="margin-top:-5px; " >	
-  					<p:panelGrid  columns="1" cellpadding="4" style=" margin:0 auto;margin-top:-5px; "> 
-                    		<h:outputLabel for="limite_validite_compte" title="#{msg['user.compteLimiteTitle']}" value="#{msg['user.compteLimiteLabel']}:" />
-                    		
-                    		<p:selectBooleanButton value="#{userBean.limite_validite_compte}" id="limite_validite_compte" onLabel="#{msg['button.non']}" offLabel="#{msg['button.oui']}" >
-                    			<p:ajax listener="#{userBean.afficheSelectDatesValidite}" update="panlAfficheDateValiditeId" global="false"/>
-                    		</p:selectBooleanButton>
-                                      		
-                    </p:panelGrid>			
-                    	<p:panelGrid  columns="2" id="panlAfficheDateValiditeId" style="margin-top:-5px;">
-                    	<h:outputLabel id="labelDateDebutId" for="date_debut_validite" title="#{msg['user.datedebutValiditeCompteTitle']}" value="#{msg['user.datedebutValiditeCompteLabel']}:" rendered="#{userBean.limite_validite_compte}" />
-                    		<h:outputLabel id="labelDateFinId" for="date_fin_validite" title="#{msg['user.dateFinValiditeCompteTitle']}" value="#{msg['user.dateFinValiditeCompteLabel']}:"   rendered="#{userBean.limite_validite_compte}" />
-                    		
-	                    		<p:calendar value="#{userBean.user.date_debut_validite}" timeZone="Europe/Paris"   id="date_debut_validite" locale="fr" navigator="true" 
-	                              lang="fr"   pattern="dd-MM-yyyy"  mode="popup" showOn="button" required="true" requiredMessage="#{msg['courrier.add.DateCourrier.requi']}"  rendered="#{userBean.limite_validite_compte}" />
-	                              
-	                            
-	                    		<p:calendar value="#{userBean.user.date_fin_validite}" timeZone="Europe/Paris"   id="date_fin_validite" locale="fr" navigator="true" 
-	                               lang="fr"  pattern="dd-MM-yyyy"  mode="popup" showOn="button" required="true" requiredMessage="#{msg['courrier.add.DateCourrier.requi']}"  rendered="#{userBean.limite_validite_compte}" />
-                              		       
-                    	</p:panelGrid>		
-                    			
-                    	</p:panelGrid>	 	
-                    <p:separator style="margin-top:-5px;"/>	
-                    		                                
-  					
                 		              				
-				 <p:panelGrid  columns="2" cellpadding="4" style="margin:0 auto; margin-top:-5px; ">                   		      
+				 <p:panelGrid  columns="2" cellpadding="4" style="margin:0 auto;">                   		      
                     <f:facet name="footer">                                                
                     </f:facet>
                 </p:panelGrid>  
                 <div style="float:left;">
                 <c:if test="#{userBean.operation==1}">
-                    <p:commandLink styleClass="btn btn-primary btn-block" style="color:#ffffff;" value="#{msg['button.sauvegarder']}"  update=":formusers, :growl, :newuserForm"  oncomplete="PF(handleSubmitRequest(xhr, status, args, 'newuserDlg','newuserForm'));"  actionListener="#{userBean.create}"  />
+                    <p:commandLink styleClass="btn btn-primary btn-block btn-flat" style="color:#ffffff;" value="#{msg['button.sauvegarder']}"  update=":formusers, :growl, :newuserForm"  oncomplete="PF(handleSubmitRequestUser(xhr, status, args, 'newuserDlg','newuserForm'));"  actionListener="#{userBean.create}"  />
                 </c:if>
                 <c:if test="#{userBean.operation==2}">
-                	<p:commandLink styleClass="btn btn-primary btn-block" value="#{msg['button.sauvegarder']}" style="color:#ffffff;" update=":formusers, :growl, :newuserForm"  oncomplete="PF(handleSubmitRequest(xhr, status, args, 'newuserDlg','newuserForm'));"  actionListener="#{userBean.update()}"  />
+                	<p:commandLink styleClass="btn btn-primary btn-block btn-flat" value="#{msg['button.sauvegarder']}" style="color:#ffffff;" update=":formusers, :growl, :newuserForm"  oncomplete="PF(handleSubmitRequestUser(xhr, status, args, 'newuserDlg','newuserForm'));"  actionListener="#{userBean.update()}"  />
               
                 </c:if>
                 </div> 
                 <div style="float:right">
-                   <p:commandLink styleClass="btn btn-primary btn-block btn-warning" style="color:#ffffff;" oncomplete="PF('addDialog').hide();" value="#{msg['button.close']}"  />  
+                   <p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;" oncomplete="PF('addDialog').hide();" value="#{msg['button.close']}"  />  
                 </div>
               </h:form>
           </p:dialog> 
