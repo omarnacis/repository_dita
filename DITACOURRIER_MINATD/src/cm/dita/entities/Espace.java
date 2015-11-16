@@ -7,21 +7,29 @@
 package cm.dita.entities;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.primefaces.model.TreeNode;
 
 import cm.dita.entities.user.User;
 import cm.dita.object.model.OMBase;
@@ -37,7 +45,9 @@ import cm.dita.object.model.OMBase;
 @NamedQueries({
     @NamedQuery(name = "Espace.findAll", query = "SELECT e FROM Espace e"),
     @NamedQuery(name = "Espace.findById", query = "SELECT e FROM Espace e WHERE e.id = :id"),
-    @NamedQuery(name = "Espace.findByNomespace", query = "SELECT e FROM Espace e WHERE LOWER(e.nomespace) = :nomespace AND e.delate='false'")})
+   // @NamedQuery(name = "Espace.findByUserConnect", query = "SELECT e FROM Espace e, Projet pr,  PersonneHasProjets p, Personne pers WHERE e = pr.espace AND pr.projid = p.projet AND p.personne = pers.persid AND pers.user = :user AND e.delate = false"),
+    @NamedQuery(name = "Espace.findByNomespace", query = "SELECT e FROM Espace e WHERE e.nomespace = :nomespace")})
+
 public class Espace extends OMBase{
     private static final long serialVersionUID = 1L;
     
@@ -54,21 +64,27 @@ public class Espace extends OMBase{
     @Column(name = "dateCreation")
     private String dateCreation;
     
+    @Column(name="used")
+    private boolean used;
+    
+   
+    @Column(columnDefinition="TEXT",nullable = false)
+    private String hierachie;
+    
+   /* @OneToMany(cascade = CascadeType.ALL, mappedBy = "espace")
+    private Collection<User> userCollection;*/
+    
+	    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "espace")
-    private Collection<User> userCollection;
+    private Collection<Espace> espaceCollection;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "espace")
-    private Collection<EspaceCourrier> espaceCourrierCollection;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "espace_idParent", nullable = true)
+    private Espace espace;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "espacedestf")
-    private Collection<Courriers> CourrierCollection;
+    @Transient
+    private TreeNode root;
     
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "espacePrecedent")
-    private Collection<EspaceCourrier> CourrierPrecedentCollection;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "espacedestination")
-    private Collection<EspaceCourrier> CourrierDestinationCollection;
     
     public Espace() {
     }
@@ -88,11 +104,10 @@ public class Espace extends OMBase{
 		this.id = espace.id;
 		this.nomespace = espace.nomespace;
 		this.dateCreation = espace.dateCreation;
-		this.userCollection = espace.userCollection;
-		this.espaceCourrierCollection = espace.espaceCourrierCollection;
-		CourrierCollection = espace.CourrierCollection;
-		CourrierPrecedentCollection = espace.CourrierPrecedentCollection;
-		CourrierDestinationCollection = espace.CourrierDestinationCollection;
+		//this.userCollection = espace.userCollection;
+		this.espace=espace.espace;
+		this.hierachie=espace.hierachie;
+		
 	}
 
 	public Integer getId() {
@@ -112,24 +127,7 @@ public class Espace extends OMBase{
     }
 
     
-    public Collection<User> getUserCollection() {
-        return userCollection;
-    }
-
-    public void setUserCollection(Collection<User> userCollection) {
-        this.userCollection = userCollection;
-    }
-
-    
-    public Collection<EspaceCourrier> getEspaceCourrierCollection() {
-        return espaceCourrierCollection;
-    }
-
-    public void setEspaceCourrierCollection(Collection<EspaceCourrier> espaceCourrierCollection) {
-        this.espaceCourrierCollection = espaceCourrierCollection;
-    }
-    
-    
+  
 
     public String getDateCreation() {
 		return dateCreation;
@@ -137,6 +135,46 @@ public class Espace extends OMBase{
 
 	public void setDateCreation(String dateCreation) {
 		this.dateCreation = dateCreation;
+	}
+	
+	
+
+	public String getHierachie() {
+		return hierachie;
+	}
+
+	public void setHierachie(String hierachie) {
+		this.hierachie = hierachie;
+	}
+	
+	
+
+	public Collection<Espace> getEspaceCollection() {
+		return espaceCollection;
+	}
+
+	public void setEspaceCollection(Collection<Espace> espaceCollection) {
+		this.espaceCollection = espaceCollection;
+	}
+	
+	
+
+	public Espace getEspace() {
+		return espace;
+	}
+
+	public void setEspace(Espace espace) {
+		this.espace = espace;
+	}
+	
+	
+
+	public TreeNode getRoot() {
+		return root;
+	}
+
+	public void setRoot(TreeNode root) {
+		this.root = root;
 	}
 
 	@Override
@@ -160,39 +198,25 @@ public class Espace extends OMBase{
     }
     
 
-    /**
-	 * @return the courrierCollection
-	 */
-	public Collection<Courriers> getCourrierCollection() {
-		return CourrierCollection;
-	}
-
-	/**
-	 * @param courrierCollection the courrierCollection to set
-	 */
-	public void setCourrierCollection(Collection<Courriers> courrierCollection) {
-		CourrierCollection = courrierCollection;
-	}
-
-	
-	/**
-	 * @return the courrierPrecedentCollection
-	 */
-	public Collection<EspaceCourrier> getCourrierPrecedentCollection() {
-		return CourrierPrecedentCollection;
-	}
-
-	/**
-	 * @param courrierPrecedentCollection the courrierPrecedentCollection to set
-	 */
-	public void setCourrierPrecedentCollection(
-			Collection<EspaceCourrier> courrierPrecedentCollection) {
-		CourrierPrecedentCollection = courrierPrecedentCollection;
-	}
-
 	@Override
     public String toString() {
         return "cm.dita.entities.Espace[ id=" + id + " ]";
     }
-    
+
+	/**
+	 * @return the used
+	 */
+	public boolean isUsed() {
+		return used;
+	}
+
+	/**
+	 * @param used the used to set
+	 */
+	public void setUsed(boolean used) {
+		this.used = used;
+	}
+
+ 
+	
 }
