@@ -20,11 +20,11 @@ public void onAuthenticationFailure(HttpServletRequest request, HttpServletRespo
   
   //JOptionPane.showMessageDialog(null, exception.getMessage());
   if(exception.getClass().isAssignableFrom(UsernameNotFoundException.class)) {
-	 // JOptionPane.showMessageDialog(null, "titittti");
+	//  JOptionPane.showMessageDialog(null, "titittti");
     //showMessage("BAD_CREDENTIAL");
   } else if (exception.getClass().isAssignableFrom(DisabledException.class)) {
    // showMessage("USER_DISABLED");
-	//  JOptionPane.showMessageDialog(null, "OMAR");
+	  //JOptionPane.showMessageDialog(null, "mbe");
   }
 }
 
