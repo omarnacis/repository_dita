@@ -160,7 +160,7 @@ public class DateManipulation {
         // Calcul de différence
         long diff = dateEnd.getTime( ) - dateBegin.getTime( );
 
-        System.out.println("Différence en nombre de jour entre "+dateBegin+ " et " + dateEnd +
+        System.out.println("Différence en nombre de jour entre : "+dateBegin+ " et " + dateEnd +
                 " nest " + (diff / (MILISECOND_PER_DAY)) + " jours.");
  		//return Math.round(Math.abs(diff/MILISECOND_PER_DAY));
  		//return Math.round(diff/MILISECOND_PER_DAY);
