@@ -101,7 +101,7 @@ public class AuthenBean implements Serializable{
   	    	 }	 
     		requestContext.execute("poll.start()");
     		stop=true;
-  		      requestContext.execute("athenDialog.hide()");
+  		      requestContext.execute("PF(athenDialog).hide()");
     		
     	}else{
     		
