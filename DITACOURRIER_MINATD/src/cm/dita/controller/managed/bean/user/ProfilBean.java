@@ -14,6 +14,8 @@ import javax.faces.event.ActionEvent;
 import javax.faces.validator.ValidatorException;
 //import javax.swing.JOptionPane;
 
+
+import org.primefaces.context.RequestContext;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -121,6 +123,7 @@ public class ProfilBean implements Serializable{
     public void changePass(ActionEvent actionEvent){   
     	
     	 FacesContext context = FacesContext.getCurrentInstance();
+    	 RequestContext requestContext = RequestContext.getCurrentInstance();
     	
     	try{
 		    	Md5PasswordEncoder encoder = new Md5PasswordEncoder();
@@ -131,7 +134,14 @@ public class ProfilBean implements Serializable{
 			      
 		      if(user!=null)
 			       if(cryptedPassword.equals(user.getPassword())){
-			    	   
+			    	  
+			   if(cryptedPassword.equals(user.getPassword())){
+				    		 //  RequestContext requestContext = RequestContext.getCurrentInstance();
+				    		 //  requestContext.addCallbackParam("passwordPasValide", true);
+				    	
+				    	requestContext.execute("PF('passwordSameError').show()");
+				   
+				    }else{
 			    	   cryptedPassword=encoder.encodePassword(password2,IConstance.MOT_POUR_CRYPTER);			    	   
 			    	   user.setPassword(cryptedPassword);
 			    	   user.setInit_pass(false);
@@ -142,6 +152,12 @@ public class ProfilBean implements Serializable{
 			    	   FacesMessage message = Messages.getMessage("messages", "global.gestion.reussi", null);
 				    	message.setSeverity(FacesMessage.SEVERITY_INFO);
 				        context.addMessage(null, message);
+				        requestContext.execute("PF('passDialog').hide()");
+				    }
+				        if(user.isAutorithies()==true){
+				        	requestContext.execute("PF('preferencModal').show()");
+				        	
+				        }
 			    	   
 			       }else{
 			    	   mouchardRessourceService.tracage("Tentative de modification du mot de passe par :"+user.getInfosPersonne().getNom()+" "+user.getInfosPersonne().getPrenom(), "modification",user.getDateUseToSortData(), "User");
