@@ -104,8 +104,12 @@ public class DitaInitListener implements ServletContextListener, ServletContextA
 			String cryptedPassword = encoder.encodePassword("admin", IConstance.MOT_POUR_CRYPTER);
 				
 			Espace espace=new Espace();
+			
 			espace.setId(1);
-			espace.setNomespace("Grand espace");
+			espace.setHierachie("0");
+			espace.setNomespace("Administrateur");
+			espace.setUsed(true);
+			
 				//if(espaceService.load(espace.getId())==null)
 			//	if(espaceService.load(espace.getId())==null)
 			//	if(espaceService.load(espace.getId())==null)
@@ -131,7 +135,7 @@ public class DitaInitListener implements ServletContextListener, ServletContextA
     		user.setEspace(espace);
     		//user.setTypespersonnel(typespersonnel);
     		user.setAutorithies(true);
-    		user.setInit_pass(false);
+    		user.setInit_pass(true);
     		user.setLangue("fr");
     		InfosPersonne infosPersonne = new InfosPersonne();
     		infosPersonne.setMailAddress("mbebruno@gmail.com");
