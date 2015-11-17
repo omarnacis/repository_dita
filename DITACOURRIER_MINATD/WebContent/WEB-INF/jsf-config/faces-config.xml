@@ -55,6 +55,28 @@
     <navigation-rule>
 	    <from-view-id>/faces/listpersonne.xhtml</from-view-id> 	    
     </navigation-rule>
+    
+     <navigation-rule>
+	    <from-view-id>*</from-view-id> 
+	    <navigation-case>
+	        <from-action>#{userBean.showUser}</from-action>
+	        <from-outcome>ok</from-outcome>
+            <to-view-id>/faces/user/users.xhtml</to-view-id>
+            <redirect></redirect>
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+	    <from-view-id>*</from-view-id> 
+	    <navigation-case>
+	        <from-action>#{personnesBean.showPersonne}</from-action>
+	        <from-outcome>ok</from-outcome>
+            <to-view-id>/faces/personne/personnes.xhtml</to-view-id>
+            <redirect></redirect>
+        </navigation-case>
+    </navigation-rule>
+    
+    
 	
 	<navigation-rule>
 		<from-view-id>*</from-view-id>

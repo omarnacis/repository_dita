@@ -4,6 +4,8 @@
   xmlns:h="http://java.sun.com/jsf/html"
   xmlns:p="http://primefaces.org/ui"
   xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:c="http://java.sun.com/jsp/jstl/core"
+   xmlns:fn="http://java.sun.com/jsp/jstl/functions"
   xmlns:ui="http://java.sun.com/jsf/facelets">
   <ui:composition template="../layout.xhtml"
   xmlns:sec="http://www.springframework.org/security/facelets/tags">
@@ -110,15 +112,15 @@
 		                        <h:outputText value="" />
 		                    </f:facet>
 		                    <sec:ifAnyGranted  roles="ROLE_groups.view,ROLE_ADMIN">  
-                        	 		<p:commandButton  actionListener="#{groupBean.editEvent(group)}" oncomplete="PF('editDialog').show()" update=":groupDetailForm" icon="ui-icon-info" styleClass="bg-blue" title="#{msg['global.detail']}" />
+                        	 		<p:commandButton  actionListener="#{groupBean.viewEvent(group)}" oncomplete="PF('viewDialog').show()" update=":groupDetailForm" icon="ui-icon-info" styleClass="bg-blue" title="#{msg['global.detail']}" />
    							</sec:ifAnyGranted>
 		                    <sec:ifAnyGranted  roles="ROLE_groups.edit,ROLE_ADMIN">  
-                        	 		<p:commandButton  actionListener="#{groupBean.editEvent(group)}" oncomplete="PF('addDialog').show()" update=":newGroupForm" icon="ui-icon-pencil" styleClass="bg-olive" title="#{msg['global.modifier']}" />
+                        	 		<p:commandButton  actionListener="#{groupBean.editEvent(group)}" oncomplete="PF('editDialog').show()" update=":editGroupForm" icon="ui-icon-pencil" styleClass="bg-olive" title="#{msg['global.modifier']}" />
    							</sec:ifAnyGranted>
-   							
+   							<!-- 
    							<sec:ifAnyGranted  roles="ROLE_groups.add.access,ROLE_ADMIN">  
                         	 		<p:commandButton  actionListener="#{groupBean.AddRessources2GroupEvent(group)}" oncomplete="PF('group2AccessDialog').show()" update=":newGoup2AccessForm" icon="ui-icon-person" styleClass="bg-purple" title="#{msg['group.access.add']}" />
-   							</sec:ifAnyGranted>
+   							</sec:ifAnyGranted> -->
    							
    							
    							
@@ -142,60 +144,79 @@
       
       <!-- DIALOG DE DETAILS -->
       
-		<p:dialog header="#{msg['global.detail']}" widgetVar="editDialog" resizable="false" id="userDlg" modal="true" width="650px"> 
+		<p:dialog header="#{msg['global.detail']}" widgetVar="viewDialog" resizable="false" id="userDlg" modal="true" width="850px"> 
                <h:form id="groupDetailForm">
-                <p:panelGrid id="display" columns="6" cellpadding="4" style="margin:0 auto;">   
-						<h:outputLabel value="#{msg['group.code']}:"></h:outputLabel>						
-						<h:outputLabel>  <h4>#{groupBean.group.idGroup}</h4></h:outputLabel>
-						
-						<h:outputLabel value="#{msg['group.nom']}:"></h:outputLabel>
-						<h:outputLabel>  <h4>#{groupBean.group.groupName}</h4></h:outputLabel>
-						
-						
-						<h:outputLabel value="#{msg['group.date']}:"></h:outputLabel>
-						<h:outputLabel>  <h4>#{groupBean.group.dateCreation}</h4></h:outputLabel>
-						
-					</p:panelGrid> 					
-                      <p:separator/>
-                     <p:panelGrid  columns="1" cellpadding="4" style="margin:0 auto;">
-                     
-                     	     <h:outputLabel value="#{msg['group.access']}:"></h:outputLabel>
-                     		<p:dataTable  var="access" value="#{groupBean.ressourcesListDataModel}" widgetVar="accessTable"
-		                        paginator="true" rows="10" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-		                       rowsPerPageTemplate="10"   emptyMessage="#{msg['global.msgsearch']}">
-		                       
-		                       
-		               
-		                <p:column>
-		                    <f:facet name="header">
-		                        <h:outputText value="#{msg['access.code']}" />
-		                    </f:facet>
-		                    <h:outputText value="#{access.idRessource}" />
-		                </p:column>
-		                
-		                <!-- <p:column   >
-		                    <f:facet name="header">
-		                        <h:outputText value="#{msg['access.nom']}" />
-		                    </f:facet>
-		                    <h:outputText value="#{access.ressourceName}" />
-		                </p:column> -->
-		                
-		               <p:column   >
-		                    <f:facet name="header">
-		                        <h:outputText value="#{msg['access.libelle']}" />
-		                    </f:facet>
-		                    <h:outputText value="#{access.ressourceDetail}" />
-		                </p:column>
-		                       
-		             </p:dataTable>
-                     		
-                     </p:panelGrid>
-                      
-                <p:panelGrid columns="1" cellpadding="4" style="margin:0 auto;">
-                    <f:facet name="footer">
-                            <p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;" value="#{msg['button.close']}" oncomplete="PF('editDialog').hide()" />
-                    </f:facet>
-                </p:panelGrid>
+               	<div class="row">            
+				   <section class="content-header">
+			          <h2>
+			           
+			            Details groupe
+			            <small>#{groupBean.group.groupName}</small>
+			          </h2>	
+			                         
+                    		        
+			        </section>             	
+               
+               	 <div class="col-md-6">              
+              		<div class="box box-primary">
+              			<div class="box-header">
+                 			 <h3 class="box-title">Informations</h3>
+                		</div><!-- /.box-header -->
+                		
+              	       
+	                    <div class="box-body">
+		                    <div class="form-group">
+		                      <label>#{msg['group.code']}</label>
+		                      <h:outputLabel styleClass="form-control"> #{groupBean.group.idGroup}</h:outputLabel>
+		                      
+		                    </div>
+		                    <div class="form-group">
+		                      <label>#{msg['group.nom']}</label>
+		                      <h:outputLabel styleClass="form-control"> #{groupBean.group.groupName}</h:outputLabel>
+		                      
+		                    </div>
+		                    <div class="form-group">
+		                      <label >#{msg['group.date']}</label>
+		                      <h:outputLabel styleClass="form-control">#{groupBean.group.dateCreation}</h:outputLabel>	                      
+		                       </div>
+		                   
+	                  </div><!-- /.box-body -->
+
+		                  <div class="box-footer">                   
+		                    	
+		                       <div style="float:right">    
+		                           <p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;" value="#{msg['button.close']}" oncomplete="PF('viewDialog').hide()" />
+		                        </div>  
+		                  </div>
+                    
+		              </div>
+		          </div>		                
+		                <div class="col-md-6" >              
+		              		<div class="box box-warning" >
+		              			<div class="box-header">
+		                 			 <h3 class="box-title">Privilèges du groupe</h3>
+		                		</div><!-- /.box-header -->        		
+							    
+							    
+							    <p:dataGrid var="access" value="#{groupBean.listRessoureBlocs}" columns="2" layout="grid"
+							        rows="3" paginator="true" id="cars" style="width:507px;height:300px"
+							        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							        >
+ 									
+ 										 <p:panel header="#{access.ressourceDetail}" >
+							        	<p:dataList value="#{access.selectRessourceDuBloc}" var="access_2" type="unordered"  emptyMessage="#{msg['global.msgsearch']}">
+									       #{access_2}
+									    </p:dataList>							           
+							        </p:panel>
+ 								
+							    </p:dataGrid>
+							    
+							    
+		                		
+		                	</div>
+		                </div>		                
+		           </div> 
+               
              </h:form>
           </p:dialog> 
           
@@ -203,30 +224,147 @@
              
           <p:dialog header="#{msg['glabel.ajouter']}" widgetVar="addDialog" resizable="false" id="newGroupDlg" modal="true"> 
               <h:form id="newGroupForm">  
-              	<p:focus for="groupName"/>
-              	       <f:facet name="header">
-                        <i><h:outputLabel value="#{msg['global.label.obligatoire']}"/></i>
-                    </f:facet>
-                <p:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">                				
-						<h:outputText value="#{msg['group.nom']}*"></h:outputText>
-						 <p:inputText value="#{groupBean.group.groupName}"  id="groupName" required="true" requiredMessage="#{msg['group.nom.require']}" 
-						 validator="#{groupBean.validateName}"
-						 />
-						 
-						 <h:outputText value="#{msg['group.date']}"></h:outputText>
-						 <p:inputText value="#{groupBean.group.dateCreation}"  id="datecreation" disabled="true" />
-                       
-                    <f:facet name="footer">
-                    	<div style="float:left">
-                            <p:commandLink styleClass="btn btn-primary btn-block btn-flat" style="color:#ffffff;" value="#{msg['button.sauvegarder']}" update=":formgroups, :growl"   oncomplete="PF(handleSubmitRequest(xhr, status, args, 'newGroupDlg','newGroupForm'));"  actionListener="#{groupBean.create}"  />
-                        </div>
-                        <div style="float:right">    
-                            <p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;" value="#{msg['button.close']}" oncomplete="PF('addDialog').hide()" />
-                         </div>                  
-                    </f:facet>
-                </p:panelGrid>  
+              	<div class="row">            
+				   <section class="content-header">
+			          <h2>
+			           
+			            Nouveau groupe
+			            <small>#{groupBean.group.groupName}</small>
+			          </h2>	
+			         <div class="text-center">
+			         	<i>#{msg['global.label.obligatoire']}</i>
+			         </div>                    
+                    		        
+			        </section>             	
+               
+               	 <div class="col-md-6">              
+              		<div class="box box-primary">
+              			<div class="box-header">
+                 			 <h3 class="box-title">Informations</h3>
+                		</div><!-- /.box-header -->
+                		
+                		<p:focus for="groupName"/>
+              	       
+	                    <div class="box-body">
+		                    <div class="form-group">
+		                      <label for="groupName">#{msg['group.nom']}*</label>
+		                      <p:inputText value="#{groupBean.group.groupName}"  id="groupName" required="true" requiredMessage="#{msg['group.nom.require']}" 
+								 validator="#{groupBean.validateName}" styleClass="form-control"
+								 />
+		                    </div>
+		                    <div class="form-group">
+		                      <label for="exampleInputPassword1">#{msg['group.date']}</label>		                      
+		                       <p:inputText value="#{groupBean.group.dateCreation}"  id="datecreation" disabled="true" styleClass="form-control" />
+		                    </div>
+		                   
+	                  </div><!-- /.box-body -->
+
+		                  <div class="box-footer">                   
+		                    	<div style="float:left">
+		                           <p:commandLink styleClass="btn btn-primary btn-block btn-flat" style="color:#ffffff;" value="#{msg['button.sauvegarder']}" update=":formgroups, :growl"   oncomplete="PF(handleSubmitRequest(xhr, status, args, 'newGroupDlg','newGroupForm'));"  actionListener="#{groupBean.create}"  />
+		                       </div>
+		                       <div style="float:right">    
+		                           <p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;" value="#{msg['button.close']}" oncomplete="PF('addDialog').hide()" />
+		                        </div>  
+		                  </div>
+                    
+		              </div>
+		          </div>		                
+		                <div class="col-md-6" >              
+		              		<div class="box box-warning" style="overflow:scroll">
+		              			<div class="box-header">
+		                 			 <h3 class="box-title">Privilèges du groupe</h3>
+		                		</div><!-- /.box-header -->
+				                	<p:panelGrid columns="1" cellpadding="4" style="margin:0 auto;" >    
+						            	    <p:accordionPanel value="#{groupBean.listRessoureBlocs}" var="access" style="width:507px;height:500px">
+										        <p:tab title="#{access.ressourceDetail}">
+										        	<p:selectManyCheckbox id="grid" value="#{access.selectRessourceDuBloc}" layout="grid" columns="2">
+												        <f:selectItems value="#{access.listRessourceDuBloc}" var="access_2" itemLabel="#{access_2.ressourceDetail}" itemValue="#{access_2.idRessource}" />
+												    </p:selectManyCheckbox>						        
+										        </p:tab>
+										    </p:accordionPanel>	 
+				                	</p:panelGrid>
+		                	</div>
+		                </div>		                
+		           </div>            
+              
               </h:form>
           </p:dialog> 
+          
+          <!-- MODIFICATION D'UN GROUPE -->
+          
+           <p:dialog header="#{msg['global.modifier']}" widgetVar="editDialog" resizable="false" id="editGroupDlg" modal="true"> 
+              <h:form id="editGroupForm">  
+              	<div class="row">            
+				   <section class="content-header">
+			          <h2>
+			            Modification du groupe :			           
+			            <small>#{groupBean.group.groupName}</small>
+			          </h2>	
+			         <div class="text-center">
+			         	<i>#{msg['global.label.obligatoire']}</i>
+			         </div>                    
+                    		        
+			        </section>             	
+               
+               	 <div class="col-md-6">              
+              		<div class="box box-primary">
+              			<div class="box-header">
+                 			 <h3 class="box-title">Informations</h3>
+                		</div><!-- /.box-header -->
+                		
+                		<p:focus for="groupName"/>
+              	       
+	                    <div class="box-body">
+		                    <div class="form-group">
+		                      <label for="groupName">#{msg['group.nom']}*</label>
+		                      <p:inputText value="#{groupBean.group.groupName}"  id="groupName" required="true" requiredMessage="#{msg['group.nom.require']}" 
+								 validator="#{groupBean.validateName}" styleClass="form-control"
+								 />
+		                    </div>
+		                    <div class="form-group">
+		                      <label for="exampleInputPassword1">#{msg['group.date']}</label>		                      
+		                       <p:inputText value="#{groupBean.group.dateCreation}"  id="datecreation" disabled="true" styleClass="form-control" />
+		                    </div>
+		                   
+	                  </div><!-- /.box-body -->
+
+		                  <div class="box-footer">                   
+		                    	<div style="float:left">
+		                           <p:commandLink styleClass="btn btn-primary btn-block btn-flat" style="color:#ffffff;" value="#{msg['button.sauvegarder']}" update=":formgroups, :growl"   oncomplete="PF(handleSubmitRequest(xhr, status, args, 'editGroupDlg','editGroupForm'));"  actionListener="#{groupBean.update}"  />
+		                       </div>
+		                       <div style="float:right">    
+		                           <p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;" value="#{msg['button.close']}" oncomplete="PF('editDialog').hide()" />
+		                        </div>  
+		                  </div>
+                    
+		              </div>
+		          </div>		                
+		                <div class="col-md-6" >              
+		              		<div class="box box-warning" style="overflow:scroll">
+		              			<div class="box-header">
+		                 			 <h3 class="box-title">Privilèges du groupe</h3>
+		                		</div><!-- /.box-header -->
+				                	<p:panelGrid columns="1" cellpadding="4" style="margin:0 auto;" >    
+						            	    <p:accordionPanel value="#{groupBean.listRessoureBlocs}" var="access" style="width:507px;height:500px">
+										        <p:tab title="#{access.ressourceDetail}">
+										        	<p:selectManyCheckbox id="grid" value="#{access.selectRessourceDuBloc}" layout="grid" columns="2">
+												        <f:selectItems value="#{access.listRessourceDuBloc}" var="access_2" itemLabel="#{access_2.ressourceDetail}" itemValue="#{access_2.idRessource}" />
+												    </p:selectManyCheckbox>						        
+										        </p:tab>
+										    </p:accordionPanel>	 
+				                	</p:panelGrid>
+		                	</div>
+		                </div>		                
+		           </div>            
+              
+              </h:form>
+          </p:dialog>
+          
+          
+          
+          
+          
           
           <!-- DIALOG DE CONFIRMATION DE LA SUPPRESSION -->
           
@@ -235,62 +373,106 @@
 			message="#{msg['global.supprimer.label']}" severity="alert"  widgetVar="deleteDialog">			
 			<p:commandButton value="#{msg['button.oui']}" update=":formgroups,:growl"   actionListener="#{groupBean.delete(actionEvent) }" 
 			 oncomplete="PF('deleteDialog').hide();"/>			
-			<p:commandButton value="#{msg['button.non']}" onclick="deleteDialog.hide();" type="button" /> 
+			<p:commandButton value="#{msg['button.non']}" onclick="PF('deleteDialog').hide();" type="button" /> 
 			</p:confirmDialog> 
         
         </h:form>
         
-         <!-- DIALOG D'AJOUT DES ACCESS A UN GROUPE-->
         
-        <p:dialog header="#{msg['glabel.ajouter']}" widgetVar="group2AccessDialog" resizable="false" id="group2AccessDlg" modal="true" width="650px"> 
+         <!-- DIALOG DE CONFIRMATION DE LA SUPPRESSION DE TOUS LES ACESSS -->
+          
+          <h:form id="deleteFromAccess">
+        	 <p:confirmDialog  header="#{msg['global.warning']}"
+			message="#{msg['group.access.deleted']}" severity="alert"  widgetVar="deleteDialogAccess">			
+			<p:commandButton value="#{msg['button.oui']}" update=":formgroups,:growl"   actionListener="#{groupBean.deleteAcess(actionEvent) }" 
+			 oncomplete="PF('deleteDialogAccess').hide();"/>			
+			<p:commandButton value="#{msg['button.non']}" onclick="PF('deleteDialogAccess').hide();" type="button" /> 
+			</p:confirmDialog> 
+        
+        </h:form>
+        
+        <!-- DIALOG DE CONFIRMATION DE L'AJOUT  DE NOUVEAU ACESS -->
+          
+          <h:form id="addFromAccess">
+        	 <p:confirmDialog  header="#{msg['global.warning']}1"
+			message="#{msg['group.access.add.confirm']}" severity="alert"  widgetVar="addDialogAccess">			
+			<p:commandButton value="#{msg['button.oui']}" update=":formgroups,:growl"   actionListener="#{groupBean.addAcess(actionEvent) }" 
+			 oncomplete="PF('addDialogAccess').hide();"/>			
+			<p:commandButton value="#{msg['button.non']}" onclick="PF('addDialogAccess').hide();" type="button" /> 
+			</p:confirmDialog> 
+        
+        </h:form>
+        
+        
+         <!-- DIALOG DE MODIFICATION DES ACCESS A UN GROUPE-->
+        
+        <p:dialog header="#{msg['glabel.ajouter']}" widgetVar="group2AccessDialog" resizable="false" id="group2AccessDlg" modal="true" style="width:807px;"> 
               <h:form id="newGoup2AccessForm"> 
-                <p:panelGrid id="display" columns="1" cellpadding="4" style="margin:0 auto;"> 
-                	
-                	
-                	<h:outputLabel >#{msg['group.access.seleted']} #{groupBean.group.idGroup} (#{groupBean.group.groupName})</h:outputLabel>
-                	<p:dataTable  var="access" value="#{groupBean.ressourcesListDataModel}" widgetVar="accessTable" rowKey="#{access.idRessource}"
-		                        paginator="true" rows="10" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-		                        emptyMessage="#{msg['global.msgsearch']}"
-		                        selection="#{groupBean.selectedRessources}">
-		                       
-		                        <p:column selectionMode="multiple" style="width:40px;text-align:center" />  
-		               
-		               <!--  <p:column  sortBy="#{access.idRessource}" filterBy="#{access.idRessource}" filterMatchMode="contains"  >
-		                    <f:facet name="header">
-		                        <h:outputText value="#{msg['access.code']}" />
-		                    </f:facet>
-		                    <h:outputText value="#{access.idRessource}" />
-		                </p:column> -->
-		                
-		               <!--  <p:column  sortBy="#{access.ressourceName}" filterBy="#{access.ressourceName}" filterMatchMode="contains"  >
-		                    <f:facet name="header">
-		                        <h:outputText value="#{msg['access.nom']}" />
-		                    </f:facet>
-		                    <h:outputText value="#{access.ressourceName}" />
-		                </p:column> -->
-		                
-		                <p:column  sortBy="#{access.ressourceDetail}" filterBy="#{access.ressourceDetail}" filterMatchMode="contains"  >
-		                    <f:facet name="header">
-		                        <h:outputText value="#{msg['access.libelle']}" />
-		                    </f:facet>
-		                    <h:outputText value="#{access.ressourceDetail}" />
-		                </p:column>
-		                       
-		             </p:dataTable>
-                	               				
-						
-                    <f:facet name="footer">
-                    
-                    	<div style="float:left">
-                    		 <p:commandLink styleClass="btn btn-primary btn-block btn-flat" style="color:#ffffff;" value="#{msg['button.sauvegarder']}" update=":growl"   oncomplete="PF('group2AccessDialog').hide()"  actionListener="#{groupBean.AddGroup2Access()}"  />
-                          
-                    	</div>
-                    	<div style="float:right">
-                    		 <p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;"  value="#{msg['button.close']}"  oncomplete="PF('group2AccessDialog').hide()" />                         
-     
-                    	</div>
+               <div class="row">            
+				   <section class="content-header">
+			          <h2>
+			            Modification du groupe :
+			            <small>#{groupBean.group.groupName}</small>
+			          </h2>	
+			         <div class="text-center">
+			         	<i>#{msg['global.label.obligatoire']}</i>
+			         </div>                    
+                    		        
+			        </section>             	
+               
+               	 <div class="col-md-6">              
+              		<div class="box box-primary">
+              			<div class="box-header">
+                 			 <h3 class="box-title">Informations</h3>
+                		</div><!-- /.box-header -->
+                		
+                		<p:focus for="groupName"/>
+              	       <f:facet name="header">
+                        <i><h:outputLabel value="#{msg['global.label.obligatoire']}"/></i>
                     </f:facet>
-                </p:panelGrid>  
+                    
+	                    <div class="box-body">
+		                    <div class="form-group">
+		                      <label for="groupName">#{msg['group.nom']}*</label>
+		                      <p:inputText value="#{groupBean.group.groupName}"  id="groupName" required="true" requiredMessage="#{msg['group.nom.require']}" 
+								 validator="#{groupBean.validateName}" styleClass="form-control"
+								 />
+		                    </div>
+		                    <div class="form-group">
+		                      <label for="exampleInputPassword1">#{msg['group.date']}</label>		                      
+		                       <p:inputText value="#{groupBean.group.dateCreation}"  id="datecreation" disabled="true" styleClass="form-control" />
+		                    </div>
+		                   
+	                  </div><!-- /.box-body -->
+
+		                  <div class="box-footer">                   
+		                    	<div style="float:left">
+		                           <p:commandLink styleClass="btn btn-primary btn-block btn-flat" style="color:#ffffff;" value="#{msg['button.sauvegarder']}" update=":formgroups, :growl"   oncomplete="PF(handleSubmitRequest(xhr, status, args, 'newGroupDlg','newGroupForm'));"  actionListener="#{groupBean.create}"  />
+		                       </div>
+		                       <div style="float:right">    
+		                           <p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;" value="#{msg['button.close']}" oncomplete="PF('addDialog').hide()" />
+		                        </div>  
+		                  </div>
+                    
+		              </div>
+		          </div>		                
+		                <div class="col-md-6" >              
+		              		<div class="box box-warning" style="overflow:scroll">
+		              			<div class="box-header">
+		                 			 <h3 class="box-title">Privilèges du groupe</h3>
+		                		</div><!-- /.box-header -->
+				                	<p:panelGrid columns="1" cellpadding="4" style="margin:0 auto;" >    
+						            	    <p:accordionPanel value="#{groupBean.listRessoureBlocs}" var="access" style="width:507px;height:500px">
+										        <p:tab title="#{access.ressourceDetail}">
+										        	<p:selectManyCheckbox id="grid" value="#{access.selectRessourceDuBloc}" layout="grid" columns="2">
+												        <f:selectItems value="#{access.listRessourceDuBloc}" var="access_2" itemLabel="#{access_2.ressourceDetail}" itemValue="#{access_2.idRessource}" />
+												    </p:selectManyCheckbox>						        
+										        </p:tab>
+										    </p:accordionPanel>	 
+				                	</p:panelGrid>
+		                	</div>
+		                </div>		                
+		           </div>
               </h:form>
           </p:dialog>  
 		

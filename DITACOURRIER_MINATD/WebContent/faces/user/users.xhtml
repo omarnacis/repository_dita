@@ -57,7 +57,7 @@
 		                            <ul class="dropdown-menu" role="menu">
 		                              <li>
 	                               		<sec:ifAnyGranted  roles="ROLE_users.add,ROLE_ADMIN">  
-					            				<p:commandLink value="#{msg['button.add']}" update=":newuserForm"  oncomplete="PF('addDialog').show()" actionListener="#{userBean.ajoutEvent(actionEvent)}" />		                        
+					            				<p:commandLink value="#{msg['button.add']}" update=":newuserForm" oncomplete="PF('addDialog').show()" actionListener="#{userBean.ajoutEvent(actionEvent)}" />		                        
 					                  	</sec:ifAnyGranted> 
 		                              </li>		                             
 		                             <!--  <li class="divider"></li>
@@ -73,7 +73,7 @@
               				 <div class="col-sm-9">	
               				 	<div class="input-group search-taille">                         
 	                            	<p:outputPanel>						                       
-				                        <p:inputText id="globalFilter" onkeyup="userTable.filter()" styleClass="form-control input-sm"  />                           
+				                        <p:inputText id="globalFilter" onkeyup="PF('userTable').filter()" styleClass="form-control input-sm"  />                           
 				                    </p:outputPanel>
 				                 </div>	                            
 	                            
@@ -102,17 +102,28 @@
 		                </p:column>
 		                
 		                
-		                 <p:column headerText="#{msg['user.nom']}" id="nom" sortBy="#{user.infosPersonne.nom}" filterBy="#{user.infosPersonne.nom}" filterMatchMode="contains" >
-		                    <h:outputText value="#{user.infosPersonne.nom}" />
+		                
+		                 <p:column headerText="#{msg['user.nomComplet']}" id="nom" sortBy="#{user.infosPersonne.persnom} #{user.infosPersonne.persprenom}" filterBy="#{user.infosPersonne.persnom} #{user.infosPersonne.persprenom}" filterMatchMode="contains" >
+		                    <h:outputText value="#{user.infosPersonne.persnom} #{user.infosPersonne.persprenom}" />
+		                </p:column>
+		              
+		               <p:column headerText="#{msg['user.enable.bloque']}" sortBy="#{user.enabled}" filterBy="#{user.enabled}" filterMatchMode="equals"  >
+		                  
+		                  <f:facet name="filter">
+				                <p:selectOneButton onchange="PF('userTable').filter()">
+				                    <f:converter converterId="javax.faces.Boolean" />
+				                    <f:selectItem itemLabel="Tous" itemValue="" />
+				                    <f:selectItem itemLabel="Oui" itemValue="true" />
+				                    <f:selectItem itemLabel="Non" itemValue="false" />
+				                </p:selectOneButton>
+				            </f:facet>
+		                  
+		                    <i  class="#{user.enabled?'fa fa-unlock':'fa fa-lock'}" ></i>
+		                   
+		                    
 		                </p:column>
 		                
-		                <p:column headerText="#{msg['user.prenom']}" id="prenom" sortBy="#{user.infosPersonne.prenom}" filterBy="#{user.infosPersonne.prenom}" filterMatchMode="contains" >
-		                    <h:outputText value="#{user.infosPersonne.prenom}" />
-		                </p:column>
-		                
-		                <p:column headerText="#{msg['user.espace']}" id="espace" sortBy="#{user.espace.nomespace}" filterBy="#{user.espace.nomespace}" filterMatchMode="contains" >
-		                    <h:outputText value="#{user.espace.nomespace}" />
-		                </p:column>
+		               
 		                
 		               <!--  <p:column sortBy="#{user.dateCreation}" filterBy="#{user.dateCreation}" filterMatchMode="contains">
 		                    <f:facet name="header">
@@ -124,26 +135,32 @@
 		                 <p:column>
 		                    <f:facet name="header">
 		                        <h:outputText value="" />
-		                    </f:facet>
-		                    
-			                    <sec:ifAnyGranted  roles="ROLE_users.view,ROLE_ADMIN">  
-	                        	 		<p:commandButton  actionListener="#{userBean.editEvent(user.id)}"  oncomplete="PF('editDialog').show()" update=":userDetailForm" icon="ui-icon-info" styleClass="btn-info" title="#{msg['global.detail']}" />
+		                    </f:facet>                
+			                    
+	   							
+	   								<sec:ifAnyGranted  roles="ROLE_users.view,ROLE_ADMIN">  
+	                        	 		<p:commandButton  actionListener="#{userBean.viewEvent(user.id)}" oncomplete="PF('viewDialog').show()" update=":viewuserDetailForm" icon="ui-icon-info"  title="#{msg['global.detail']}" />
 	   							</sec:ifAnyGranted>
 			                    <sec:ifAnyGranted  roles="ROLE_users.edit,ROLE_ADMIN">  
-	                        	 		<p:commandButton  actionListener="#{userBean.editEvent(user.id)}"  oncomplete="PF('addDialog').show()" update=":newuserForm" icon="ui-icon-pencil" styleClass="btn-success" title="#{msg['global.modifier']}" disabled="#{user.autorithies}" />
+	                        	 		<p:commandButton  actionListener="#{userBean.editEvent(user.id)}" oncomplete="PF('editDialog').show()" update=":edituserForm" icon="ui-icon-pencil"  title="#{msg['global.modifier']}" disabled="#{user.autorithies}" />
+	   							</sec:ifAnyGranted>
+	   							
+	   							<sec:ifAnyGranted  roles="ROLE_users.enable,ROLE_ADMIN"> 
+	                        	 		<p:commandButton  actionListener="#{userBean.status(user.id)}"  icon="#{user.enabled?'ui-icon-unlocked':'ui-icon-locked'}" update=":formusers"  title="#{msg['user.enable.title']}" disabled="#{user.autorithies}" />
 	   							</sec:ifAnyGranted>
 	   							
 	   							<sec:ifAnyGranted  roles="ROLE_users.initPass,ROLE_ADMIN">  
-	                        	 		<p:commandButton  actionListener="#{userBean.editEvent(user.id)}"  oncomplete="PF('initPassDialog').show()"  icon="ui-icon-key" styleClass="btn-success" title="#{msg['global.initPassword']}" disabled="#{user.autorithies}" />
+	                        	 		<p:commandButton  actionListener="#{userBean.editEvent(user.id)}" oncomplete="PF('initPassDialog').show()"  icon="ui-icon-key"  title="#{msg['global.initPassword']}" disabled="#{user.autorithies}" />
 	   							</sec:ifAnyGranted>
-	   							
+	   							<!-- 
 	   							<sec:ifAnyGranted  roles="ROLE_users.role,ROLE_ADMIN">  
-	                        	 		<p:commandButton  actionListener="#{userBean.AddRole2UserEvent(user)}" oncomplete="PF('role2userDialog').show()" update=":newRole2UserForm" icon="ui-icon-person" styleClass="bg-purple" title="#{msg['user.role.add']}" disabled="#{user.autorithies}" />
-	   							</sec:ifAnyGranted>
+	                        	 		<p:commandButton  actionListener="#{userBean.AddRole2UserEvent(user)}" oncomplete="PF('role2userDialog').show()" update=":newRole2UserForm" icon="ui-icon-person"  title="#{msg['user.role.add']}" disabled="#{user.autorithies}" />
+	   							</sec:ifAnyGranted> -->
 	   							
 			                   	<sec:ifAnyGranted  roles="ROLE_users.delete,ROLE_ADMIN">  
-	                        	 		<p:commandButton  actionListener="#{userBean.editEvent(user.id)}" oncomplete="PF('deleteDialog').show()"  icon="ui-icon-trash" styleClass="btn-danger" title="#{msg['global.supprimer']}" disabled="#{user.autorithies}" />
+	                        	 		<p:commandButton  actionListener="#{userBean.deleteEvent(user.id)}" oncomplete="PF('deleteDialog').show()"  icon="ui-icon-trash"  title="#{msg['global.supprimer']}" disabled="#{user.autorithies}" />
 	   							</sec:ifAnyGranted>
+	   						
 	   						 
 		                </p:column>		
 		            </p:dataTable>
@@ -166,9 +183,9 @@
       
       <!-- DIALOG DE DETAILS -->
       
-		<p:dialog header="#{msg['global.detail']}" widgetVar="editDialog" resizable="false" id="userDlg" modal="true"
+		<p:dialog header="#{msg['global.detail']}" widgetVar="viewDialog" resizable="false" id="userDlg" modal="true"
 			style="z-index:1035"> 
-              <h:form id="userDetailForm">   
+              <h:form id="viewuserDetailForm">   
                
                <p:tabView id="tabView">  
 				    <p:tab id="tab1" title="#{msg['user.details.infos']}">  
@@ -181,11 +198,7 @@
 			                    <h:outputLabel  value="#{msg['user.enable']}:" />
 			                     <h:outputLabel value="#{userBean.user.enabled == 'true'? msg['user.enable.actif']:msg['user.enable.bloque']}" />
 			                  
-			                    <h:outputLabel   value="#{msg['user.espace']}:" />          	                           
-			                    <h:selectOneMenu  value="#{userBean.espace_id}" disabled="true"  >															
-											<f:selectItems  var="espace"  value="#{userBean.listEspace}"  itemLabel="#{espace.nomespace}"
-											itemValue="#{espace.id}" />
-								</h:selectOneMenu>
+			                  
 								
 								<!-- <h:outputLabel  value="#{msg['user.type']}:"  />
 								<h:selectOneMenu value="#{userBean.type_id}" disabled="true" >												
@@ -197,13 +210,13 @@
                     		<p:separator />
 			                 <p:panelGrid columns="6" cellpadding="4" style="margin:0 auto;">                     
 			                     <h:outputLabel for="nom" value="#{msg['user.nom']}:" />
-			                      <h:outputLabel> <h4>#{userBean.user.infosPersonne.nom}</h4></h:outputLabel>
+			                      <h:outputLabel> <h4>#{userBean.user.infosPersonne.persnom}</h4></h:outputLabel>
 			                    
 			                    <h:outputLabel value="#{msg['user.prenom']}:" />
-			                    <h:outputLabel>  <h4>#{userBean.user.infosPersonne.prenom}</h4></h:outputLabel>
+			                    <h:outputLabel>  <h4>#{userBean.user.infosPersonne.persprenom}</h4></h:outputLabel>
 			                    
 			                     <h:outputLabel  value="#{msg['user.sexe']}:" />                        
-			                      <h:selectOneMenu value="#{userBean.user.infosPersonne.sexe}"  disabled="true"  >
+			                      <h:selectOneMenu value="#{userBean.user.infosPersonne.perssexe}"  disabled="true"  >
 										<f:selectItem itemLabel="#{msg['global.selection']}" itemValue="" />							
 										<f:selectItems var="sexe" value="#{userBean.listSexe}" itemLabel="#{sexe.designation}" itemValue="#{sexe.code}" />
 									</h:selectOneMenu> 
@@ -214,13 +227,13 @@
                     			<p:separator/>
 			                    <p:panelGrid  columns="6" cellpadding="4" style="margin:0 auto;"> 
 			                    		<h:outputLabel  value="#{msg['user.mail']}:" />
-			                    		<h:outputLabel>  <h4>#{userBean.user.infosPersonne.mailAddress}</h4></h:outputLabel>
+			                    		<h:outputLabel>  <h4>#{userBean.user.infosPersonne.persemail}</h4></h:outputLabel>
 			                    		
 			                    		<h:outputLabel  value="#{msg['user.telephone']}:" />
-					                   	<h:outputLabel>  <h4>#{userBean.user.infosPersonne.telephone}</h4></h:outputLabel>
+					                   	<h:outputLabel>  <h4>#{userBean.user.infosPersonne.perstel}</h4></h:outputLabel>
 					                    
 					                    <h:outputLabel value="#{msg['user.localisation']}:" />                                    
-					                    <h:outputLabel>  <h4>#{userBean.user.infosPersonne.localisation}</h4></h:outputLabel>
+					                    <h:outputLabel>  <h4>#{userBean.user.infosPersonne.persadresse}</h4></h:outputLabel>
 					                             
 			  					</p:panelGrid>
   								<p:separator/>
@@ -234,7 +247,7 @@
 				  
 				    <p:tab id="tab2" title="#{msg['user.details.roles']}">
 				    	<h:outputLabel value="#{msg['user.role']}:"></h:outputLabel>
-				    	<p:dataTable  var="role" value="#{userBean.roleListDataModel}" widgetVar="roleTable"
+				    	<p:dataTable  var="role" value="#{userBean.roleListDataModel}" widgetVar="roleTable" style="width:500px"
 		                        paginator="true" rows="10" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 		                       emptyMessage="#{msg['global.msgsearch']}">
 		                       
@@ -258,7 +271,7 @@
 		             </p:tab> 
                       <p:tab id="tab3" title="#{msg['user.details.access']}">
                      	     <h:outputLabel value="#{msg['group.access']}:"></h:outputLabel>
-                     		<p:dataTable  var="access" value="#{userBean.ressourceListDataModel}" widgetVar="accessTable"
+                     		<p:dataTable  var="access" value="#{userBean.ressourceListDataModel}" widgetVar="accessTable" style="width:500px"
 				                        paginator="true" rows="10" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				                        emptyMessage="#{msg['global.msgsearch']}">
 				                       
@@ -289,120 +302,230 @@
 				</p:tabView>    				
 				 <p:panelGrid  columns="2" cellpadding="4" style="margin:0 auto;">                   		      
                    	<f:facet name="footer">
-                            <p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;" value="#{msg['button.close']}" oncomplete="PF('editDialog').hide()" />
+                            <p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;" value="#{msg['button.close']}" oncomplete="PF('viewDialog').hide()" />
                     </f:facet> 
                 </p:panelGrid>    
              </h:form>
           </p:dialog> 
           
-          <!-- DIALOG D'AJOUT ET MISE A JOUR -->
-             
+          <!-- DIALOG D'AJOUT -->             
           <p:dialog header="#{msg['glabel.ajouter']}" widgetVar="addDialog" resizable="false" id="newuserDlg" modal="true"> 
-              <h:form id="newuserForm">  
-              	<p:focus for="login"/>
-              	     <p:panelGrid  columns="1" cellpadding="4" style="margin:0 auto;">
-                        <i>#{msg['global.label.obligatoire']}</i>
-                   </p:panelGrid>
-                
-                <p:panelGrid id="display" columns="#{userBean.operation!=2 ? 3:2}" cellpadding="4" style="margin:0 auto;">  
-                
-	                	<h:outputLabel for="login"  value="#{msg['user.login']}:*" />  
-	                	<c:if test="#{userBean.operation!=2}">
-	                		 <h:outputLabel for="password" title="#{msg['user.password']}" value="#{msg['user.password']}:*" />	             		  		                
-		                	                
-	                	</c:if>    
-	                	<h:outputLabel for="enable"  value="#{msg['user.enable']}:*" />                            
-	                      <p:inputText value="#{userBean.user.login}"  id="login" required="true" requiredMessage="#{msg['user.login.require']}" 
-	                        validator="#{userBean.validateName}" />
-	                    <c:if test="#{userBean.operation!=2}">
-		                    <p:password value="#{userBean.user.password}"  id="password" required="true" requiredMessage="#{msg['user.password.require']}" validatorMessage="#{msg['user.password.validator']}"  feedback="true"
-		                    promptLabel="#{msg[user.password.format]}" title="format pwd">
-		                           
-		                            <c:if test="#{applicationBean.COMPLEXE_PASSWORD == 'oui'}">
-				                    	 <f:validateRegex pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$"/>
-				                    </c:if> 
-		                    </p:password>
-		                    
-		                </c:if>
-		                
-		                    <p:selectBooleanButton value="#{userBean.user.enabled}" id="enable" onLabel="#{msg['user.enable.actif']}" offLabel="#{msg['user.enable.bloque']}" />
-		                    
-		               
-		              
-                  </p:panelGrid>
-                    	<p:separator />
-                 <p:panelGrid columns="3" cellpadding="4" style="margin:0 auto;">                     
-                     <h:outputLabel for="nom" title="#{msg['user.nom']}" value="#{msg['user.nom']}:*" />
-                    <h:outputLabel for="prenom" title="#{msg['user.prenom']}" value="#{msg['user.prenom']}:*" /> 
-                     <h:outputLabel for="sexe" title="#{msg['user.sexe']}" value="#{msg['user.sexe']}:" />                        
-                       
-                    <p:inputText value="#{userBean.infosuser.nom}"  id="nom" required="true" requiredMessage="#{msg['user.nom.require']}"/>
-                    <p:inputText value="#{userBean.infosuser.prenom}"  id="prenom" required="true" requiredMessage="#{msg['user.prenom.require']}"/>
-                        
-                         <h:selectOneMenu value="#{userBean.infosuser.sexe}"  id="sexe"  >
-							<f:selectItem itemLabel="#{msg['global.selection']}" itemValue="" />							
-							<f:selectItems var="sexe" value="#{userBean.listSexe}" itemLabel="#{sexe.designation}" itemValue="#{sexe.code}" />
-						</h:selectOneMenu>
-						
-					
-                    	
-                    </p:panelGrid>
-                    <p:separator/>
-                    <p:panelGrid  columns="3" cellpadding="4" style="margin:0 auto;"> 
-                    		<h:outputLabel for="mailAddress" title="#{msg['user.mail']}" value="#{msg['user.mail']}:*" />
-                    		<h:outputLabel for="telephone" title="#{msg['user.telephone']}" value="#{msg['user.telephone']}:*" />
-		                    <h:outputLabel for="localisation" title="#{msg['user.localisation']}" value="#{msg['user.localisation']}:" />                                    
-		                    <p:inputText value="#{userBean.infosuser.mailAddress}"  id="mailAddress" validatorMessage="#{msg['user.mail.validator']}"  required="true" requiredMessage="#{msg['user.mail.require']}">
-		                    	<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-		                    </p:inputText>
-		                       <p:inputText value="#{userBean.infosuser.telephone}" id="telephone"  required="true" requiredMessage="#{msg['user.telephone.require']}">
-		                       		
-		                        <f:convertNumber integerOnly="true" type="number"  />
-						     		  </p:inputText>
+              <h:form id="newuserForm"> 
+              		<div class="nav-tabs-custom">
+						<ul class="nav nav-tabs">
+						  <li class="active"><a href="#tab_1" data-toggle="tab">Informations utilisateur</a></li>
+						  <li><a href="#tab_2" data-toggle="tab">Rôles d'autorisation</a></li>	 
+						  
+						</ul>
+						<div class="tab-content">
+						  <div class="tab-pane active" id="tab_1" style="height:300px; width:430px;">
+								
+								<p:focus for="login"/>
+			              	     <p:panelGrid  columns="1" cellpadding="4" style="margin:0 auto;">
+			                        <i>#{msg['global.label.obligatoire']}</i>
+			                   </p:panelGrid>
+			                   <p:panelGrid id="display" columns="#{userBean.operation!=2 ? 3:2}" cellpadding="4" style="margin:0 auto;">               
+				                	<h:outputLabel for="login"  value="#{msg['user.login']}:*" />  
+				                	<c:if test="#{userBean.operation!=2}">
+				                		 <h:outputLabel for="password" title="#{msg['user.password']}" value="#{msg['user.password']}:*" />	             		  		                
+					                	                
+				                	</c:if>    
+				                	<h:outputLabel for="enable"  value="#{msg['user.enable']}:*" />                            
+				                      <p:inputText value="#{userBean.user.login}"  id="login" required="true" requiredMessage="#{msg['user.login.require']}" 
+				                        validator="#{userBean.validateName}" />
+				                    <c:if test="#{userBean.operation!=2}">
+					                    <p:password value="#{userBean.user.password}"  id="password" required="true" requiredMessage="#{msg['user.password.require']}" validatorMessage="#{msg['user.password.validator']}"  feedback="true"
+					                    promptLabel="#{msg[user.password.format]}" title="format pwd">
+					                           
+					                            <c:if test="#{applicationBean.COMPLEXE_PASSWORD == 'oui'}">
+							                    	 <f:validateRegex pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$"/>
+							                    </c:if> 
+					                    </p:password>
+					                    
+					                </c:if>					                
+					                    <p:selectBooleanButton value="#{userBean.user.enabled}" id="enable" onLabel="#{msg['user.enable.actif']}" offLabel="#{msg['user.enable.bloque']}" />                    
+					           </p:panelGrid>
+					           <p:separator />
+			                 <p:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">                     
+			                     <h:outputLabel for="nom" title="#{msg['user.nom']}" value="#{msg['user.nom']}:*" />
+			                    <h:outputLabel for="prenom" title="#{msg['user.prenom']}" value="#{msg['user.prenom']}:*" /> 
+			                        
+			                    <p:inputText value="#{userBean.infosuser.persnom}"  id="nom" required="true" requiredMessage="#{msg['user.nom.require']}"/>
+			                    <p:inputText value="#{userBean.infosuser.persprenom}"  id="prenom" required="true" requiredMessage="#{msg['user.prenom.require']}"/>
+			                  
+			                   
+                  
+		                    </p:panelGrid>
 		                   
-		                     <p:inputText value="#{userBean.infosuser.localisation}"   id="localisation"/>
-		                     
-		                                     
-  					</p:panelGrid>
-  					<p:separator/>
-  					
-  					<p:panelGrid  columns="2" cellpadding="4" style="margin:0 auto;"> 
-                    		<h:outputLabel for="espace" title="#{msg['user.espace']}" value="#{msg['user.espace']}:*" />
-                    		
-		                     <h:selectOneMenu  value="#{userBean.espace_id}"   id="espace" required="true" requiredMessage="#{msg['user.espace.require']}" >
-									<f:selectItem itemLabel="#{msg['global.selection']}" itemValue="" />							
-									<f:selectItems  var="espace"  value="#{userBean.listEspace}"  itemLabel="#{espace.nomespace}"
-									itemValue="#{espace.id}" />
+		  					<p:separator/>
+		  					
+		  					<p:panelGrid  columns="2" cellpadding="4" style="margin:0 auto;">                     		
+										 <h:outputLabel   value="#{msg['user.espace']}:" /> 
+										  <h:outputLabel for="creationDate" title="#{msg['user.datecreation']}" value="#{msg['user.datecreation']} :" /> 
+				                              	                           
+						                    <h:selectOneMenu  value="#{userBean.espace_id}"  >															
+														<f:selectItems  var="espace"  value="#{userBean.listEspace}"  itemLabel="#{espace.nomespace}"
+														itemValue="#{espace.id}" />
 								</h:selectOneMenu>
-						<!-- 		
-								<h:selectOneMenu value="#{userBean.type_id}"   id="type" required="true" requiredMessage="#{msg['user.type.require']}" >
-									<f:selectItem itemLabel="Select One" itemValue="" />							
-									<f:selectItems var="type" value="#{userBean.listType}" itemLabel="#{type.typepersdesignation}"
-									itemValue="#{type.typepersid}" />
-								</h:selectOneMenu>
-		                      -->
-		                      <h:outputLabel for="creationDate" title="#{msg['user.datecreation']}" value="#{msg['user.datecreation']} :" /> 
-		                       <p:inputText value="#{userBean.user.dateCreation}"   id="creationDate" disabled="true" />                    
-  					</p:panelGrid>
-                		              				
-				 <p:panelGrid  columns="2" cellpadding="4" style="margin:0 auto;">                   		      
-                    <f:facet name="footer">                                                
-                    </f:facet>
-                </p:panelGrid>  
-                <div style="float:left;">
-                <c:if test="#{userBean.operation==1}">
-                    <p:commandLink styleClass="btn btn-primary btn-block btn-flat" style="color:#ffffff;" value="#{msg['button.sauvegarder']}"  update=":formusers, :growl, :newuserForm"  oncomplete="PF(handleSubmitRequestUser(xhr, status, args, 'newuserDlg','newuserForm'));"  actionListener="#{userBean.create}"  />
-                </c:if>
-                <c:if test="#{userBean.operation==2}">
-                	<p:commandLink styleClass="btn btn-primary btn-block btn-flat" value="#{msg['button.sauvegarder']}" style="color:#ffffff;" update=":formusers, :growl, :newuserForm"  oncomplete="PF(handleSubmitRequestUser(xhr, status, args, 'newuserDlg','newuserForm'));"  actionListener="#{userBean.update()}"  />
-              
-                </c:if>
-                </div> 
-                <div style="float:right">
-                   <p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;" oncomplete="PF('addDialog').hide();" value="#{msg['button.close']}"  />  
-                </div>
+				                       <p:inputText value="#{userBean.user.dateCreation}"   id="creationDate" disabled="true" />                    
+		  					</p:panelGrid>
+		                		              				
+						 <p:panelGrid  columns="2" cellpadding="4" style="margin:0 auto;">                   		      
+		                    <f:facet name="footer">                                                
+		                    </f:facet>
+		                </p:panelGrid>  
+		                <div style="float:left;">
+		                <c:if test="#{userBean.operation==1}">
+		                    <p:commandLink styleClass="btn btn-primary btn-block btn-flat" style="color:#ffffff;" value="#{msg['button.sauvegarder']}"  update=":formusers, :growl, :newuserForm"   oncomplete="PF(handleSubmitRequest(xhr, status, args, 'newuserDlg','newuserForm'));"  actionListener="#{userBean.create()}"  />
+		                </c:if>
+		                <c:if test="#{userBean.operation==2}">
+		                	<p:commandLink styleClass="btn btn-primary btn-block btn-flat" value="#{msg['button.sauvegarder']}" style="color:#ffffff;" update=":formusers, :growl, :newuserForm"   oncomplete="PF(handleSubmitRequest(xhr, status, args, 'newuserDlg','newuserForm'));"  actionListener="#{userBean.update()}"  />
+		              
+		                </c:if>
+		                </div> 
+		                <div style="float:right">
+		                   <p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;" oncomplete="PF('addDialog').hide()" value="#{msg['button.close']}"  />  
+		                </div>
+								
+								
+						  </div><!-- /.tab-pane -->
+						  <div class="tab-pane" id="tab_2" style="height:300px; width:430px;">						  			
+						  			<p:dataTable  var="role" value="#{userBean.roleListDataModel}" widgetVar="roleTable" rowKey="#{role.identifier}"  style="width:400px"
+					                        paginator="true" rows="10" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					                     emptyMessage="#{msg['global.msgsearch']}"
+					                       selection="#{userBean.seletedRoles}">
+					                       
+					                        <p:column selectionMode="multiple" style="width:32px" />  
+					               
+				               				<!-- <p:column  sortBy="#{role.identifier}" filterBy="#{role.identifier}" filterMatchMode="contains"  >
+							                    <f:facet name="header">
+							                        <h:outputText value="#{msg['role.code']}" />
+							                    </f:facet>
+							                    <h:outputText value="#{role.identifier}" />
+							                </p:column> -->
+							                
+							                
+							
+							                <p:column sortBy="#{role.roleName}" filterBy="#{role.roleName}" filterMatchMode="contains">
+							                    <f:facet name="header">
+							                        <h:outputText value="#{msg['role.nom']}" />
+							                    </f:facet>
+							                    <h:outputText value="#{role.roleName}" />
+							                </p:column>
+					                       
+					             </p:dataTable>
+						  			
+						  			
+							
+						  </div><!-- /.tab-pane -->
+						</div><!-- /.tab-content -->
+					  </div><!-- nav-tabs-custom -->               
               </h:form>
           </p:dialog> 
+          
+          
+           <!-- DIALOG DE MODIFICATION -->             
+          <p:dialog header="#{msg['global.modifier']}" widgetVar="editDialog" resizable="false" id="edituserDlg" modal="true"> 
+              <h:form id="edituserForm"> 
+              		<div class="nav-tabs-custom">
+						<ul class="nav nav-tabs">
+						  <li class="active"><a href="#tab_11" data-toggle="tab">Informations utilisateur</a></li>
+						  <li><a href="#tab_22" data-toggle="tab">Rôles d'autorisation</a></li>	 
+						  
+						</ul>
+						<div class="tab-content">
+						  <div class="tab-pane active" id="tab_11" style="height:300px; width:430px;">								
+								<p:focus for="login"/>
+			              	     <p:panelGrid  columns="1" cellpadding="4" style="margin:0 auto;">
+			                        <i>#{msg['global.label.obligatoire']}</i>
+			                   </p:panelGrid>
+			                   <p:panelGrid id="display" columns="#{userBean.operation!=2 ? 3:2}" cellpadding="4" style="margin:0 auto;">               
+				                	<h:outputLabel for="login"  value="#{msg['user.login']}:*" />  
+				                	<c:if test="#{userBean.operation!=2}">
+				                		 <h:outputLabel for="password" title="#{msg['user.password']}" value="#{msg['user.password']}:*" />	             		  		                
+					                	                
+				                	</c:if>    
+				                                       
+				                      <p:inputText value="#{userBean.user.login}"  id="login" required="true" requiredMessage="#{msg['user.login.require']}" 
+				                        validator="#{userBean.validateName}" />
+				                    <c:if test="#{userBean.operation!=2}">
+					                    <p:password value="#{userBean.user.password}"  id="password" required="true" requiredMessage="#{msg['user.password.require']}" validatorMessage="#{msg['user.password.validator']}"  feedback="true"
+					                    promptLabel="#{msg[user.password.format]}" title="format pwd">
+					                           
+					                            <c:if test="#{applicationBean.COMPLEXE_PASSWORD == 'oui'}">
+							                    	 <f:validateRegex pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$"/>
+							                    </c:if> 
+					                    </p:password>
+					                    
+					                </c:if>					                
+					                             </p:panelGrid>
+					           <p:separator />
+			                 <p:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">                     
+			                     <h:outputLabel for="nom" title="#{msg['user.nom']}" value="#{msg['user.nom']}:*" />
+			                    <h:outputLabel for="prenom" title="#{msg['user.prenom']}" value="#{msg['user.prenom']}:*" /> 
+			                        
+			                    <p:inputText value="#{userBean.infosuser.persnom}"  id="nom" required="true" requiredMessage="#{msg['user.nom.require']}"/>
+			                    <p:inputText value="#{userBean.infosuser.persprenom}"  id="prenom" required="true" requiredMessage="#{msg['user.prenom.require']}"/>
+			                  
+			                   
+                  
+		                    </p:panelGrid>
+		                   
+		  					<p:separator/>
+		  					
+		  					<p:panelGrid  columns="2" cellpadding="4" style="margin:0 auto;">                     		
+										 <h:outputLabel   value="#{msg['user.espace']}:" /> 
+										  <h:outputLabel for="creationDate" title="#{msg['user.datecreation']}" value="#{msg['user.datecreation']} :" /> 
+				                              	                           
+						                    <h:selectOneMenu  value="#{userBean.espace_id}"  >															
+														<f:selectItems  var="espace"  value="#{userBean.listEspace}"  itemLabel="#{espace.nomespace}"
+														itemValue="#{espace.id}" />
+								</h:selectOneMenu>
+				                       <p:inputText value="#{userBean.user.dateCreation}"   id="creationDate" disabled="true" />                    
+		  					</p:panelGrid>
+		                		              				
+						 <p:panelGrid  columns="2" cellpadding="4" style="margin:0 auto;">                   		      
+		                    <f:facet name="footer">                                                
+		                    </f:facet>
+		                </p:panelGrid>  
+		                <div style="float:left;">
+		               	<p:commandLink styleClass="btn btn-primary btn-block btn-flat" value="#{msg['button.sauvegarder']}" style="color:#ffffff;" update=":formusers, :growl, :newuserForm"   oncomplete="PF(handleSubmitRequest(xhr, status, args, 'edituserDlg','edituserForm'));"  actionListener="#{userBean.update()}"  />
+		              
+		                </div> 
+		                <div style="float:right">
+		                   <p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;" oncomplete="PF('editDialog').hide()" value="#{msg['button.close']}"  />  
+		                </div>
+								
+								
+						  </div><!-- /.tab-pane -->
+						  <div class="tab-pane" id="tab_22" style="height:300px; width:430px;">						  			
+						  			<p:dataTable  var="role" value="#{userBean.roleListDataModel}" widgetVar="roleTable" rowKey="#{role.identifier}"  style="width:400px"
+					                        paginator="true" rows="10" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					                     emptyMessage="#{msg['global.msgsearch']}"
+					                       selection="#{userBean.seletedRoles}">
+					                       
+					                        <p:column selectionMode="multiple" style="width:32px" />  
+					               
+							                <p:column sortBy="#{role.roleName}" filterBy="#{role.roleName}" filterMatchMode="contains">
+							                    <f:facet name="header">
+							                        <h:outputText value="#{msg['role.nom']}" />
+							                    </f:facet>
+							                    <h:outputText value="#{role.roleName}" />
+							                </p:column>
+					                       
+					             </p:dataTable>
+						  			
+						  			
+							
+						  </div><!-- /.tab-pane -->
+						</div><!-- /.tab-content -->
+					  </div><!-- nav-tabs-custom -->               
+              </h:form>
+          </p:dialog> 
+          
+          
+          
+          
           
           <!-- DIALOG DE CONFIRMATION DE LA SUPPRESSION -->
           
@@ -411,7 +534,7 @@
 			message="#{msg['global.supprimer.label']}" severity="alert"  widgetVar="deleteDialog">			
 			<p:commandButton value="#{msg['button.oui']}" update=":formusers,:growl"   actionListener="#{userBean.delete(actionEvent)}" 
 			 oncomplete="PF('deleteDialog').hide();"/>			
-			<p:commandButton value="#{msg['button.non']}" onclick="deleteDialog.hide();" type="button" /> 
+			<p:commandButton value="#{msg['button.non']}" onclick="PF('deleteDialog').hide();" type="button" /> 
 			</p:confirmDialog> 
         
         </h:form>
@@ -447,66 +570,40 @@
                 <p:separator/>
                 <div style="float:left">
                 <p:commandLink styleClass="btn btn-primary btn-block btn-flat" style="color:#ffffff;" value="#{msg['button.sauvegarder']}"  update=":growl, :initpasswordForm" actionListener="#{userBean.changePassByAdmin(actionEvent) }"
-                 oncomplete="PF(handleSubmitRequest_init(xhr, status, args, 'initPassUserDialog','initpasswordForm'));" />
+                 oncomplete="PF(handleSubmitRequest_init(xhr, status, args, 'initPassUserDialog','initpasswordForm'))"  />
                 </div>
                  <div style="float:right">
-                   <p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;" oncomplete="PF('initPassDialog').hide();" value="#{msg['button.close']}"  />  
+                   <p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;" oncomplete="PF('initPassDialog').hide()" value="#{msg['button.close']}"  />  
                 </div>
                  
                   </h:form>  
            </p:dialog>
            
-         
-          <!-- DIALOG D'AJOUT DES ROLES A UN UTILISATEUR-->
+          <!-- DIALOG DE CONFIRMATION DE LA SUPPRESSION DE TOUS LES ROLES -->
+          
+          <h:form id="deleteFromRole">
+        	 <p:confirmDialog  header="#{msg['global.warning']}"
+			message="#{msg['user.role.deleted']}" severity="alert"  widgetVar="deleteDialogRole">			
+			<p:commandButton value="#{msg['button.oui']}" update=":formusers,:growl"   actionListener="#{userBean.deleteRole(actionEvent) }" 
+			 oncomplete="PF('deleteDialogRole').hide();"/>			
+			<p:commandButton value="#{msg['button.non']}" onclick="PF('deleteDialogRole').hide();" type="button" /> 
+			</p:confirmDialog> 
         
-        <p:dialog header="#{msg['glabel.ajouter']}" widgetVar="role2userDialog" resizable="false" id="group2RoleDlg" modal="true" width="500px"> 
-              <h:form id="newRole2UserForm"> 
-                <p:panelGrid id="display" columns="1" cellpadding="4" style="margin:0 auto;"> 
-                	
-                	<h:outputLabel >#{msg['user.role.seleted']}#{userBean.user.id}(#{userBean.user.login})</h:outputLabel>
-                	<p:dataTable  var="role" value="#{userBean.roleListDataModel}" widgetVar="roleTable" rowKey="#{role.identifier}"
-		                        paginator="true" rows="10" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-		                     emptyMessage="#{msg['global.msgsearch']}"
-		                       selection="#{userBean.seletedRoles}">
-		                       
-		                        <p:column selectionMode="multiple" style="width:30px" />  
-		               
-	               				<!-- <p:column  sortBy="#{role.identifier}" filterBy="#{role.identifier}" filterMatchMode="contains"  >
-				                    <f:facet name="header">
-				                        <h:outputText value="#{msg['role.code']}" />
-				                    </f:facet>
-				                    <h:outputText value="#{role.identifier}" />
-				                </p:column> -->
-				                
-				                
-				
-				                <p:column sortBy="#{role.roleName}" filterBy="#{role.roleName}" filterMatchMode="contains">
-				                    <f:facet name="header">
-				                        <h:outputText value="#{msg['role.nom']}" />
-				                    </f:facet>
-				                    <h:outputText value="#{role.roleName}" />
-				                </p:column>
-		                       
-		             </p:dataTable>
-                	               				
-						
-                    <f:facet name="footer">
-                       <div style="float:left">
-                       	 <p:commandLink styleClass="btn btn-primary btn-block btn-flat" style="color:#ffffff;" value="#{msg['button.sauvegarder']}" update=":growl" oncomplete="PF('role2userDialog').hide();"  actionListener="#{userBean.AddRole2User()}"  />
-                      
-                       </div>
-                       <div style="float:right">
-                       	<p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;float:right;" value="#{msg['button.close']}" oncomplete="PF('role2userDialog').hide();" />                            
-         
-                       </div>
-                     </f:facet>
-                </p:panelGrid>  
-              </h:form>
-          </p:dialog> 
-      
-		
-		
-		
+        </h:form>
+        
+        <!-- DIALOG DE CONFIRMATION DE L'AJOUT  DE NOUVEAU ROLES -->
+          
+          <h:form id="addFromRole">
+        	 <p:confirmDialog  header="#{msg['global.warning']}"
+			message="#{msg['user.role.add.confirm']}" severity="alert"  widgetVar="addDialogRole">			
+			<p:commandButton value="#{msg['button.oui']}" update=":formusers,:growl"   actionListener="#{userBean.addRole(actionEvent) }" 
+			 oncomplete="PF('addDialogRole').hide();"/>			
+			<p:commandButton value="#{msg['button.non']}" onclick="PF('addDialogRole').hide();" type="button" /> 
+			</p:confirmDialog> 
+        
+        </h:form>
+           
+       
    
    </ui:define>
   </ui:composition>

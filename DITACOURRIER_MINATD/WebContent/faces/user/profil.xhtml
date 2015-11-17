@@ -9,71 +9,241 @@
   xmlns:ui="http://java.sun.com/jsf/facelets">
 	
 	<p:growl id="profilGrowl" showDetail="false" life="5000" />
-	  
-	<p:dialog header="#{msg['glabel.ajouter']}" widgetVar="profilDialog" resizable="false" id="profiluserDlg" modal="true" > 
-           <h:form id="profiluserForm">   
-				<p:focus for="login"/>
-              	      
-              	     <p:panelGrid  columns="1" cellpadding="4" style="margin:0 auto;">
-                        <i>#{msg['global.label.obligatoire']}</i>
-                   </p:panelGrid>
-              	      
-                <p:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">  
-                	
-	                	<h:outputLabel for="login"  value="#{msg['user.login']}:*" />  
-	                                            
-	                      <p:inputText value="#{profilBean.user.login}"  id="login" required="true" requiredMessage="#{msg['user.login.require']}"
-	                      	validator="#{profilBean.validateName}"
-	                       />
-	                   
-                  </p:panelGrid>
-                    	<p:separator />
-                 <p:panelGrid columns="3" cellpadding="4" style="margin:0 auto;">                     
-                     <h:outputLabel for="nom" title="#{msg['user.nom']}" value="#{msg['user.nom']}:*" />
-                    <h:outputLabel for="prenom" title="#{msg['user.prenom']}" value="#{msg['user.prenom']}:*" /> 
-                     <h:outputLabel for="sexe" title="#{msg['user.sexe']}" value="#{msg['user.sexe']}:" />                        
-                       
-                    <p:inputText value="#{profilBean.user.infosPersonne.nom}"  id="nom" required="true" requiredMessage="#{msg['user.nom.require']}"/>
-                    <p:inputText value="#{profilBean.user.infosPersonne.prenom}"  id="prenom" required="true" requiredMessage="#{msg['user.prenom.require']}"/>
-                        
-                         <h:selectOneMenu value="#{profilBean.user.infosPersonne.sexe}"  id="sexe"  >
-							<f:selectItem itemLabel="#{msg['global.selection']}" itemValue="" />							
-							<f:selectItems var="sexe" value="#{profilBean.listSexe}" itemLabel="#{sexe.designation}" itemValue="#{sexe.code}" />
-						</h:selectOneMenu>
-                    	
-                    </p:panelGrid>
-                    <p:separator/>
-                    <p:panelGrid  columns="3" cellpadding="4" style="margin:0 auto;"> 
-                    		<h:outputLabel for="mailAddress" title="#{msg['user.mail']}" value="#{msg['user.mail']}:*" />
-                    		<h:outputLabel for="telephone" title="#{msg['user.telephone']}" value="#{msg['user.telephone']}:*" />
-		                    <h:outputLabel for="localisation" title="#{msg['user.localisation']}" value="#{msg['user.localisation']}:" />                                    
-		                    <p:inputText value="#{profilBean.user.infosPersonne.mailAddress}"  id="mailAddress" validatorMessage="#{msg['user.mail.validator']}"  required="true" requiredMessage="#{msg['user.mail.require']}">
-		                    	<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-		                    </p:inputText>
-		                       <p:inputText value="#{profilBean.user.infosPersonne.telephone}" id="telephone"  required="true" requiredMessage="#{msg['user.telephone.require']}">
-		                        <f:convertNumber integerOnly="true" type="number"  />
-						     		  </p:inputText>
-		                   
-		                     <p:inputText value="#{profilBean.user.infosPersonne.localisation}"   id="localisation"/>
-		                     
-		                                     
-  					</p:panelGrid>
-  					<p:separator/>					    				
-				                 		      
-                    <f:facet name="footer">                  	
-                                                       
-                    </f:facet>
-                    
-                    <div style="float:left">
-                    		  <p:commandLink styleClass="btn btn-primary btn-block btn-flat" style="color:#ffffff;" value="#{msg['button.sauvegarder']}"  update=":profilGrowl, :profiluserForm"   oncomplete="PF(handleSubmitRequest_profil(xhr, status, args, 'profiluserDlg','profiluserForm'));"  actionListener="#{profilBean.update()}"  />
-                         
-                    	</div>
-                    	<div style="float:right">
-                    		 <p:commandLink styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;" value="#{msg['button.close']}" oncomplete="PF('profilDialog').hide()" />
-                    	</div>
-              
-             </h:form>
+
+          
+           <div class="modal_courrier" >      
+          <p:dialog header="#{msg['glabel.ajouter']}" widgetVar="profilDialog" resizable="false" id="profiluserDlg" modal="true" width="950" height="400" > 
+           <h:form id="profiluserForm" enctype="multipart/form-data"> 
+              	    <p:wizard flowListener="#{profilBean.onFlowProcess}" widgetVar="wiz_profil">
+				        <p:tab id="personal_profil" title="#{msg['personne.infospers']}">
+				            <p:panel header="#{msg['personne.infospers2']}">
+				            	<p:messages showDetail="false" closable="true" />
+				               <h:panelGrid columns="4" cellpadding="10"  style="margin:0 auto;">
+				               
+				                   <h:outputText value="#{msg['personne.perstitre']}: "/>				                  
+				                   <h:selectOneMenu id="titre" value="#{profilBean.personne.perstitre}" required="true" label="perstitre">
+				                   <f:selectItem itemLabel="#{msg['global.select']}" itemValue="" noSelectionOption="true" />
+					             	<f:selectItems value="#{applicationBean.PERS_TITRE}" var="titre" itemLabel="#{titre}" itemValue="#{titre}"></f:selectItems>
+					            </h:selectOneMenu>
+				                   
+				                   
+				
+				                   <h:outputText value="#{msg['personne.persnom']}*: "/>
+				                   <p:inputText value="#{profilBean.personne.persnom}" required="true" label="Lastname"/>
+				
+				                   <h:outputText value="#{msg['personne.persprenom']}*: "/>
+				                   <p:inputText value="#{profilBean.personne.persprenom}" required="true" label="Firstname"/>
+				
+				                   <h:outputText value="#{msg['personne.persdatenaiss']}: "/>  
+				                    <p:calendar value="#{profilBean.personne.persdatenaiss}"    id="persdatenaiss" locale="fr" navigator="true" 
+				                    pattern="dd/MM/yyyy"  mode="popup" showOn="button" />
+				
+				                   <h:outputText value="#{msg['personne.perslieunaiss']}: "/>
+				                   <p:inputText value="#{profilBean.personne.perslieunaiss}" />
+				
+				                   <h:outputText value="#{msg['personne.perssexe']}*: "/>
+				                   <h:selectOneMenu id="sexe2" value="#{profilBean.personne.perssexe}" required="true" label="Sexe">
+					                <f:selectItem itemLabel="#{msg['global.select']}" itemValue="" noSelectionOption="true" />
+					                <f:selectItem itemLabel="#{msg['personne.perssexe1']}" itemValue="1" />
+					                <f:selectItem itemLabel="#{msg['personne.perssexe2']}" itemValue="2" />
+					            </h:selectOneMenu>				                    
+				
+				                  <!--  <h:outputText value="#{msg['personne.persituationdefamille']}: " />
+				                   <h:selectOneMenu id="situationdefamille2" value="#{profilBean.personne.persituationdefamille}">
+					                <f:selectItem itemLabel="#{msg['global.select']}" itemValue="" noSelectionOption="true" />
+					                <f:selectItem itemLabel="#{msg['personne.persitfam1']}" itemValue="1" />
+					                <f:selectItem itemLabel="#{msg['personne.persitfam2']}" itemValue="2" />
+					                <f:selectItem itemLabel="#{msg['personne.persitfam3']}" itemValue="3" />
+					                <f:selectItem itemLabel="#{msg['personne.persitfam4']}" itemValue="4" />
+					            </h:selectOneMenu> -->
+					          			<h:outputText value="#{msg['personne.changeIMG']}"/>
+					          			<p:selectBooleanCheckbox value="#{profilBean.changeImage}"  >				                     	
+				                    		<p:ajax listener="#{profilBean.addMessage}" update="lsrc_img_profil,src_img_profil" />
+				                    </p:selectBooleanCheckbox>
+					            		<h:outputText id="lsrc_img_profil"  value="#{msg['personne.src_img']}:" style="#{profilBean.changeImage?'display:block':'display:none'}" /> 
+						         		
+						         			<p:fileUpload  value="#{profilBean.file}" fileUploadListener="#{profilBean.handleFileUpload}" 
+								        auto="true" mode="advanced"  id="src_img_profil" update="namefile" style="#{profilBean.changeImage?'display:block':'display:none'}"  />
+						         		<h:outputText value=""/>
+						         <h:outputText value=""/>
+						         <h:outputText value=""/>
+						         <h:outputText value="#{profilBean.file.fileName}" id="namefile" />
+					            
+					            
+					             
+						         
+				               </h:panelGrid>
+				               <h:outputText value="#{msg['personne.skip']}: " />
+				                   <h:selectBooleanCheckbox value="#{profilBean.skip}" />
+				           </p:panel>
+				        </p:tab>
+				 
+				        <p:tab id="address_profil" title="#{msg['personne.infosaddr']}" >
+				           <p:panel header="#{msg['personne.infosaddr2']}">
+				           <p:messages showDetail="false" closable="true" />
+				                <h:panelGrid columns="4" cellpadding="10"  style="margin:0 auto;">
+				                   <h:outputText value="#{msg['personne.persadresse']}: " />
+				                   <p:inputText value="#{profilBean.personne.persadresse}" />
+				
+				                   <h:outputText value="#{msg['personne.perstel']}*: " />
+				                   <p:inputText value="#{profilBean.personne.perstel}" required="true" label="Tel" >
+				                   	<f:convertNumber integerOnly="true" type="number"  />
+								   </p:inputText>
+				
+				                   <h:outputText value="#{msg['personne.persemail']}*: "/>
+				                   <p:inputText value="#{profilBean.personne.persemail}" required="true" label="Email" validatorMessage="#{msg['user.mail.validator']}" requiredMessage="#{msg['user.mail.require']}">
+				                   		<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+						            </p:inputText>
+				                  <!--  
+									<h:outputText value="#{msg['personne.perssiteweb']}: " />
+				                   <p:inputText value="#{profilBean.personne.perssiteweb}" /> -->
+				                   
+				                   
+				               </h:panelGrid>
+				               <h:outputText value="#{msg['personne.skip']}: " />
+				                   <h:selectBooleanCheckbox value="#{profilBean.skip}" />
+				           </p:panel>
+				       </p:tab>
+				 
+				       <!--  <p:tab id="health_profil" title="#{msg['personne.infossant']}">
+				            <p:panel header="#{msg['personne.infossant2']}">
+				                <p:messages showDetail="false" closable="true" />
+				                 <h:panelGrid columns="4" cellpadding="10"  style="margin:0 auto;">
+				                    <h:outputText value="#{msg['personne.perstaille']}: " />
+				                    <p:inputText value="#{profilBean.personne.perstaille}"/>
+				 
+				                    <h:outputText value="#{msg['personne.perspoids']}: " />
+				                    <p:inputText value="#{profilBean.personne.perspoids}"/>
+				 
+				                    <h:outputText value="#{msg['personne.persmaladies']}: " />
+				                    <p:inputText value="#{profilBean.personne.persmaladies}"/>
+				                    
+				                   
+				                </h:panelGrid>
+				                 <h:outputText value="#{msg['personne.skip']}: " />
+				                    <h:selectBooleanCheckbox value="#{profilBean.skip}" />
+				            </p:panel>
+				        </p:tab> -->
+				        
+				      <!--   <p:tab id="professional_profil" title="#{msg['personne.infosprof']}">
+				            <p:panel header="#{msg['personne.infosprof2']}" style="height:200px;">
+				                <p:messages  showDetail="false" closable="true"/>
+				                 <h:panelGrid columns="4" cellpadding="10"  style="margin:0 auto;">
+				                    <h:outputText value="#{msg['personne.persprofession']}: *" />
+				                    <p:inputText value="#{profilBean.personne.persprofession}" required="true"/>
+				  
+				                    <h:outputLabel for="categoriespersonnelId2" title="#{msg['user.categoriespersonnelId']}" value="#{msg['user.categoriespersonnelId']}:" />
+			                    	<h:selectOneMenu value="#{profilBean.idCat}"  id="categoriespersonnelId2" >
+											<f:selectItem itemLabel="#{msg['global.selection']}" itemValue="-1" />							
+											<f:selectItems var="cat" value="#{profilBean.listCategories}" itemLabel="#{cat.catdesignationpers}" itemValue="#{cat.id}" />
+									</h:selectOneMenu>
+			                    	
+			                    	<h:outputLabel for="serviceId2" title="#{msg['personne.persservice']}" value="#{msg['user.serviceId']}:*" />
+					                
+									<h:selectOneMenu value="#{profilBean.idSrv}"  id="serviceId2" >
+										<f:selectItem itemLabel="#{msg['global.selection']}" itemValue="-1" />							
+										<f:selectItems var="sev" value="#{profilBean.listServices}" itemLabel="#{sev.servdesignation}" itemValue="#{sev.id}" />
+									</h:selectOneMenu>
+									
+									<h:outputLabel for="persmat2" title="#{msg['user.persmat']}" value="#{msg['user.persmat']}:*" />               
+					                
+					                <p:inputText value="#{profilBean.personne.persmat}" id="persmat2" />
+				 
+						              <h:outputLabel for="login2"  value="#{msg['user.login']}:*" />
+				                     <p:inputText value="#{profilBean.user.login}"  id="login2" required="true" requiredMessage="#{msg['user.login.require']}"
+				                      	validator="#{profilBean.validateName}"/>
+				                </h:panelGrid>
+				               
+				            </p:panel>
+				        </p:tab> -->
+				        
+				       
+				 
+				        <p:tab id="confirm_profil" title="Confirmation">
+				            <p:panel header="Confirmation" >
+				                <h:panelGrid id="confirmation" columns="3" columnClasses="grid,grid,grid">
+				                    <h:panelGrid columns="8" cellpadding="4" style="color:black;">
+				                             
+				                   <h:outputText value="#{msg['personne.perstitre']}: "/>
+				                   <h:outputText value="#{profilBean.personne.perstitre}" styleClass="outputLabel"/>
+				
+				                   <h:outputText value="#{msg['personne.persnom']}*: "/>
+				                   <h:outputText value="#{profilBean.personne.persnom}" styleClass="outputLabel"/>
+				
+				                   <h:outputText value="#{msg['personne.persprenom']}*: "/>
+				                   <h:outputText value="#{profilBean.personne.persprenom}" styleClass="outputLabel"/>
+				
+				                   <h:outputText value="#{msg['personne.persdatenaiss']}: "/>
+				                  <h:outputText value="#{profilBean.personne.persdatenaiss}" styleClass="outputLabel"/>                    
+				
+				                   <h:outputText value="#{msg['personne.perslieunaiss']}: "/>
+				                   <h:outputText value="#{profilBean.personne.perslieunaiss}" styleClass="outputLabel" />
+				
+				                   <h:outputText value="#{msg['personne.perssexe']}*: "/>                	
+			                   		<h:selectOneMenu disabled="true" value="#{profilBean.personne.perssexe}" styleClass="outputLabel" >
+						                <f:selectItem itemLabel="" itemValue="" noSelectionOption="true" />
+						                <f:selectItem itemLabel="#{msg['personne.perssexe1']}" itemValue="1" />
+				                		<f:selectItem itemLabel="#{msg['personne.perssexe2']}" itemValue="2" />
+						            </h:selectOneMenu> 
+						            <!--  <h:outputText value="#{msg['personne.persituationdefamille']}: " />
+					                  <h:selectOneMenu disabled="true" value="#{profilBean.personne.persituationdefamille}"  styleClass="outputLabel" >
+						                <f:selectItem itemLabel="" itemValue="" noSelectionOption="true" />
+						                <f:selectItem itemLabel="#{msg['personne.persitfam1']}" itemValue="1" />
+						                <f:selectItem itemLabel="#{msg['personne.persitfam2']}" itemValue="2" />
+						                <f:selectItem itemLabel="#{msg['personne.persitfam3']}" itemValue="3" />
+						                <f:selectItem itemLabel="#{msg['personne.persitfam4']}" itemValue="4" />
+						            </h:selectOneMenu>   -->
+				                  
+				                  <h:outputText value="#{msg['personne.persadresse']}: " />
+				                   <h:outputText value="#{profilBean.personne.persadresse}" styleClass="outputLabel" />
+				
+				                   <h:outputText value="#{msg['personne.perstel']}*: " />
+				                   <h:outputText value="#{profilBean.personne.perstel}" styleClass="outputLabel" />
+				
+				                   <h:outputText value="#{msg['personne.persemail']}*: "/>
+				                   <h:outputText value="#{profilBean.personne.persemail}" styleClass="outputLabel"/>
+				                   
+								<!-- 	<h:outputText value="#{msg['personne.perssiteweb']}: " />
+				                   <h:outputText value="#{profilBean.personne.perssiteweb}" styleClass="outputLabel" /> 
+				                   
+				                   <h:outputText value="#{msg['personne.perstaille']}: " />
+				                    <h:outputText value="#{profilBean.personne.perstaille}" styleClass="outputLabel"/>
+				 
+				                    <h:outputText value="#{msg['personne.perspoids']}: " />
+				                    <h:outputText value="#{profilBean.personne.perspoids}" styleClass="outputLabel"/>
+				 
+				                    <h:outputText value="#{msg['personne.persmaladies']}: " />
+				                    <h:outputText value="#{profilBean.personne.persmaladies}" styleClass="outputLabel"/>                
+				                  
+				                    <h:outputText value="#{msg['personne.persprofession']}: *" />
+				                    <h:outputText value="#{profilBean.personne.persprofession}" />				  
+				                    <h:outputLabel   value="#{msg['user.categoriespersonnelId']}:" />
+			                    	<h:selectOneMenu value="#{profilBean.idCat}" disabled="true"   >
+											<f:selectItem itemLabel="" itemValue="-1" />							
+											<f:selectItems var="cat" value="#{profilBean.listCategories}" itemLabel="#{cat.catdesignationpers}" itemValue="#{cat.id}" />
+									</h:selectOneMenu>			                    	
+			                    	<h:outputLabel  value="#{msg['user.serviceId']}:" />
+									<h:selectOneMenu value="#{profilBean.idSrv}" disabled="true" >
+										<f:selectItem itemLabel="" itemValue="-1" />							
+										<f:selectItems var="sev" value="#{profilBean.listServices}" itemLabel="#{sev.servdesignation}" itemValue="#{sev.id}" />
+									</h:selectOneMenu>									
+									<h:outputLabel for="persmat" title="#{msg['user.persmat']}" value="#{msg['user.persmat']}:" />
+					                <h:outputText value="#{profilBean.personne.persmat}"  /> -->
+				                    
+				                </h:panelGrid>
+				              </h:panelGrid>
+				                <h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">	
+				                		<p:commandButton styleClass="btn btn-primary btn-block btn-flat" immediate="true" value="#{msg['button.sauvegarder']}"  update=":profilGrowl, :profiluserForm"   oncomplete="PF(handleSubmitRequest_profil(xhr, status, args, 'profiluserDlg','profiluserForm'));"  actionListener="#{profilBean.update()}" ajax="false"/>				            	
+						               <p:commandButton styleClass="btn btn-primary btn-block btn-flat btn-warning" style="color:#ffffff;" value="#{msg['button.close']}" oncomplete="PF('profilDialog').hide()" />
+						        </h:panelGrid>    	
+				            
+				            </p:panel>
+				        </p:tab>
+				    </p:wizard>
+    		    
+              </h:form>
           </p:dialog> 
+        </div>
           
            
          

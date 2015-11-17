@@ -38,6 +38,8 @@
      <bean id="groupAccessRessourceService"
         class="cm.dita.service.domaine.impl.user.GroupAccessRessourceServiceImpl">
         <property name="dao" ref="groupAccessRessourceDao" />
+        <property name="groupDao" ref="groupDao" />
+        <property name="accessRessourceDao" ref="accessRessourceDao" />
          <property name="mouchardDao" ref="mouchardDao"/>
     </bean>
      
@@ -130,6 +132,11 @@
 	
 	<bean id="IImageService" class="cm.dita.service.domaine.impl.IImageServiceImpl">
 		<property name="dao" ref="IImageDao"/>
+	</bean>
+	
+	<bean id="personneRessourceService" class="cm.dita.service.domaine.impl.PersonneRessourceServiceImpl">
+		<property name="personneDao" ref="personneDao"/>
+		<property name="userDao" ref="userDao"/>
 	</bean>
  		
    </beans>

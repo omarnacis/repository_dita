@@ -63,7 +63,17 @@
 				        <p:submenu label="#{msg['menu.utilisateur']}" >  
 		                    <p:menuitem value="#{msg['user.liste']}" url="/faces/user/users.xhtml" icon="ui-icon-person" />
 		                     <p:menuitem value="#{msg['role.liste']}" url="/faces/user/roles.xhtml" icon="ui-icon-key"/>
-		                    <p:menuitem value="#{msg['group.liste']}" url="/faces/user/groups.xhtml" icon="ui-icon-copy" />              
+		                    <p:menuitem value="#{msg['group.liste']}" url="/faces/user/groups.xhtml" icon="ui-icon-copy" /> 
+		                    
+		                    <sec:ifAnyGranted  roles="ROLE_users,ROLE_ADMIN"> 		                   
+		                    	<p:menuitem icon="ui-icon-person" value="#{msg['user.liste']}" action="#{userBean.showUser}"/>
+	                    	</sec:ifAnyGranted>
+	                    	
+	                    	<!-- Profiles --> 
+	                    	<sec:ifAnyGranted  roles="ROLE_personne,ROLE_ADMIN">		                   
+		                     	<p:menuitem icon="ui-icon-contact" value="#{msg['personne']}" action="#{personnesBean.showPersonne}"/>	
+		                  	</sec:ifAnyGranted>
+		                                 
 		                  
 				        </p:submenu>
 			        </sec:ifAnyGranted>

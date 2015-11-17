@@ -1,84 +1,102 @@
-nom,detaille
-ROLE_espaces,Page de listing des espaces
-ROLE_espaces.add,Ajouter un espace
-ROLE_espaces.edit,Editer un espace
-ROLE_espaces.view,Visualiser un espace 
-ROLE_espaces.print,Imprimer un espace
-ROLE_espaces.delete,Supprimer un espace
+nom,detaille,bloc,action
+all,Gestion des espaces,1,0
+ROLE_espaces,Page de listing des espaces,1,1
+ROLE_espaces.add,Ajouter un espace,1,2
+ROLE_espaces.edit,Editer un espace,1,3
+ROLE_espaces.view,Visualiser un espace,1,4
+ROLE_espaces.print,Imprimer un espace,1,5
+ROLE_espaces.delete,Supprimer un espace,1,6
 
-ROLE_users,Page de listing des utilisateurs
-ROLE_users.add,Ajouter un utilisateur
-ROLE_users.edit,Editer un utilisateur
-ROLE_users.view,Visualiser un utilisateur 
-ROLE_users.print,Imprimer un utilisateur
-ROLE_users.delete,Supprimer un utilisateur
-ROLE_users.initPass,Reinitialiser le mot de passe
-ROLE_users.role,Attribuer les privileges a un utilisateur
+all,Gestion des utilisateurs,2,0
+ROLE_users,Page de listing des utilisateurs,2,1
+ROLE_users.add,Ajouter un utilisateur,2,2
+ROLE_users.edit,Editer un utilisateur,2,3
+ROLE_users.view,Visualiser un utilisateur,2,4
+ROLE_users.print,Imprimer un utilisateur,2,5
+ROLE_users.delete,Supprimer un utilisateur,2,5
+ROLE_users.initPass,Reinitialiser le mot de passe,2,6
+ROLE_users.role,Attribuer les privileges a un utilisateur,2,7
+ROLE_users.enable,Activer ou dÃ©sactiver les utilisateurs,2,8
 
-ROLE_roles,Page de listing des roles
-ROLE_roles.add,Ajouter un role
-ROLE_roles.edit,Editer un role
-ROLE_roles.view,Visualiser un role 
-ROLE_roles.print,Imprimer un role
-ROLE_roles.delete,Supprimer un role
-ROLE_roles.groupes,Liste les groupes d'un role
-ROLE_roles.add.groupe,Ajouter un groupe a un role
+all,Gestion des rÃ´les utilisateurs,3,0
+ROLE_roles,Page de listing des roles,3,1
+ROLE_roles.add,Ajouter un role,3,2
+ROLE_roles.edit,Editer un role,3,3
+ROLE_roles.view,Visualiser un role,3,4
+ROLE_roles.print,Imprimer un role,3,5
+ROLE_roles.delete,Supprimer un role,3,6
+ROLE_roles.groupes,Liste les groupes d'un role,3,7
+ROLE_roles.add.groupe,Ajouter un groupe a un role,3,8
 
-ROLE_groups,Page de listing des groupes
-ROLE_groups.add,Ajouter un groupe
-ROLE_groups.edit,Editer un groupe
-ROLE_groups.view,Visualiser un groupe 
-ROLE_groups.print,Imprimer un groupe
-ROLE_groups.delete,Supprimer un groupe
-ROLE_groups.access,Liste les access d'un groupe
-ROLE_groups.add.access,Ajouter un access a un groupe
+all,Gestion des groupes utilisateurs,4,0
+ROLE_groups,Page de listing des groupes,4,1
+ROLE_groups.add,Ajouter un groupe,4,2
+ROLE_groups.edit,Editer un groupe,4,3
+ROLE_groups.view,Visualiser un groupe,4,4 
+ROLE_groups.print,Imprimer un groupe,4,5
+ROLE_groups.delete,Supprimer un groupe,4,6
+ROLE_groups.access,Liste les access d'un groupe,4,7
+ROLE_groups.add.access,Ajouter un access a un groupe,4,8
 
-ROLE_preferences,Page de listing des preferences
-ROLE_preferences.add,Ajouter une preference
-ROLE_preferences.edit,Editer une preference
-ROLE_preferences.view,Visualiser une preference 
-ROLE_preferences.print,Imprimer une preference
-ROLE_preferences.delete,Supprimer une preference
+all,Gestion des prÃ©ferences de l'appliaction,5,0
+ROLE_preferences,Page de listing des preferences,5,1
+ROLE_preferences.add,Ajouter une preference,5,2
+ROLE_preferences.edit,Editer une preference,5,3
+ROLE_preferences.view,Visualiser une preference,5,4 
+ROLE_preferences.print,Imprimer une preference,5,5
+ROLE_preferences.delete,Supprimer une preference,5,6
 
-ROLE_bordereaus,Page de listing des bordereaux
-ROLE_bordereaus.add,Ajouter un bordereau
-ROLE_bordereaus.traite1,Traiter un bordereau de numero connu
-ROLE_bordereaus.edit,Editer un bordereau
-ROLE_bordereaus.view,Visualiser un bordereau 
-ROLE_bordereaus.print,Imprimer un bordereau
-ROLE_bordereaus.delete,Supprimer un bordereau
-ROLE_bordereaus.downloadPJ, Télécharger un bordereau
+all,Gestion des bordereaux,6,0
+ROLE_bordereaus,Page de listing des bordereaux,6,1
+ROLE_bordereaus.add,Ajouter un bordereau,6,2
+ROLE_bordereaus.traite1,Traiter un bordereau de numero connu,6,3
+ROLE_bordereaus.edit,Editer un bordereau,6,4
+ROLE_bordereaus.view,Visualiser un bordereau,6,5 
+ROLE_bordereaus.print,Imprimer un bordereau,6,6
+ROLE_bordereaus.delete,Supprimer un bordereau,6,7
+ROLE_bordereaus.downloadPJ, Tï¿½lï¿½charger un bordereau,6,8
 
-ROLE_statistique, Page de visualisation des statistiques
-ROLE_statistique.view, visualiser les statistiques
+all,Statistiques,7,0
+ROLE_statistique, Page de visualisation des statistiques,7,1
+ROLE_statistique.view, visualiser les statistiques,7,2
 
-ROLE_mouchard, page de visualisation du mouchard
-ROLE_mouchard.view, visualiser le mouchard
+all,TraÃ§abilitÃ©s,8,0
+ROLE_mouchard, page de visualisation du mouchard,8,1
+ROLE_mouchard.view, visualiser le mouchard,8,2
 
-ROLE_suivi, Page de visualisation du suivi
-ROLE_suivi.recherche, rechercher le suivi d'un courrier
+all,Gestion des correspondants,9,0
+ROLE_correspondants,Page de listing des correspondants,9,1
+ROLE_correspondants.add,Ajouter un correspondants,9,2
+ROLE_correspondants.edit,Editer un correspondant,9,3
+ROLE_correspondants.view,Visualiser un correspondant,9,4 
+ROLE_correspondants.print,Imprimer un correspondant,9,5
+ROLE_correspondants.delete,Supprimer un correspondant,9,6
 
-ROLE_correspondants,Page de listing des correspondants
-ROLE_correspondants.add,Ajouter un correspondants
-ROLE_correspondants.edit,Editer un correspondant
-ROLE_correspondants.view,Visualiser un correspondant 
-ROLE_correspondants.print,Imprimer un correspondant
-ROLE_correspondants.delete,Supprimer un correspondant
-ROLE_correspondants.add,Ajouter un courrier
+all,Gestion des courriers,10,0
+ROLE_courrier,Page de listing des courriers,10,1
+ROLE_courrier.add,Ajouter un courrier,10,2
+ROLE_courrier.edit,Editer un courrier,10,3
+ROLE_courrier.view,Visualiser un courrier,10,4
+ROLE_courrier.print,Imprimer un courrier,10,5
+ROLE_courrier.delete,Supprimer un courrier,10,6
+ROLE_courrier.rejeter,Rejeter un courrier,10,7
+ROLE_courrier.transferer,Transerer un courrier dans un autre espace,10,8
+ROLE_courrier.deleteTrans,Supprimer une transmission,10,9
+ROLE_courrier.addPJ, Ajouter une piï¿½ce jointe du courrier,10,10
+ROLE_courrier.viewPJ, Voire les piï¿½ces jointes du courrier,10,11
+ROLE_courrier.downloadPJ,telecharger une piï¿½ce jointe du courrier,10,12
+ROLE_courrier.deletePJ,Supprimer une piï¿½ce jointe du courrier,10,13
+ROLE_suivi, Page de visualisation du suivi,10,14
+ROLE_suivi.recherche, rechercher le suivi d'un courrier,10,15
 
-ROLE_courrier,Page de listing des courriers
-ROLE_courrier.add,Ajouter un courrier
-ROLE_courrier.edit,Editer un courrier
-ROLE_courrier.view,Visualiser un courrier 
-ROLE_courrier.print,Imprimer un courrier
-ROLE_courrier.delete,Supprimer un courrier
-ROLE_courrier.rejeter,Rejeter un courrier
-ROLE_courrier.transferer,Transerer un courrier dans un autre espace
-ROLE_courrier.deleteTrans,Supprimer une transmission
-ROLE_courrier.addPJ, Ajouter une pièce jointe du courrier
-ROLE_courrier.viewPJ, Voire les pièces jointes du courrier
-ROLE_courrier.downloadPJ,telecharger une pièce jointe du courrier
-ROLE_courrier.deletePJ,Supprimer une pièce jointe du courrier
+all,Notifications,11,0
+ROLE_notification,Page de listing des notifictions,11,1
+ROLE_notification.print,Imprimer une notification,11,2
 
-ROLE_notification,Page de listing des notifictions
-ROLE_notification.print,Imprimer une notification
+all,Gestion personnes,12,0
+ROLE_personnes,Page de listing des profils,12,1
+ROLE_personnes.add,Ajouter un profil,12,2
+ROLE_personnes.edit,Editer un profil,12,3
+ROLE_personnes.view,Visualiser un profil,12,4
+ROLE_personnes.print,Imprimer un profil,12,5
+ROLE_personnes.delete,Supprimer un profil,12,6

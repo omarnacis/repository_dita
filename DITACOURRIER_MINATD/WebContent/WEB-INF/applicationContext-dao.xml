@@ -40,6 +40,7 @@
 	<bean id="typespiecesjointesDao" class="cm.dita.dao.domaine.impl.TypespiecesjointesDaoImpl" parent="daoBase" />
 	<bean id="correspondantDao" class="cm.dita.dao.domaine.impl.CorrespondantDaoImpl" parent="daoBase" />
 	<bean id="IImageDao" class="cm.dita.dao.domaine.impl.ImageDaoImpl" parent="daoBase" />
+	<bean id="personneDao"  class="cm.dita.dao.domaine.impl.PersonneDaoImpl"  parent="daoBase" />		
 	
 	
 	<bean id="applicationContextHolder"	class="cm.dita.utils.ApplicationContextHolder" />
