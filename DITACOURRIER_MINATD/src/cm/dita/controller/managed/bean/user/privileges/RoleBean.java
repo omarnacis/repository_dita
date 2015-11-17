@@ -4,9 +4,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -17,7 +15,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.validator.ValidatorException;
-//import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 import org.primefaces.context.RequestContext;
@@ -25,11 +22,11 @@ import org.primefaces.context.RequestContext;
 import cm.dita.constant.IConstance;
 import cm.dita.entities.user.Group;
 import cm.dita.entities.user.Role;
-import cm.dita.entities.user.RoleGroup;
 import cm.dita.service.domaine.inter.IMouchardRessourceService;
 import cm.dita.service.domaine.inter.user.IGroupService;
 import cm.dita.service.domaine.inter.user.IRoleGroupService;
 import cm.dita.service.domaine.inter.user.IRoleService;
+import cm.dita.service.domaine.inter.user.IRoleUserService;
 import cm.dita.utils.Messages;
 
 @ManagedBean(name = "roleBean")
@@ -48,6 +45,9 @@ public class RoleBean  implements Serializable{
 	
 	@ManagedProperty(value="#{roleGroupService}")
 	IRoleGroupService roleGroupService;
+	
+	@ManagedProperty(value="#{roleUserService}")
+	 private IRoleUserService roleUserService = null;
 	
 	@ManagedProperty(value="#{groupService}")
 	IGroupService groupService;
@@ -89,6 +89,8 @@ public class RoleBean  implements Serializable{
     	role = new Role();			    	
     	SimpleDateFormat sdf = new SimpleDateFormat(IConstance.PARAMETER_DATE_FORMAT_2);    	
     	role.setDateCreation(sdf.format(new Date()));
+    	this.groupsList=groupService.listVersusEnabled(IConstance.FIELD_DELETE, new String[]{});
+ 	    this.groupListDataModel= new GroupDataModel(this.groupsList);
     	
     }
  	
@@ -101,10 +103,30 @@ public class RoleBean  implements Serializable{
  	public void editEvent(Role role) { 		
  	    //this.role_edit = roleService.load(role.getIdentifier());
  	   this.role= new Role(roleService.load(role.getIdentifier()));
+ 	  this.groupsList=groupService.listVersusEnabled(IConstance.FIELD_DELETE, new String[]{});
+	    this.groupListDataModel= new GroupDataModel(this.groupsList);
+ 	   this.selectedGroups=groupService.listOfGroup4Role(this.role); 	
+ 	 
+     }
+ 	
+ 	public void viewEvent(Role role) { 		
+ 	    //this.role_edit = roleService.load(role.getIdentifier());
+ 	   this.role= new Role(roleService.load(role.getIdentifier()));
+ 	  this.selectedGroups=groupService.listOfGroup4Role(this.role); 	
+	    this.groupListDataModel= new GroupDataModel(this.selectedGroups);
+ 	   
+ 	 
+     }
+ 	
+ 	public void deleteEvent(Role role) { 		
+ 	    //this.role_edit = roleService.load(role.getIdentifier());
+ 	   this.role=role;
  	   this.selectedGroups=groupService.listOfGroup4Role(this.role); 	
  	 this.groupListDataModel= new GroupDataModel(this.selectedGroups);
         
      }
+ 	
+ 	
 /**
 * Ajoute un role
 * @param role
@@ -115,9 +137,11 @@ public class RoleBean  implements Serializable{
     	 FacesContext context = FacesContext.getCurrentInstance();
     	try{	
     	
-	    		roleService.save(role);	
+	    		int code=(int) roleService.saveReturnID(role);
+	    		this.role.setIdentifier(code);
+	    		roleGroupService.saveGroup2Role(this.role, selectedGroups);
 		        init();//mise ï¿½ jour de la liste			    	
-		        mouchardRessourceService.tracage("Ajout du rôle "+role.getRoleName(), "ajout",role.getDateUseToSortData(), "Role");
+		        mouchardRessourceService.tracage("Ajout du rï¿½le "+role.getRoleName(), "ajout",role.getDateUseToSortData(), "Role");
 				
 		        FacesMessage message = Messages.getMessage("messages", "global.gestion.reussi", null);
 		    	message.setSeverity(FacesMessage.SEVERITY_INFO);
@@ -126,13 +150,14 @@ public class RoleBean  implements Serializable{
     	
     	 }catch(Exception e){
     		 e.printStackTrace();
-    		 mouchardRessourceService.tracage("Echec ajout du rôle "+role.getRoleName(), "ajout",role.getDateUseToSortData(), "Role");
+    		 mouchardRessourceService.tracage("Echec ajout du rï¿½le "+role.getRoleName(), "ajout",role.getDateUseToSortData(), "Role");
  			
     		 FacesMessage message = Messages.getMessage("messages", "global.gestion.echec", null);
 		    	message.setSeverity(FacesMessage.SEVERITY_WARN);
 		        context.addMessage(null, message);
     	 }finally{
     		 role = new Role();
+    		 selectedGroups.clear();
     		 role_edit= null;
     	 }
 	        
@@ -146,14 +171,15 @@ public class RoleBean  implements Serializable{
   * @return role
   */
  	
- 	 public void edition(ActionEvent actionEvent) {
+ 	 public void update(ActionEvent actionEvent) {
     	 FacesContext context = FacesContext.getCurrentInstance();
     	
     	 try{
     		
     		 	roleService.update(role);
+    		 	roleGroupService.saveGroup2Role(this.role, selectedGroups);
 		    	init();//mise ï¿½ jour de la liste
-		    	 mouchardRessourceService.tracage("Modification du rôle "+role.getRoleName(), "modification",role.getDateUseToSortData(), "Role");
+		    	 mouchardRessourceService.tracage("Modification du rï¿½le "+role.getRoleName(), "modification",role.getDateUseToSortData(), "Role");
 					
 		    	role = new Role();
 		    	FacesMessage message = Messages.getMessage("messages", "global.gestion.modifier", null);
@@ -162,13 +188,14 @@ public class RoleBean  implements Serializable{
  	    //	}
 			  
     	 }catch(Exception e){
-    		 mouchardRessourceService.tracage("Echec modification du rôle"+role.getRoleName(), "modification",role.getDateUseToSortData(), "Role");
+    		 mouchardRessourceService.tracage("Echec modification du rï¿½le"+role.getRoleName(), "modification",role.getDateUseToSortData(), "Role");
  			
     		 FacesMessage message = Messages.getMessage("messages", "global.gestion.echec", null);
 		    	message.setSeverity(FacesMessage.SEVERITY_WARN);
 		        context.addMessage(null, message);
      	 }finally{
      		role = new Role();
+     		selectedGroups.clear();
      	 }
     }
  	 
@@ -183,38 +210,31 @@ public class RoleBean  implements Serializable{
     	 FacesContext context = FacesContext.getCurrentInstance();
     	 RequestContext requestContext = RequestContext.getCurrentInstance();
        try{
-    	   
-    	   //Cas selectiond
-    	  
-    	 /*  if(selectedRole.length>0)
-	    	   for(int i=0;i<selectedRole.length;i++){				    		
-		    	//	roleService.deleteVersusDesabled(selectedRole[i], IConstance.FIELD_DELETE);
-	    		   roleService.deleteVersusDesabled(selectedRole[i]);
-	    		   role=selectedRole[i];
-	    		   mouchardRessourceService.tracage("Suppression du rÃ´le"+role.getRoleName()+"("+role.getIdentifier()+")", "suppression",role.getDateUseToSortData(), "Role");
-	    			
-		    		
-		    	}
-    	   else{*/
-    	 
-    	  // if(role!=null)		    	
-    		  // roleService.deleteVersusDesabled(role, IConstance.FIELD_DELETE);
+    	   if((roleUserService.getCountRoleUser(role.getIdentifier())>0)){
+			   mouchardRessourceService.tracage(" Erreur de suppression du rï¿½le ("+role.getRoleName()+") ", "suppression",role.getDateUseToSortData(), "Role");
+			    	
+			   FacesMessage message = Messages.getMessage("messages", "role.echec.delete", null);
+		    	message.setSeverity(FacesMessage.SEVERITY_WARN);
+		        context.addMessage(null, message);
+	   	}else{
     		   roleService.deleteVersusDesabled(role);
-    	   		mouchardRessourceService.tracage("Suppression du rôle"+role.getRoleName()+"("+role.getIdentifier()+")", "suppression",role.getDateUseToSortData(), "Role");
-			
-    	  // }
-    	   
-    	   
-		    	init();//mise Ã  jour de la liste
+    	   		mouchardRessourceService.tracage("Suppression du rï¿½le"+role.getRoleName()+"("+role.getIdentifier()+")", "suppression",role.getDateUseToSortData(), "Role");
+	   
+    	   		init();//mise Ã  jour de la liste
 		    	
 		    	 FacesMessage message = Messages.getMessage("messages", "global.gestion.delete", null);
 			    	message.setSeverity(FacesMessage.SEVERITY_INFO);
 			        context.addMessage(null, message);				    	
-		        requestContext.execute("PF('deleteDialog').hide()");	    	  
+		        requestContext.execute("PF('deleteDialog').hide()");	   
+	   	}
+    	  
+    	   
+    	   
+		    	 	  
     	   
        }catch(Exception e){
   		 e.printStackTrace();
-  		mouchardRessourceService.tracage("Echec de suppression du rôle"+role.getRoleName()+"("+role.getIdentifier()+")", "suppression",role.getDateUseToSortData(), "Role");
+  		mouchardRessourceService.tracage("Echec de suppression du rï¿½le"+role.getRoleName()+"("+role.getIdentifier()+")", "suppression",role.getDateUseToSortData(), "Role");
 		
   		 FacesMessage message = Messages.getMessage("messages", "global.gestion.echec", null);
 	    	message.setSeverity(FacesMessage.SEVERITY_WARN);
@@ -229,8 +249,8 @@ public class RoleBean  implements Serializable{
  	public void AddGroup2RoleEvent(Role role) { 		
  	    this.role = role;
  	    this.groupsList=groupService.listVersusEnabled(IConstance.FIELD_DELETE, new String[]{});
- 	   this.groupListDataModel= new GroupDataModel(this.groupsList);
- 	   this.selectedGroups=groupService.listOfGroup4Role(this.role);
+ 	    this.groupListDataModel= new GroupDataModel(this.groupsList);
+ 	    this.selectedGroups=groupService.listOfGroup4Role(this.role);
  	 
         
      }
@@ -328,7 +348,7 @@ public class RoleBean  implements Serializable{
  			 role.setIdentifier(role_edit.getIdentifier());*/
  		 role.setRoleName(valeur);
  		 if(roleService.userExiste(role)){
- 			 mouchardRessourceService.tracage("Tentative d'ajout du rôle (nom existant) "+role.getRoleName(), "ajout",role.getDateUseToSortData(), "Role");
+ 			 mouchardRessourceService.tracage("Tentative d'ajout du rï¿½le (nom existant) "+role.getRoleName(), "ajout",role.getDateUseToSortData(), "Role");
  			//role.setRoleName(nomRole);    			
  			FacesMessage message = Messages.getMessage("messages", "role.nom.existe", null);
  	    	message.setSeverity(FacesMessage.SEVERITY_ERROR);
@@ -457,6 +477,16 @@ public class RoleBean  implements Serializable{
 	public void setMouchardRessourceService(
 			IMouchardRessourceService mouchardRessourceService) {
 		this.mouchardRessourceService = mouchardRessourceService;
+	}
+
+
+	public IRoleUserService getRoleUserService() {
+		return roleUserService;
+	}
+
+
+	public void setRoleUserService(IRoleUserService roleUserService) {
+		this.roleUserService = roleUserService;
 	}
 	
 	

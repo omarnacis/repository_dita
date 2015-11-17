@@ -10,7 +10,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
@@ -21,28 +20,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 //import javax.swing.JOptionPane;
 
-
-
-import javax.swing.JOptionPane;
-
 import org.apache.log4j.Logger;
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.NodeExpandEvent;
-import org.primefaces.event.SelectEvent;
-import org.primefaces.event.ToggleEvent;
-import org.primefaces.model.DefaultTreeNode;
-import org.primefaces.model.TreeNode;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import cm.dita.service.domaine.inter.IEspaceCourrierRessourceService;
 import cm.dita.service.domaine.inter.IEspaceRessourceService;
 import cm.dita.service.domaine.inter.IMouchardRessourceService;
+import cm.dita.service.domaine.inter.IStatutsRessourceService;
+import cm.dita.service.domaine.inter.ITypescourriersRessourceService;
 import cm.dita.service.domaine.inter.user.IUserService;
 import cm.dita.utils.Messages;
-
 import cm.dita.constant.IConstance;
 import cm.dita.constant.ISessionConstant;
-import cm.dita.controller.managed.bean.user.LoginBean;
 import cm.dita.entities.Espace;
 import cm.dita.entities.user.User;
 
@@ -59,8 +50,6 @@ public class EspaceBean implements Serializable{
 	
 	private static final Logger LOG = Logger.getLogger(EspaceBean.class);
 	
-	    // LoginBean loginBean;
-	
 		//Spring Espace Service is injected...
 		@ManagedProperty(value="#{espaceRessourceService}")
 		IEspaceRessourceService espaceRessourceService;
@@ -68,19 +57,17 @@ public class EspaceBean implements Serializable{
 		@ManagedProperty(value="#{userService}")
 		IUserService userService;
 		
+		@ManagedProperty(value="#{espaceCourrierRessourceService}")
+		private IEspaceCourrierRessourceService espaceCourrierRessourceService;
 		
 		@ManagedProperty(value="#{mouchardRessourceService}")
 		private IMouchardRessourceService mouchardRessourceService;
 		
 		private List<Espace> espaceList = new ArrayList<Espace>();
 		private Espace espace;
-		private Espace espaceParent;
 		private List<Espace> filteredEspace=new ArrayList<Espace>();
 		private EspaceDataModel espaceListDataModel;		
 		private Espace[]  selectedEspace;
-		
-		private TreeNode root;
-		private String val;
 		//private User 
 		
 		/**
@@ -93,48 +80,19 @@ public class EspaceBean implements Serializable{
 		    public void init(){
 			this.espaceList=espaceRessourceService.listVersusEnabled(IConstance.FIELD_DELETE, new String[]{});			
 			 this.espaceListDataModel= new EspaceDataModel(espaceList);	
-			 
-			 espaceParent=new Espace();
-			 espace=new Espace();
+			// mouchardRessourceService.tracage("Liste des espaces", "listing",null, "Espace");
+		       
 			
 		    }
 		
-		public void onNodeExpand(NodeExpandEvent event) {  
-	         DefaultTreeNode parent = (DefaultTreeNode) event.getTreeNode();	         
-	         parent.getChildren().clear();
-	         List<Espace> liste=espaceRessourceService.getMyEspace(((Espace) event.getTreeNode().getData()));	         
-	         for(Espace espace:liste){	
-	        	 TreeNode node = new DefaultTreeNode(espace, parent); 
-		    		if(espaceRessourceService.getMyEspace(espace).size()>0)
-		    			new DefaultTreeNode(new Espace(), node);
-		    	}	        
-	    }
-
-	   
-	    
-	    public void onRowToggle(ToggleEvent event) {
-	    		TreeNode root = new DefaultTreeNode(((Espace)event.getData()), null);  
-	    	for(Espace espace: espaceRessourceService.getMyEspace(((Espace)event.getData()))){
-	    		TreeNode node = new DefaultTreeNode(espace, root); 
-	    		if(espaceRessourceService.getMyEspace(espace).size()>0)
-	    			new DefaultTreeNode(new Espace(), node);
-	    	}
-		   	((Espace)event.getData()).setRoot(root); 	
+		//POUR LE POLL DE  MISE A JOUR
 			
-		}
-	    
-	    public void onRowSelect(SelectEvent event) {
-	        //FacesMessage msg = new FacesMessage("Car Selected", ((Car) event.getObject()).getId());
-	        //FacesContext.getCurrentInstance().addMessage(null, msg);
-	    	//JOptionPane.showMessageDialog(null, ((Espace) event.getObject()).getId());
-	    }
-		
+		 	public void updateByPoll(ActionEvent actionEvent){ 		
+		 		init();//mise � jour de la liste	 		
+		 	}
 		//CLICK SUR LES BUTTONS ajout et EDIT
-		 	public void ajoutEvent(ActionEvent actionEvent) {	
-		 		this.espaceList=espaceRessourceService.listVersusEnabled(IConstance.FIELD_DELETE, new String[]{});	
-		    	espace = new Espace();
-		    	espace.setUsed(false);
-		    	espaceParent=new Espace();///espaceParent.setId(0);
+		 	public void ajoutEvent(ActionEvent actionEvent) {		 		
+		    	espace = new Espace();			    	
 		    	SimpleDateFormat sdf = new SimpleDateFormat(IConstance.PARAMETER_DATE_FORMAT_2);    	
 		    	espace.setDateCreation(sdf.format(new Date()));
 		    	
@@ -147,22 +105,16 @@ public class EspaceBean implements Serializable{
 		 	 */
 		 	
 		 	public void editEvent(Espace espace) {
-		 		this.espaceList=espaceRessourceService.listVersusEnabled(IConstance.FIELD_DELETE, new String[]{});	
+		 		
 		 	    this.espace = new Espace(espaceRessourceService.load(espace.getId()));
-		 	   espaceParent=new Espace();
-		 	   if(this.espace.getEspace()!=null)
-		 		  
-		 		   espaceParent.setId(this.espace.getEspace().getId());
-		 	   else
-		 		   espaceParent.setId(0);;
 		 	    
 		     }
 		 	
 		 	public void detailsEvent(Espace espace) {
 		 		
 		 	    this.espace = espaceRessourceService.load(espace.getId());
-		 	   mouchardRessourceService.tracage("Visualisation de la fonction ("+espace.getNomespace()+") ", "visualisation",espace.getDateUseToSortData(), "Espace");
-			  
+		 	   mouchardRessourceService.tracage("Visualisation de l'espace ("+espace.getNomespace()+") ", "visualisation",espace.getDateUseToSortData(), "Espace");
+			    
 		        
 		     }
 	/**
@@ -175,32 +127,8 @@ public class EspaceBean implements Serializable{
 		    	 FacesContext context = FacesContext.getCurrentInstance();
 		    	try{	
 		    		
-		    		//espaceParent=espaceRessourceService.load(espaceParent.getId());
-		    		/*if(espaceParent!=null)
-		    			espace.setHierachie(espaceParent.getHierachie()+"*"+espaceParent.getId());*/
-		    		//JOptionPane.showMessageDialog(null, espaceParent);
-		    		if(espaceParent.getId()!=0){
-		    			espaceParent=espaceRessourceService.load(espaceParent.getId());
-		    			espaceRessourceService.updateHierachie(espaceParent.getHierachie()+"*"+espaceParent.getId(),espace);
-		    			espace.setHierachie(espaceParent.getHierachie()+"*"+espaceParent.getId());
-		    			espace.setEspace(espaceParent);
-		    		}else{
-		    			espace.setHierachie("0");
-		    			espace.setEspace(null);
-		    		}
-		    			/*if(espaceParent.getHierachie()!=null)
-		    				espace.setHierachie(espaceParent.getHierachie()+"*"+espaceParent.getId());
-		    			else*/
-		    			//JOptionPane.showMessageDialog(null, espace.getDateCreation());
-		    			
 			    		espaceRessourceService.save(espace);	
 				        init();//mise � jour de la liste	 	       
-				        /*loginBean.setListeEspace(OperRolesSpringSecurity.lesEspacesFonctionDuRole(loginBean.getLibelleRoleAdmin()));
-				        String lesEspaces = "";
-				        for(Espace e :loginBean.getListeEspace()){
-				        	lesEspaces += e.getNomespace()+"\n"; 
-				        }
-				        JOptionPane.showMessageDialog(null, "******************les espaces******************\n"+lesEspaces);*/
 				        
 				        mouchardRessourceService.tracage("Ajout de l'espace ("+espace.getNomespace()+") ", "ajout",espace.getDateUseToSortData(), "Espace");
 				        
@@ -216,7 +144,6 @@ public class EspaceBean implements Serializable{
 				        context.addMessage(null, message);
 		    	 }		    	  
 			        espace = new Espace();
-			        espaceParent=new Espace();
 			     
 		    }
 		 	
@@ -231,47 +158,25 @@ public class EspaceBean implements Serializable{
 		    	 FacesContext context = FacesContext.getCurrentInstance();
 		    	
 		    	 try{
-		    		
-				    		if(espaceParent.getId()==0){
-				    			espaceParent.setHierachie("0");
-				    			espaceParent=null;
-				    		//JOptionPane.showMessageDialog(null, "Construction0");
-				    		}
-				    		else
-				    		{
-				    			espaceParent=espaceRessourceService.load(espaceParent.getId());
-				    			//JOptionPane.showMessageDialog(null, espaceParent);	
-				    		}
-				    		if(espaceParent!=null){
-				    			//if()
-				    			JOptionPane.showMessageDialog(null, espaceParent);
-				    			espaceRessourceService.updateHierachie(espaceParent.getHierachie()+"*"+espaceParent.getId(),espace);
-				    			JOptionPane.showMessageDialog(null, espaceParent);
-				    			espace.setHierachie(espaceParent.getHierachie()+"*"+espaceParent.getId());
-				    			JOptionPane.showMessageDialog(null, "Construction2");
-				    			if(espaceParent.getId()==0)
-				    				espace.setEspace(null);
-				    			else
-				    				espace.setEspace(espaceParent);
-				    		}else{
-				    			JOptionPane.showMessageDialog(null, "Construction3");
-				    			espace.setHierachie("0");
-				    			espace.setEspace(null);
-				    		}
-				    		
+		    		 if(espaceRessourceService.userExiste(espace)){
+				    		mouchardRessourceService.tracage("Tentative de modfication de l'espace (nom existant) "+espace.getNomespace(), "modification",espace.getDateUseToSortData(), "Espace");
+							
+				    		FacesMessage message = Messages.getMessage("messages", "espace.nom.existe", null);
+					    	message.setSeverity(FacesMessage.SEVERITY_ERROR);
+					        context.addMessage(null, message);
+				    	}else{
 			    		 	espaceRessourceService.update(espace);
 					    	init();//mise � jour de la liste
-					    	mouchardRessourceService.tracage("Modification de la fonction ("+espace.getNomespace()+") ", "modification",espace.getDateUseToSortData(), "Espace");
+					    	mouchardRessourceService.tracage("Modification de l'espace ("+espace.getNomespace()+") ", "modification",espace.getDateUseToSortData(), "Espace");
 						       
 					    	espace = new Espace();
-					    	 espaceParent=new Espace();
 					    	FacesMessage message = Messages.getMessage("messages", "global.gestion.modifier", null);
 					    	message.setSeverity(FacesMessage.SEVERITY_INFO);
 					        context.addMessage(null, message);
-				    	
+				    	}
 					  
 		    	 }catch(Exception e){
-		    		 mouchardRessourceService.tracage(" Echec modification de la fonction ("+espace.getNomespace()+") ", "modification",espace.getDateUseToSortData(), "Espace");
+		    		 mouchardRessourceService.tracage(" Echec modification de l'espace ("+espace.getNomespace()+") ", "modification",espace.getDateUseToSortData(), "Espace");
 					   
 		    		 FacesMessage message = Messages.getMessage("messages", "global.gestion.echec", null);
 				    	message.setSeverity(FacesMessage.SEVERITY_WARN);
@@ -307,9 +212,15 @@ public class EspaceBean implements Serializable{
 			    	   }
 		    	   }*/
 		    	       
-			    		  
+			    		   if((userService.getCountUserParEspace(espace.getId())>0)||(espaceCourrierRessourceService.getCountCourrierParEspace(espace.getId())>0) ){
+			    			   mouchardRessourceService.tracage(" Erreur de suppression de l'espace ("+espace.getNomespace()+") ", "suppression",espace.getDateUseToSortData(), "Espace");
+							    	
+			    			   FacesMessage message = Messages.getMessage("messages", "espace.echec.delete", null);
+						    	message.setSeverity(FacesMessage.SEVERITY_WARN);
+						        context.addMessage(null, message);
+			    	   	}else{
 			    	   		espaceRessourceService.deleteVersusDesabled(espace, IConstance.FIELD_DELETE);
-			    	   		mouchardRessourceService.tracage("Suppression de la fonction ("+espace.getNomespace()+") ", "suppression",espace.getDateUseToSortData(), "Espace");
+			    	   		mouchardRessourceService.tracage("Suppression de l'espace ("+espace.getNomespace()+") ", "suppression",espace.getDateUseToSortData(), "Espace");
 						    
 			    	   		selectedEspace=null;
 					    	   espace=null;
@@ -318,12 +229,14 @@ public class EspaceBean implements Serializable{
 							    	 FacesMessage message = Messages.getMessage("messages", "global.gestion.delete", null);
 								    	message.setSeverity(FacesMessage.SEVERITY_INFO);
 								        context.addMessage(null, message);				    	
-							         requestContext.execute("PF('deleteDialog').hide()");	
-			    	    
+							        requestContext.execute("deleteDialog.hide()");	
+			    	   
+			    	   	}
+		    	       	  
 		    	   
 		       }catch(Exception e){
 		  		 e.printStackTrace();
-		  		mouchardRessourceService.tracage("Echec de suppression de la fonction ("+espace.getNomespace()+") ", "suppression",espace.getDateUseToSortData(), "Espace");
+		  		mouchardRessourceService.tracage("Echec de suppression de l'espace ("+espace.getNomespace()+") ", "suppression",espace.getDateUseToSortData(), "Espace");
 			    
 		  		 	FacesMessage message = Messages.getMessage("messages", "global.gestion.echec", null);
 			    	message.setSeverity(FacesMessage.SEVERITY_WARN);
@@ -353,7 +266,7 @@ public class EspaceBean implements Serializable{
 		 	
 		 		 espace.setNomespace(valeur);
 		 		 if(espaceRessourceService.userExiste(espace)){
-		 			mouchardRessourceService.tracage("Tentative d'ajout de la fonction (nom existant) "+espace.getNomespace(), "ajout",espace.getDateUseToSortData(), "Espace");
+		 			mouchardRessourceService.tracage("Tentative d'ajout de l'espace (nom existant) "+espace.getNomespace(), "ajout",espace.getDateUseToSortData(), "Espace");
 					
 		    		FacesMessage message = Messages.getMessage("messages", "espace.nom.existe", null);
 			    	message.setSeverity(FacesMessage.SEVERITY_ERROR);
@@ -411,7 +324,14 @@ public class EspaceBean implements Serializable{
 			this.userService = userService;
 		}
 
-		
+		public IEspaceCourrierRessourceService getEspaceCourrierRessourceService() {
+			return espaceCourrierRessourceService;
+		}
+
+		public void setEspaceCourrierRessourceService(
+				IEspaceCourrierRessourceService espaceCourrierRessourceService) {
+			this.espaceCourrierRessourceService = espaceCourrierRessourceService;
+		}
 
 		public IMouchardRessourceService getMouchardRessourceService() {
 			return mouchardRessourceService;
@@ -421,32 +341,10 @@ public class EspaceBean implements Serializable{
 				IMouchardRessourceService mouchardRessourceService) {
 			this.mouchardRessourceService = mouchardRessourceService;
 		}
-
-		public Espace getEspaceParent() {
-			return espaceParent;
-		}
-
-		public void setEspaceParent(Espace espaceParent) {
-			this.espaceParent = espaceParent;
-		}
-
-		public TreeNode getRoot() {
-			return root;
-		}
-
-		public void setRoot(TreeNode root) {
-			this.root = root;
-		}
-
-		public String getVal() {
-			return val;
-		}
-
-		public void setVal(String val) {
-			this.val = val;
-		}
-
-
+		
+		
+		
+		
 		
 		
 }
