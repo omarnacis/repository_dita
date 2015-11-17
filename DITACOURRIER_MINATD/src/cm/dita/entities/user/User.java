@@ -11,6 +11,7 @@ package cm.dita.entities.user;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -36,6 +37,7 @@ import cm.dita.object.model.OMBase;
 import cm.dita.annotation.AsignedIdEntity;
 import cm.dita.entities.Courriers;
 import cm.dita.entities.Espace;
+import cm.dita.entities.EspaceReceptionTransf;
 import cm.dita.entities.Typespersonnel;
 
 import java.util.Collection;
@@ -92,6 +94,19 @@ public class User  extends OMBase{
     @Column(name = "password")
     private String password;
     
+    @Column(name="date_desabled")
+    private String date_desabled;
+    
+    
+    @Column(name="date_fin_validite")
+    private String date_fin_validite;
+    
+    @Column(name="date_derniere_session")
+    private String date_derniere_session;
+    
+    @Column(name="ip_derniere_session")
+    private String ip_derniere_session;
+    
     /**
      * The creation date of the user
      */
@@ -120,6 +135,9 @@ public class User  extends OMBase{
     
     @Embedded
     private InfosPersonne infosPersonne;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "transmission")
+    private List<EspaceReceptionTransf> listeEspaceReceptionTransf; 
     
     public User(){
     	
@@ -273,6 +291,97 @@ public class User  extends OMBase{
 	}
 	public void setInit_pass(boolean init_pass) {
 		Init_pass = init_pass;
+	}
+
+
+
+	/**
+	 * @return the date_desabled
+	 */
+	public String getDate_desabled() {
+		return date_desabled;
+	}
+
+
+
+	/**
+	 * @param date_desabled the date_desabled to set
+	 */
+	public void setDate_desabled(String date_desabled) {
+		this.date_desabled = date_desabled;
+	}
+
+
+
+	/**
+	 * @return the date_fin_validite
+	 */
+	public String getDate_fin_validite() {
+		return date_fin_validite;
+	}
+
+
+
+	/**
+	 * @param date_fin_validite the date_fin_validite to set
+	 */
+	public void setDate_fin_validite(String date_fin_validite) {
+		this.date_fin_validite = date_fin_validite;
+	}
+
+
+
+	/**
+	 * @return the date_derniere_session
+	 */
+	public String getDate_derniere_session() {
+		return date_derniere_session;
+	}
+
+
+
+	/**
+	 * @param date_derniere_session the date_derniere_session to set
+	 */
+	public void setDate_derniere_session(String date_derniere_session) {
+		this.date_derniere_session = date_derniere_session;
+	}
+
+
+
+	/**
+	 * @return the ip_derniere_session
+	 */
+	public String getIp_derniere_session() {
+		return ip_derniere_session;
+	}
+
+
+
+	/**
+	 * @param ip_derniere_session the ip_derniere_session to set
+	 */
+	public void setIp_derniere_session(String ip_derniere_session) {
+		this.ip_derniere_session = ip_derniere_session;
+	}
+
+
+
+	/**
+	 * @return the listeEspaceReceptionTransf
+	 */
+	public List<EspaceReceptionTransf> getListeEspaceReceptionTransf() {
+		return listeEspaceReceptionTransf;
+	}
+
+
+
+	/**
+	 * @param listeEspaceReceptionTransf the listeEspaceReceptionTransf to set
+	 */
+	public void setListeEspaceReceptionTransf(
+			List<EspaceReceptionTransf> listeEspaceReceptionTransf) {
+		this.listeEspaceReceptionTransf = listeEspaceReceptionTransf;
 	}
 	
 	
