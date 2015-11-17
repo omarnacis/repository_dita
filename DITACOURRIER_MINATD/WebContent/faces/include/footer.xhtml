@@ -18,13 +18,23 @@
 		            clearForm(formName);
 		            PF('addDialog').hide(); 
 		            PF('editDialog').hide();
-		            PF('profilDialog').hide();
-		            PF('passDialog').hide();
+		            PF('modifDialog').hide();
 		          //  initPassDialog.hide();
 		            
 		        }  
 		    }
-		    
+		    function handleSubmitRequestUser(xhr, status, args, dialogName, formName ,dialogWi) {
+	            dialog = jQuery('#'+dialogName);
+	        if(args.validationFailed) {  
+	            dialog.effect("shake", { times:3 }, 100);  
+	        } else {
+	            clearForm(formName);
+	            PF('addDialog').hide(); 
+	            PF('editDialog').hide();
+	             //  initPassDialog.hide();
+	            
+	        }  
+	    }
 		    function handleSubmitRequest_profil(xhr, status, args, dialogName, formName ,dialogWi) {
 	            dialog = jQuery('#'+dialogName);
 	        if(args.validationFailed) {  
@@ -57,6 +67,8 @@
 	        } else {
 	            clearForm(formName);
 	            PF('rejetDialog').hide(); 
+	            
+	            
 	            //editDialog.hide();
 	            
 	        }  
