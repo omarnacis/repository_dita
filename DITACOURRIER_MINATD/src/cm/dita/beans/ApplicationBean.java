@@ -55,7 +55,7 @@ public class ApplicationBean implements Serializable {
 	private boolean PRODUCT_OK;
 	public int PRODUCT_OK_2;
 	
-	
+	public String[] PERS_TITRE={"Mme.","Mlle.","M.","Dr","Me","Pr","Dir"};	
 	boolean is_text_logo;
 	
 	private List<Preferences> preferenceList = new ArrayList<Preferences>();
@@ -396,6 +396,15 @@ public class ApplicationBean implements Serializable {
 		PRODUCT_OK_2 = pRODUCT_OK_2;
 	}
 
+	public String[] getPERS_TITRE() {
+		return PERS_TITRE;
+	}
+
+	public void setPERS_TITRE(String[] pERS_TITRE) {
+		PERS_TITRE = pERS_TITRE;
+	}
+
+	
 	
   
 	
