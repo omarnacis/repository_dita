@@ -120,7 +120,7 @@ public class EspaceCourrierControllerBean implements Serializable {
 	private List<Typescourriers> listeTypescourriers = new ArrayList<Typescourriers>();
 	private Typescourriers[] selectedTypescourriers;
 	private Typescourriers typescourriersSelected;
-	private List<SelectItem> lesStatuts = new ArrayList<SelectItem>(Arrays.asList(new SelectItem("","Tous"),new SelectItem("Terminé","Terminé"),new SelectItem("Rejeté","Rejeté"),new SelectItem("En cours","En cours")));
+	private List<SelectItem> lesStatuts = new ArrayList<SelectItem>(Arrays.asList(new SelectItem("","Tous"),new SelectItem("Terminï¿½","Terminï¿½"),new SelectItem("Rejetï¿½","Rejetï¿½"),new SelectItem("En cours","En cours")));
 	private List<SelectItem> estrecu = new ArrayList<SelectItem>(Arrays.asList(new SelectItem("","Tous"),new SelectItem("true","OUI"),new SelectItem("false","NON")));
 	/*@ManagedProperty(value="#{mouchardAction}")
 	private MouchardAction mouchardAction;
@@ -187,7 +187,7 @@ public class EspaceCourrierControllerBean implements Serializable {
 			idEspacecourant=userconnected.getEspace().getId().toString();
 		 // liste les espaces courrier 'les transmissions de courriers"
 		    listeEspace=espaceRessourceService.listVersusEnabled(IConstance.FIELD_DELETE, new String[]{});
-		 // Liste les courriers qui ont été traités dans l'espace
+		 // Liste les courriers qui ont ï¿½tï¿½ traitï¿½s dans l'espace
             listecourrierstraite=espaceCourrierRessourceService.listCourrierParEspacetraite(userconnected.getEspace().getId());
 		    listecourriers=espaceCourrierRessourceService.listCourrierParEspacefiltre(Integer.parseInt(idEspacecourant), userconnected.getId());
 		  
@@ -224,22 +224,22 @@ public class EspaceCourrierControllerBean implements Serializable {
 				 else
 					 if(cour.getTypecourrier().getId() == 2){//courrier interne
 						 
-						 nomPrenomExpediteur = cour.getUsersender().getInfosPersonne().getNom().concat(" ")+cour.getUsersender().getInfosPersonne().getPrenom();
-						 adresseExpediteur = cour.getUsersender().getInfosPersonne().getMailAddress();
+						 nomPrenomExpediteur = cour.getUsersender().getInfosPersonne().getPersnom().concat(" ")+cour.getUsersender().getInfosPersonne().getPersprenom();
+						 adresseExpediteur = cour.getUsersender().getInfosPersonne().getPersemail();
 						 
 						 					 
 					 }
 					 else
 						 if(cour.getTypecourrier().getId() == 3){//courrier sortant
 							 
-							 nomPrenomExpediteur = cour.getUsersender().getInfosPersonne().getNom().concat(" ")+cour.getUsersender().getInfosPersonne().getPrenom();
-							 adresseExpediteur = cour.getUsersender().getInfosPersonne().getMailAddress();
+							 nomPrenomExpediteur = cour.getUsersender().getInfosPersonne().getPersnom().concat(" ")+cour.getUsersender().getInfosPersonne().getPersprenom();
+							 adresseExpediteur = cour.getUsersender().getInfosPersonne().getPersemail();
 							 
 							
 						 }
 			        
 				 
-                    if(nomPrenomExpediteur.length()>0 && adresseExpediteur.length()>0){//l'expediteur est renseigné
+                    if(nomPrenomExpediteur.length()>0 && adresseExpediteur.length()>0){//l'expediteur est renseignï¿½
                     	
                     	alarme1.setEmail(adresseExpediteur);
                     	alarme1.setAlarmdate(new java.util.Date());
@@ -251,8 +251,8 @@ public class EspaceCourrierControllerBean implements Serializable {
                     	alarme1.setUser_recv(cour.getUserreceiver().getId());
                     	//OMAR     alarme1.setUser_sender(cour.getUsersender().getId());
                     	alarme1.setUser_id(cour.getUsercreate().getId());
-                    	alarme1.setObjet("Rejet du courrier de référence"+" "+cour.getRefid());
-                    	alarme1.setCorps(applicationScopeBean.getCORPS_MAIL()+"<br> <br> Référence du courrier :"+cour.getRefid()+"a été rejeté pour les raisons suivantes"
+                    	alarme1.setObjet("Rejet du courrier de rï¿½fï¿½rence"+" "+cour.getRefid());
+                    	alarme1.setCorps(applicationScopeBean.getCORPS_MAIL()+"<br> <br> Rï¿½fï¿½rence du courrier :"+cour.getRefid()+"a ï¿½tï¿½ rejetï¿½ pour les raisons suivantes"
                     	+cour.getCourobservation()+"<br><br> "+applicationScopeBean.getNOM_ENTREPRISE()+"<br><br>"+applicationScopeBean.getADRESSE()+"<br> "+applicationScopeBean.getTELEPHONE());
                     	alarmesRessourceService.save(alarme1);
     			           			        
@@ -336,10 +336,10 @@ public class EspaceCourrierControllerBean implements Serializable {
 		 
 			 	}
 			   	 this.init();
-			 	context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"","Courrier(s) rejeté(s)"));
+			 	context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"","Courrier(s) rejetï¿½(s)"));
 			   	mouchardRessourceService.tracage("Rejeter au moins un courrier", userconnected);
 			} else{
-				 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"","Impossible de supprimer. Soit vous n'avez sélectionné aucun courrier, soit un ou plusieurs courrier(s) non recu ont été sélectionnés"));
+				 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"","Impossible de supprimer. Soit vous n'avez sï¿½lectionnï¿½ aucun courrier, soit un ou plusieurs courrier(s) non recu ont ï¿½tï¿½ sï¿½lectionnï¿½s"));
 				 mouchardRessourceService.tracage("Rejet sans selection de courriers", userconnected); 
 			}
 			   
@@ -359,7 +359,7 @@ public class EspaceCourrierControllerBean implements Serializable {
 		}
 	}
 	
-	//permet de créer un bordereau
+	//permet de crï¿½er un bordereau
 	public void create() {
     	FacesContext context = FacesContext.getCurrentInstance();
     	try {
@@ -559,7 +559,7 @@ public void viewConf(Long value){
 						 		
 			 		mouchardRessourceService.tracage("Transferer ou plusieurs courriers", userconnected);
 			 		initialisation.init();
-			 		context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"","Le transfert a été bien éffectué"));
+			 		context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"","Le transfert a ï¿½tï¿½ bien ï¿½ffectuï¿½"));
 	    	 		
 			 } else {
 				 if (listecourriersfilter.isEmpty())
@@ -569,7 +569,7 @@ public void viewConf(Long value){
 				 else if(idEspaceTransfert=="")
 					 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"","Une erreur est survenue lors du transfert du courrier. Vous devez choisir un espace pour effectuer le transfert"));
 				 else if(Integer.parseInt(userLoad)==userconnected.getId())
-					 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"","Une erreur est survenue lors du transfert du courrier. Vous êtes entrain de vous retransférer le même courrier"));
+					 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"","Une erreur est survenue lors du transfert du courrier. Vous ï¿½tes entrain de vous retransfï¿½rer le mï¿½me courrier"));
 			 }
 			 
 		 }catch(Exception e){
@@ -605,7 +605,7 @@ public void viewConf(Long value){
 	
 	
 	public void onRowSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage("Un courrier selectionné", ((EspaceCourrier) event.getObject()).getId().toString());
+        FacesMessage msg = new FacesMessage("Un courrier selectionnï¿½", ((EspaceCourrier) event.getObject()).getId().toString());
         FacesContext.getCurrentInstance().addMessage(null, msg);
         espacecourrier=(EspaceCourrier)event.getObject();
         
@@ -615,7 +615,7 @@ public void viewConf(Long value){
        // JOptionPane.showMessageDialog(null, ""+espacecourrier.getCourrier().getRefid()+"");
     }
 	 
-	//Permet de changer le statut de reception d'un courrier récemment envoyé
+	//Permet de changer le statut de reception d'un courrier rï¿½cemment envoyï¿½
 	public void changeReceptionStatut(){
 		
 		//JOptionPane.showMessageDialog(null,espacecourrier.isRecu());
@@ -640,7 +640,7 @@ public void viewConf(Long value){
 			
 		}	
         
-        //défini la date de receptio du courrier
+        //dï¿½fini la date de receptio du courrier
         espaceCourrierP.setRecepationDate(sdf.format(new Date()));
         espacecourriercourant.setRecu(true);
         

@@ -321,7 +321,7 @@ public class BordereauControllerBean   implements Serializable{
 		//Omar ajout pour test jasper
 		TestJqspertRepport t = new TestJqspertRepport();
 		List<Courriers> listecour = new ArrayList<Courriers>();
-		for(EspaceCourrier epc : bordereau.getEspaceCourrierCollection()){
+		for(EspaceCourrier epc : espaceCourrierRessourceService.findByBordereauId(bordereau.getId())){
 			listecour.add(epc.getCourrier());
 			//System.out.println("les references "+epc.getCourrier().getRefid()+"   et l'objet est : "+epc.getCourrier().getCourobjet());
 		}
@@ -374,7 +374,7 @@ public class BordereauControllerBean   implements Serializable{
        
         pdf.setPageSize(PageSize.A4);
         
-        pdf.addAuthor(utilisateurCourant.getInfosPersonne().getNom()+" "+utilisateurCourant.getInfosPersonne().getPrenom());	          	
+        pdf.addAuthor(utilisateurCourant.getInfosPersonne().getPersnom()+" "+utilisateurCourant.getInfosPersonne().getPersprenom());	          	
                   	
         pdf.addCreationDate();
         pdf.addTitle("un titre");
@@ -419,7 +419,7 @@ public class BordereauControllerBean   implements Serializable{
 		}  
         
 		
-		pdf.add(new Paragraph(utilisateurCourant.getInfosPersonne().getNom()+" "+utilisateurCourant.getInfosPersonne().getPrenom(), FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD, new Color(0, 0, 0))));
+		pdf.add(new Paragraph(utilisateurCourant.getInfosPersonne().getPersnom()+" "+utilisateurCourant.getInfosPersonne().getPersprenom(), FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD, new Color(0, 0, 0))));
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
         
        
