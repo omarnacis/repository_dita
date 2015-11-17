@@ -93,13 +93,10 @@
                   	<h:outputText value="#{mouchard.mouchardDate}" />
                 </p:column>
                 
-           <sec:ifAnyGranted  roles="ROLE_ADMIN"> 
-           		<p:column headerText="Actions" > 
-	                <p:commandButton  actionListener="#{mouchardControllerBean.editEvent(mouchard.mouchardId)}" oncomplete="PF('deleteDialog').show()"  icon="ui-icon-trash" styleClass="btn-danger" title="#{msg['global.supprimer']}" />
-	            </p:column>              	 		
-	   	   </sec:ifAnyGranted>
-                 
-               
+                <!-- <p:column headerText="Actions" >
+                
+                 <p:commandButton style="color:#fff;" update=":viewform:viewCourrier" icon="ui-icon-info" styleClass="btn-info"  oncomplete="PF('viewDialog').show();" title="Modifier le courrier" actionListener="#{espaceCourrierControllerBean.viewEvent(courrier.id)}" />
+                </p:column>  -->
                 		<!-- background:#3c8dbc;color:#fff; -->
                 </p:dataTable>
                 
@@ -154,19 +151,6 @@
 						 </h:panelGrid>
 			  </h:form> 
 			  </sec:ifAnyGranted> 
-			  
-     <!-- DIALOG DE CONFIRMATION DE LA SUPPRESSION -->
-          
-          <h:form id="deleteFrom">
-        	 <p:confirmDialog  header="#{msg['global.supprimer']}"
-			message="#{msg['global.supprimer.label']}" severity="alert"  widgetVar="deleteDialog">			
-			<p:commandButton value="#{msg['button.oui']}" update=":formList,:growl"   actionListener="#{mouchardControllerBean.delete(actionEvent)}" 
-			 oncomplete="PF('deleteDialog').hide();"/>			
-			<p:commandButton value="#{msg['button.non']}" onclick="deleteDialog.hide();" type="button" /> 
-			</p:confirmDialog> 
-        
-        </h:form>
-			  
                 </div><!-- /.box-body -->
               
               </div><!-- /.box -->

@@ -63,13 +63,7 @@
          -->  
             <br/>  
           <h:messages showDetail="false" style="color: red;" id="msgErreur"  />
-          
-          <c:if test="#{param.error}">
-          	          <h:outputText value="#{msg['user.connexion.inconu']}" rendered="#{sessionControlControllerBean.user.enabled and sessionControlControllerBean.notAccountExpired and sessionControlControllerBean.dSesionCourante_plusResenteQue_dDerniereSesion}" style="color: red;"/>
-          			  <h:outputText value="#{msg['user.connexion.etat']}" rendered="#{!sessionControlControllerBean.user.enabled and sessionControlControllerBean.notAccountExpired and sessionControlControllerBean.dSesionCourante_plusResenteQue_dDerniereSesion}" style="color: red;"/>          	
-          			  <h:outputText value="#{msg['user.connexion.expire']}" rendered="#{!sessionControlControllerBean.user.enabled and !sessionControlControllerBean.notAccountExpired and sessionControlControllerBean.dSesionCourante_plusResenteQue_dDerniereSesion}" style="color: red;"/>
-          			  <h:outputText value="#{msg['user.connexion.danger']}" rendered="#{sessionControlControllerBean.user.enabled and sessionControlControllerBean.notAccountExpired and !sessionControlControllerBean.dSesionCourante_plusResenteQue_dDerniereSesion}" style="color: red;"/>
-          </c:if>
+          <h:outputText value="#{msg['user.connexion.inconu']}" rendered="#{param.error}" style="color: red;"/>
          
         </h:form>
       </div>
