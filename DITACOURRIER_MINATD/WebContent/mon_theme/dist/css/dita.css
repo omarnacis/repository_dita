@@ -24,6 +24,21 @@ color: #333;
 .old{
 	background: #8adb9e!important ;
 }
+.Projet{
+	background: green !important;
+}
+
+.Composant{
+	background: #ff7d7d!important; 
+}
+
+.Volet{
+	background: #f8ff97!important;
+}
+
+.Tache{
+	background: #0080ff!important; 
+}
 .modal_courrier .ui-dialog .ui-dialog-content{
 	background: none;
 	background-color: #fff;
