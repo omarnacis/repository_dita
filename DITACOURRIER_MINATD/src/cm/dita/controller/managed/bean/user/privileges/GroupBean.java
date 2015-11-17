@@ -4,9 +4,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -25,13 +23,13 @@ import org.primefaces.context.RequestContext;
 import cm.dita.constant.IConstance;
 import cm.dita.entities.user.AccessRessource;
 import cm.dita.entities.user.Group;
-import cm.dita.entities.user.GroupAccessRessource;
+import cm.dita.entities.user.Group;
 import cm.dita.entities.user.Role;
 import cm.dita.service.domaine.inter.IMouchardRessourceService;
 import cm.dita.service.domaine.inter.user.IAccessRessourceService;
 import cm.dita.service.domaine.inter.user.IGroupAccessRessourceService;
 import cm.dita.service.domaine.inter.user.IGroupService;
-import cm.dita.service.domaine.inter.user.IRoleGroupService;
+import cm.dita.service.domaine.inter.user.IGroupService;
 import cm.dita.utils.Messages;
 
 @ManagedBean(name = "groupBean")
@@ -52,9 +50,6 @@ public class GroupBean implements Serializable{
 	@ManagedProperty(value="#{groupAccessRessourceService}")
 	IGroupAccessRessourceService groupAccessRessourceService;
 	
-	@ManagedProperty(value="#{roleGroupService}")
-	IRoleGroupService roleGroupService;
-	
 	@ManagedProperty(value="#{accessRessourceService}")
 	IAccessRessourceService accessRessourceService;
 	
@@ -71,7 +66,6 @@ public class GroupBean implements Serializable{
 	private List<AccessRessource>  selectedRessources;
 	private List<AccessRessource> ressourcesList;
 	private RessourcesDataModel ressourcesListDataModel;
-	private List<AccessRessource> listRessoureBlocs;
 	
 	
 	
@@ -97,12 +91,6 @@ public class GroupBean implements Serializable{
     	SimpleDateFormat sdf = new SimpleDateFormat(IConstance.PARAMETER_DATE_FORMAT_2);    	
     	group.setDateCreation(sdf.format(new Date()));
     	
-    	this.listRessoureBlocs= accessRessourceService.listBlocAccess();
- 	    for(int i=0;i<listRessoureBlocs.size();i++){
- 	    	listRessoureBlocs.get(i).setListRessourceDuBloc(accessRessourceService.listAccessDuBloc(listRessoureBlocs.get(i).getCode_bloc()));
- 	    	//listRessoureBlocs.get(i).getSelectRessourceDuBloc().clear();
- 	    }
-    	
     }
  	
  	/**
@@ -112,35 +100,8 @@ public class GroupBean implements Serializable{
  	 */
  	
  	public void editEvent(Group group) { 	
+ 	
  	    this.group=new Group(groupService.load(group.getIdGroup()));
- 	 //this.selectedRessources=accessRessourceService.listOfAccess4Group(this.group); 	
- 	 //this.ressourcesListDataModel= new RessourcesDataModel(this.selectedRessources);
- 	   this.listRessoureBlocs= accessRessourceService.listBlocAccess();
-	    for(int i=0;i<listRessoureBlocs.size();i++){
-	    	listRessoureBlocs.get(i).setListRessourceDuBloc(accessRessourceService.listAccessDuBloc(listRessoureBlocs.get(i).getCode_bloc()));
-	    	listRessoureBlocs.get(i).setSelectRessourceDuBloc(accessRessourceService.listAccessDuBlocSelect(this.group.getIdGroup(), listRessoureBlocs.get(i).getCode_bloc(),1));
-	    	
-	    }  
-        
-     }
- 	
- 	
- 	public void viewEvent(Group group) { 	
- 	    this.group=new Group(groupService.load(group.getIdGroup()));
- 	 //this.selectedRessources=accessRessourceService.listOfAccess4Group(this.group); 	
- 	 //this.ressourcesListDataModel= new RessourcesDataModel(this.selectedRessources);
- 	   this.listRessoureBlocs= accessRessourceService.listBlocAccess();
-	    for(int i=0;i<listRessoureBlocs.size();i++){
-	    	listRessoureBlocs.get(i).setListRessourceDuBloc(accessRessourceService.listAccessDuBloc(listRessoureBlocs.get(i).getCode_bloc()));
-	    	listRessoureBlocs.get(i).setSelectRessourceDuBloc(accessRessourceService.listAccessDuBlocSelect(this.group.getIdGroup(), listRessoureBlocs.get(i).getCode_bloc(),2));
-	    	
-	    }  
-        
-     }
- 	
- 	public void deleteEvent(Group group) { 	
- 	 	
- 	    this.group=group;
  	 this.selectedRessources=accessRessourceService.listOfAccess4Group(this.group); 	
  	 this.ressourcesListDataModel= new RessourcesDataModel(this.selectedRessources);
         
@@ -153,14 +114,12 @@ public class GroupBean implements Serializable{
  	
  	public void create(ActionEvent actionEvent) {
     	 FacesContext context = FacesContext.getCurrentInstance();
-    	try{	     	   
-    		int code=(int) groupService.saveReturnID(group);
-    		group.setIdGroup(code);  
-    		groupAccessRessourceService.createGroupAndAccess(this.group,this.listRessoureBlocs);   		
-	     	 mouchardRessourceService.mouchard("Ajout du groupe :"+this.group.getIdGroup(), "ajout",this.group.getDateUseToSortData(), "Groupe",this.group.getIdGroup(),this.group.toString());
-				
+    	try{
+    		
+	    		groupService.save(group);	
 		        init();//mise � jour de la liste			    	
-		        
+		        mouchardRessourceService.tracage("Ajout du groupe "+group.getGroupName(), "ajout",group.getDateUseToSortData(), "Groupe");
+				
 		        FacesMessage message = Messages.getMessage("messages", "global.gestion.reussi", null);
 		    	message.setSeverity(FacesMessage.SEVERITY_INFO);
 		        context.addMessage(null, message);
@@ -168,7 +127,7 @@ public class GroupBean implements Serializable{
     	
     	 }catch(Exception e){
     		 e.printStackTrace();
-    		 mouchardRessourceService.mouchard("Echec ajout du groupe :"+this.group.getIdGroup(), "ajout",this.group.getDateUseToSortData(), "Groupe",this.group.getIdGroup(),this.group.toString());
+    		 mouchardRessourceService.tracage("Echec d'ajout du groupe "+group.getGroupName(), "ajout",group.getDateUseToSortData(), "Groupe");
  			
     		 FacesMessage message = Messages.getMessage("messages", "global.gestion.echec", null);
 		    	message.setSeverity(FacesMessage.SEVERITY_WARN);
@@ -177,35 +136,6 @@ public class GroupBean implements Serializable{
 	        group = new Group();
 	     
     }
- 	/**
- 	 * Modification des infrmations et des privilèges d'un groupe
- 	 * @param groupe
- 	 */
- 	
- 	public void update(ActionEvent actionEvent) {
-   	 FacesContext context = FacesContext.getCurrentInstance();
-   	try{	     	   
-	     	  groupAccessRessourceService.updateGroupAndAccess(this.group,this.listRessoureBlocs);   		
-	     	 mouchardRessourceService.mouchard("Modification du groupe :"+this.group.getIdGroup(), "Modification",this.group.getDateUseToSortData(), "Groupe",this.group.getIdGroup(),this.group.toString());
-				
-		        init();//mise � jour de la liste			    	
-		        
-		        FacesMessage message = Messages.getMessage("messages", "global.gestion.reussi", null);
-		    	message.setSeverity(FacesMessage.SEVERITY_INFO);
-		        context.addMessage(null, message);
-	   
-   	
-   	 }catch(Exception e){
-   		 e.printStackTrace();
-   		 mouchardRessourceService.mouchard("Echec de modification du groupe :"+this.group.getIdGroup(), "Modification",this.group.getDateUseToSortData(), "Groupe",this.group.getIdGroup(),this.group.toString());
-			
-   		 FacesMessage message = Messages.getMessage("messages", "global.gestion.echec", null);
-		    	message.setSeverity(FacesMessage.SEVERITY_WARN);
-		        context.addMessage(null, message);
-   	 }		    	  
-	        group = new Group();
-	     
-   }
  	
  	
  /**
@@ -251,25 +181,31 @@ public class GroupBean implements Serializable{
     	 RequestContext requestContext = RequestContext.getCurrentInstance();
        try{
     	   
-    	   if((roleGroupService.getCountRoleOfGroup(group.getIdGroup())>0)){
-			   mouchardRessourceService.tracage(" Erreur de suppression du groupe ("+group.getGroupName()+") ", "suppression",group.getDateUseToSortData(), "Groupe");
-			    	
-			   FacesMessage message = Messages.getMessage("messages", "group.echec.delete", null);
-		    	message.setSeverity(FacesMessage.SEVERITY_WARN);
-		        context.addMessage(null, message);
-	   	}else{
+    	   //Cas selectiond
+    	  
+    	 /*  if(selectedGroup.length>0)
+	    	   for(int i=0;i<selectedGroup.length;i++){				    		
+		    		//groupService.deleteVersusDesabled(selectedGroup[i], IConstance.FIELD_DELETE);
+	    		   group=selectedGroup[i];
+		    		groupService.deleteVersusDesabled(selectedGroup[i]);
+		    		mouchardRessourceService.tracage("Suppression du groupe "+group.getGroupName()+" ("+group.getIdGroup()+")", "suppression",group.getDateUseToSortData(), "Groupe");
+		 			
+		    	}
+    	   else{
+    	 
+    	   if(group!=null)		*/    	
+    		   //groupService.deleteVersusDesabled(group, IConstance.FIELD_DELETE);
     		   groupService.deleteVersusDesabled(group);
     	   mouchardRessourceService.tracage("Suppression du groupe "+group.getGroupName()+" ("+group.getIdGroup()+")", "suppression",group.getDateUseToSortData(), "Groupe");
 			
-    	   init();//mise à jour de la liste
-	    	
-	    	 FacesMessage message = Messages.getMessage("messages", "global.gestion.delete", null);
-		    	message.setSeverity(FacesMessage.SEVERITY_INFO);
-		        context.addMessage(null, message);				    	
-	        requestContext.execute("PF('deleteDialog').hide()");	 
-	   	}
+    	  // }
     	   
-		    	   	  
+		    	init();//mise à jour de la liste
+		    	
+		    	 FacesMessage message = Messages.getMessage("messages", "global.gestion.delete", null);
+			    	message.setSeverity(FacesMessage.SEVERITY_INFO);
+			        context.addMessage(null, message);				    	
+		        requestContext.execute("PF('deleteDialog').hide()");	    	  
     	   
        }catch(Exception e){
   		 e.printStackTrace();
@@ -290,11 +226,6 @@ public class GroupBean implements Serializable{
  	    this.ressourcesList=accessRessourceService.listVersusEnabled(IConstance.FIELD_DELETE, new String[]{});
  	   this.ressourcesListDataModel= new RessourcesDataModel(this.ressourcesList);
  	    this.selectedRessources=accessRessourceService.listOfAccess4Group(this.group);
- 	    this.listRessoureBlocs= accessRessourceService.listBlocAccess();
- 	    for(int i=0;i<listRessoureBlocs.size();i++){
- 	    	listRessoureBlocs.get(i).setListRessourceDuBloc(accessRessourceService.listAccessDuBloc(listRessoureBlocs.get(i).getCode_bloc()));
- 	    }
- 	    //JOptionPane.showMessageDialog(null, this.listRessoureBlocs.size());
  	 
         
      }
@@ -309,26 +240,20 @@ public class GroupBean implements Serializable{
  	
  	public void AddGroup2Access(){ 		
  		 FacesContext context = FacesContext.getCurrentInstance();
- 		RequestContext requestContext = RequestContext.getCurrentInstance();
+ 		
        try{
-    	  // JOptionPane.showMessageDialog(null, selectedRessources.size());
-    	   selectedRessources.clear();
-    	   for(int i=0;i<listRessoureBlocs.size();i++){    		  
-    		  for(int j=0;j<listRessoureBlocs.get(i).getSelectRessourceDuBloc().size();j++)  
-    			  selectedRessources.add(new AccessRessource(Integer.parseInt(listRessoureBlocs.get(i).getSelectRessourceDuBloc().get(j))));
-    		   listRessoureBlocs.get(i).getSelectRessourceDuBloc().clear();
+    	   //this.group.getGroups().clear();
+    	   if(selectedRessources.size()>0){    		   
+    		   groupAccessRessourceService.saveAcess2Group(this.group,this.selectedRessources);	    	  
+	    	 	
+    	   }else{
+    		  
+    		   groupAccessRessourceService.deleteAccess2Group(this.group);
+    		   
     	   }
-    	   
-    	   if(selectedRessources.size()>0){   
-       		   requestContext.execute("PF('addDialogAccess').show()");
-       		   
-       	   }else{
-       		   
-       		   requestContext.execute("PF('deleteDialogAccess').show()");
-       		  
-       		   
-       	   }
-       	   	  
+    	   FacesMessage message = Messages.getMessage("messages", "global.gestion.reussi", null);
+	    	message.setSeverity(FacesMessage.SEVERITY_INFO);
+	        context.addMessage(null, message);	 
     	   
        }catch(Exception e){
   		 e.printStackTrace();
@@ -337,61 +262,11 @@ public class GroupBean implements Serializable{
 	        context.addMessage(null, message);
   	 }finally{
   		 
-  		//this.selectedRessources=null;
-  		//this.group=null;
+  		this.selectedRessources=null;
+  		this.group=null;
   	 }
  		
  	}
- 	
- 	
- 	
- 	/*public void addAcess(ActionEvent actionEvent){
- 		FacesContext context = FacesContext.getCurrentInstance();
- 		RequestContext requestContext = RequestContext.getCurrentInstance();
- 		try{
- 			
- 			 groupAccessRessourceService.saveAcess2Group(this.group,this.selectedRessources);		    	  
- 		   FacesMessage message = Messages.getMessage("messages", "global.gestion.reussi", null);
-	    	message.setSeverity(FacesMessage.SEVERITY_INFO);
-	        context.addMessage(null, message);
-	       
- 		}catch(Exception e){
- 			e.printStackTrace();
- 	  		 FacesMessage message = Messages.getMessage("messages", "global.gestion.echec", null);
- 		    	message.setSeverity(FacesMessage.SEVERITY_WARN);
- 		        context.addMessage(null, message);
- 		}finally{
- 			this.selectedRessources=null;
- 	  		this.group=null;
- 		}
- 		
- 	}*/
- 	
- 	/**
- 	 * Suppression de tous les groupes du role
- 	 */
- 	
- 	/*public void deleteAcess(ActionEvent actionEvent){
- 		FacesContext context = FacesContext.getCurrentInstance();
- 		RequestContext requestContext = RequestContext.getCurrentInstance();
- 		try{
- 			
- 			 groupAccessRessourceService.deleteAccess2Group(this.group);
- 			//requestContext.execute("deleteDialogGroup.hide()");
- 			FacesMessage message = Messages.getMessage("messages", "global.gestion.reussi", null);
-	    	message.setSeverity(FacesMessage.SEVERITY_INFO);
-	        context.addMessage(null, message);
- 		}catch(Exception e){
- 			e.printStackTrace();
- 	  		 FacesMessage message = Messages.getMessage("messages", "global.gestion.echec", null);
- 		    	message.setSeverity(FacesMessage.SEVERITY_WARN);
- 		        context.addMessage(null, message);
- 		}finally{
- 			this.selectedRessources=null;
- 	  		this.group=null;
- 		}
- 		
- 	}*/
  	
  	/**
  	 * Validation de l'existance 
@@ -509,16 +384,6 @@ public class GroupBean implements Serializable{
 
 
 
-	public List<AccessRessource> getListRessoureBlocs() {
-		return listRessoureBlocs;
-	}
-
-
-	public void setListRessoureBlocs(List<AccessRessource> listRessoureBlocs) {
-		this.listRessoureBlocs = listRessoureBlocs;
-	}
-
-
 	public Group[] getSelectedGroup() {
 		return selectedGroup;
 	}
@@ -549,16 +414,6 @@ public class GroupBean implements Serializable{
 	public void setMouchardRessourceService(
 			IMouchardRessourceService mouchardRessourceService) {
 		this.mouchardRessourceService = mouchardRessourceService;
-	}
-
-
-	public IRoleGroupService getRoleGroupService() {
-		return roleGroupService;
-	}
-
-
-	public void setRoleGroupService(IRoleGroupService roleGroupService) {
-		this.roleGroupService = roleGroupService;
 	}
 	
 	

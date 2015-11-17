@@ -40,7 +40,11 @@
 	<bean id="typespiecesjointesDao" class="cm.dita.dao.domaine.impl.TypespiecesjointesDaoImpl" parent="daoBase" />
 	<bean id="correspondantDao" class="cm.dita.dao.domaine.impl.CorrespondantDaoImpl" parent="daoBase" />
 	<bean id="IImageDao" class="cm.dita.dao.domaine.impl.ImageDaoImpl" parent="daoBase" />
-	<bean id="personneDao"  class="cm.dita.dao.domaine.impl.PersonneDaoImpl"  parent="daoBase" />		
+	
+	<!-- AJOUT POUR LE MINATD -->
+	<bean id="espaceUserDao" class="cm.dita.dao.domaine.impl.EspaceUserDaoImpl" parent="daoBase" />
+	<bean id="espaceReceptionTransfDao" class="cm.dita.dao.domaine.impl.EspaceReceptionTransfDaoImpl" parent="daoBase" />
+	<bean id="pieceJointeTransfDao" class="cm.dita.dao.domaine.impl.PiecesJointeTransfDaoImpl" parent="daoBase" />
 	
 	
 	<bean id="applicationContextHolder"	class="cm.dita.utils.ApplicationContextHolder" />

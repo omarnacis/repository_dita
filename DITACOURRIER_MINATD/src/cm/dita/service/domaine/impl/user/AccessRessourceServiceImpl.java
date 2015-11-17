@@ -4,7 +4,6 @@
 package cm.dita.service.domaine.impl.user;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +68,7 @@ public class AccessRessourceServiceImpl extends
 			    //getDao().closeSession();//new
 			} catch (Exception e) {
 				
-				throw new ApplicationException("Probl�me lors du persist de la liste de "+getDao().getOMClass().getSimpleName(), e, 11);
+				throw new ApplicationException("Probl�me lors du persist de la liste de "+getDao().getOMClass().getSimpleName(), e, 11);
 			}
 			
 		
@@ -109,77 +108,6 @@ public class AccessRessourceServiceImpl extends
 			throw new ApplicationException("Impossible de delete les groupes du role :", e, 2);
 			
 		}
-		
-	}
-	
-	/**
-	 * les des priviléges groupés
-	 * 
-	 * @return liste des groupes de privilèges natif 
-	 */
-	public List<AccessRessource> listBlocAccess()throws ApplicationException{
-		
-		 Map<String, Object > mapParameter = new HashMap<String, Object>();
-	   		//mapParameter.put("identifier", user.getId()); 
-	   		try {			
-				return getDao().executeNameQueryAndGetListResult("access.list_bloc", mapParameter);
-				
-			} catch (Exception e) {						
-				//e.printStackTrace();
-				throw new ApplicationException("Echec de lecture de la liste des bloc de privilèges natif", e, 2);
-				
-			}
-		
-	}
-	
-	
-	/**
-	 * les des priviléges d'un bloc
-	 * @param code du bloc
-	 * @return liste des privilèges d'un bloc
-	 */
-	public List<AccessRessource> listAccessDuBloc(int code_bloc)throws ApplicationException{
-		
-		 Map<String, Object > mapParameter = new HashMap<String, Object>();
-	   		mapParameter.put("code_bloc",code_bloc); 
-	   		try {			
-				return getDao().executeNameQueryAndGetListResult("access.list_access_du_bloc", mapParameter);
-				
-			} catch (Exception e) {						
-				//e.printStackTrace();
-				throw new ApplicationException("Echec de lecture des privilèges du bloc :"+code_bloc, e, 2);
-				
-			}
-		
-	}
-	/**
-	 * Cette fonction retourne la liste d'un bloc appartenant à un groupe
-	 * @param id du groupe a trouver les privilèges
-	 * @param bloc d'appartenance des privilèges
-	 * @return liste des privilèges appartenant au groupe 
-	 * @throws ApplicationException
-	 */
-	
-	
-	public List<String> listAccessDuBlocSelect(int idgroupe,int code_bloc,int colone)throws ApplicationException{	
-		List<String> lister=new ArrayList<String>();
-		 Map<String, Object > mapParameter = new HashMap<String, Object>();
-	   		mapParameter.put("code_bloc",code_bloc); 
-	   		mapParameter.put("idgroupe",idgroupe); 
-	   		try {			
-				List<AccessRessource> liste= getDao().executeNameQueryAndGetListResult("access.list_access_du_bloc_select", mapParameter);
-				for(AccessRessource access:liste){
-					if(colone==1)
-						lister.add(String.valueOf(access.getIdRessource()));
-					else
-						lister.add(String.valueOf(access.getRessourceDetail()));
-				}
-				return lister;
-			} catch (Exception e) {						
-				//e.printStackTrace();
-				throw new ApplicationException("Echec de lecture des privilèges du bloc :"+code_bloc+" attribuer au groupe "+idgroupe, e, 2);
-				
-			}
 		
 	}
 

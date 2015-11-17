@@ -90,28 +90,5 @@ public class MouchardRessourceServiceImpl  extends ServiceBaseImpl<Mouchard>  im
 			// TODO: handle exception
 		}		
 	}
-	
-	@Override
-	public void mouchard(String message, String operation, Long ref_date,
-			String entite,long code_id,String valeur) {
-		 HttpServletRequest req=(HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-	    	HttpSession httpSession = req.getSession();
-	    	httpSession.getAttribute(ISessionConstant.SS_USER);
-		
-		 SimpleDateFormat sdf = new SimpleDateFormat(IConstance.PARAMETER_DATE_FORMAT_2); 
-		 Mouchard mouchard = new Mouchard();
-		 mouchard.setDelate(false);
-		 mouchard.setMouchardTache(message);
-		 mouchard.setMouchardUserCode((User) httpSession.getAttribute(ISessionConstant.SS_USER));
-		 mouchard.setMouchardDate(sdf.format(new Date()));
-		 mouchard.setValeur(valeur);
-		 mouchard.setOperation(operation);
-		 mouchard.setReference_date(ref_date);
-		 mouchard.setEntite_name(entite);
-		 mouchard.setCode_id(code_id);
-		
-		 dao.save(mouchard);
-		
-	}
 
 }

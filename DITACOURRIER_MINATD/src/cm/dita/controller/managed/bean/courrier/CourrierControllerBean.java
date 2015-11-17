@@ -823,7 +823,6 @@ public class CourrierControllerBean  implements Serializable{
 				 courrier.setCourdatenreg(dateAujourdhuiSql);					 
 				 courrier.setRefid("RAS");//doit ï¿½tre gï¿½nï¿½rï¿½ suivant une nomenclature
 				 courrier.setUsercreate(userconnected);
-				 courrier.setLastUserUpdate(userconnected);
 				 courrier.setIdespacecourantducour(espaceCourant.getId());
 				 courrier.setIdstatutcourantducour(statutEnCours.getId());
 				 //courrier.setUsersender(utilisateurCourant);
@@ -918,7 +917,7 @@ public class CourrierControllerBean  implements Serializable{
 			     //crï¿½er le sous repertoire des pieces jointes ï¿½ uploader pour le courrier
 			     File pointeurSousRepPJ = new File(cheminCompletSousRepStockagePJ);
 			     if (pointeurSousRepPJ.exists()) {
-			            System.out.println("Le dossier existe dï¿½jï¿½ : " + pointeurSousRepPJ.getAbsolutePath());
+			            System.out.println("Le dossier existe déjà  : " + pointeurSousRepPJ.getAbsolutePath());
 			        } else {
 			            if (pointeurSousRepPJ.mkdir()) {
 			                System.out.println("Ajout du dossier : " + pointeurSousRepPJ.getAbsolutePath());
@@ -1008,27 +1007,27 @@ public class CourrierControllerBean  implements Serializable{
 						 adresseExpediteur = cour.getCorrespondantsender().getMailAddress();
 						 
 						 if(cour.getUserreceiver() != null){
-							 nomPrenomRecepteur = cour.getUserreceiver().getInfosPersonne().getPersnom().concat(" ")+cour.getUserreceiver().getInfosPersonne().getPersprenom();
-							 adresseRecepteur = cour.getUserreceiver().getInfosPersonne().getPersemail();
+							 nomPrenomRecepteur = cour.getUserreceiver().getInfosPersonne().getNom().concat(" ")+cour.getUserreceiver().getInfosPersonne().getPrenom();
+							 adresseRecepteur = cour.getUserreceiver().getInfosPersonne().getMailAddress();
 						 }
 					 }
 					 else
 						 if(cour.getTypecourrier().getId() == 2){//courrier interne
 							 
-							 nomPrenomExpediteur = cour.getUsersender().getInfosPersonne().getPersnom().concat(" ")+cour.getUsersender().getInfosPersonne().getPersprenom();
-							 adresseExpediteur = cour.getUsersender().getInfosPersonne().getPersemail();
+							 nomPrenomExpediteur = cour.getUsersender().getInfosPersonne().getNom().concat(" ")+cour.getUsersender().getInfosPersonne().getPrenom();
+							 adresseExpediteur = cour.getUsersender().getInfosPersonne().getMailAddress();
 							 
 							 if(cour.getUserreceiver() != null){
-								 nomPrenomRecepteur = cour.getUserreceiver().getInfosPersonne().getPersnom().concat(" ")+cour.getUserreceiver().getInfosPersonne().getPersprenom();
-								 adresseRecepteur = cour.getUserreceiver().getInfosPersonne().getPersemail();
+								 nomPrenomRecepteur = cour.getUserreceiver().getInfosPersonne().getNom().concat(" ")+cour.getUserreceiver().getInfosPersonne().getPrenom();
+								 adresseRecepteur = cour.getUserreceiver().getInfosPersonne().getMailAddress();
 							 }
 						 
 						 }
 						 else
 							 if(cour.getTypecourrier().getId() == 3){//courrier sortant
 								 
-								 nomPrenomExpediteur = cour.getUsersender().getInfosPersonne().getPersnom().concat(" ")+cour.getUsersender().getInfosPersonne().getPersprenom();
-								 adresseExpediteur = cour.getUsersender().getInfosPersonne().getPersemail();
+								 nomPrenomExpediteur = cour.getUsersender().getInfosPersonne().getNom().concat(" ")+cour.getUsersender().getInfosPersonne().getPrenom();
+								 adresseExpediteur = cour.getUsersender().getInfosPersonne().getMailAddress();
 								 
 								 if(cour.getCorrespondantreceiver() != null){
 									 nomPrenomRecepteur =  cour.getCorrespondantreceiver().getNom();

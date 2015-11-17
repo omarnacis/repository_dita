@@ -20,16 +20,12 @@ import cm.dita.service.generic.IServiceBase;
  */
 public interface IGroupAccessRessourceService extends
 		IServiceBase<GroupAccessRessource> {
-	
-	public void createGroupAndAccess(Group group, List<AccessRessource> listRessoureBlocs);
-	public void updateGroupAndAccess(Group group, List<AccessRessource> listRessoureBlocs);
 
-	/*void saveAll(Set<GroupAccessRessource> groupAccessRessources)
+	void saveAll(Set<GroupAccessRessource> groupAccessRessources)
 			throws ApplicationException;
 
 	public void saveAcess2Group(Group group, List<AccessRessource> seletedAccess);
-	public void deleteAccess2Group(Group group);*/
-	
+	public void deleteAccess2Group(Group group);
 	//public void saveAll(Set<GroupAccessRessource> groupAccessRessources) throws ApplicationException ;
 
 	//public void deleteAllAccessGroup(String idGroup) throws ApplicationException;

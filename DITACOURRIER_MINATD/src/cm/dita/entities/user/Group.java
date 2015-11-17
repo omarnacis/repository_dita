@@ -71,22 +71,14 @@ public class Group extends OMBase {
 		this.roles = group.roles;
 		this.ressources = group.ressources;
 		this.listAccessOfgroup = group.listAccessOfgroup;
-		this.setDateCreate(group.getDateCreate());
-		this.setIdLastUserUpdate(group.getIdLastUserUpdate());
-		this.setIdUserCreate(group.getIdUserCreate());
-		this.setIdLastUserUpdate(group.getIdLastUserUpdate());
-		
-		
 	}
 
 	@OneToMany(mappedBy="group",cascade={CascadeType.REMOVE})
 	 private Set<RoleGroup> roles = new HashSet<RoleGroup>();
 
 	 
-	 @OneToMany(mappedBy="group",cascade={CascadeType.REMOVE})
+	 @OneToMany(mappedBy="group",cascade={CascadeType.REMOVE,CascadeType.PERSIST})
 	 private Set<GroupAccessRessource> ressources = new HashSet<GroupAccessRessource>();
-	 
-	
 	 
 	 
 	 

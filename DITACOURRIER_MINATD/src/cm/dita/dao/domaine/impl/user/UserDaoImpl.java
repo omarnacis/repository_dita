@@ -3,6 +3,11 @@
  */
 package cm.dita.dao.domaine.impl.user;
 
+import java.util.Hashtable;
+import java.util.Map;
+
+import javax.persistence.Query;
+
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 

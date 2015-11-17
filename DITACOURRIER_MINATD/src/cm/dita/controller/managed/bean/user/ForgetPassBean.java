@@ -70,7 +70,7 @@ public class ForgetPassBean  implements Serializable{
 		try{
 			if(Integer.parseInt(this.valeur)==this.code){	
 				codeTrans="";
-				requestContext.execute("PF('initPassDialog').show()");
+				requestContext.execute("initPassDialog.show()");
 			}else{
 				FacesMessage message = Messages.getMessage("messages", "global.code.saisi.error", null);
 		    	message.setSeverity(FacesMessage.SEVERITY_INFO);
@@ -98,7 +98,7 @@ public class ForgetPassBean  implements Serializable{
 				this.valeur="";
 				this.code=-1;
 				this.password="";
-				requestContext.execute("PF('initPassDialog').hide()");
+				requestContext.execute("initPassDialog.hide()");
 				
 				 mouchardRessourceService.tracage("Modification du mot de passe administrateur", "modification",null, "User");
 					

@@ -11,6 +11,7 @@ import cm.dita.object.model.OMBase;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -72,7 +73,7 @@ public class EspaceCourrier extends OMBase {
     @ManyToOne(optional = true)
     private Espace espacedestination;
     
-    @JoinColumn(name = "usercreateid_Courrier", referencedColumnName = "id", nullable=true)
+    @JoinColumn(name = "usercreateid", referencedColumnName = "id", nullable=true)
     @ManyToOne(optional = true)
     private User usercreate;
     
@@ -111,6 +112,11 @@ public class EspaceCourrier extends OMBase {
     @Column(name = "observationreReception", nullable=true)
     private String observeReceiver;
     
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "transmission")
+    private List<EspaceReceptionTransf> listeEspaceReceptionTransf;  
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "transmission")
+    private List<PiecesJointeTransf> listePiecesJointeTransf;   
     
 	public EspaceCourrier() {
     }
@@ -353,5 +359,36 @@ public class EspaceCourrier extends OMBase {
     public String toString() {
         return "cm.dita.entities.EspaceCourrier[ id=" + id + " ]";
     }
+
+	/**
+	 * @return the listeEspaceReceptionTransf
+	 */
+	public List<EspaceReceptionTransf> getListeEspaceReceptionTransf() {
+		return listeEspaceReceptionTransf;
+	}
+
+	/**
+	 * @param listeEspaceReceptionTransf the listeEspaceReceptionTransf to set
+	 */
+	public void setListeEspaceReceptionTransf(
+			List<EspaceReceptionTransf> listeEspaceReceptionTransf) {
+		this.listeEspaceReceptionTransf = listeEspaceReceptionTransf;
+	}
+
+	/**
+	 * @return the listePiecesJointeTransf
+	 */
+	public List<PiecesJointeTransf> getListePiecesJointeTransf() {
+		return listePiecesJointeTransf;
+	}
+
+	/**
+	 * @param listePiecesJointeTransf the listePiecesJointeTransf to set
+	 */
+	public void setListePiecesJointeTransf(
+			List<PiecesJointeTransf> listePiecesJointeTransf) {
+		this.listePiecesJointeTransf = listePiecesJointeTransf;
+	}
     
+	
 }

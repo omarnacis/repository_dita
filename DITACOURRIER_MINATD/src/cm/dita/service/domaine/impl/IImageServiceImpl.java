@@ -4,9 +4,12 @@ import javax.persistence.Query;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import cm.dita.dao.domaine.inter.IEspaceDao;
 import cm.dita.dao.domaine.inter.IImageDao;
-
+import cm.dita.dao.generic.IDaoBase;
+import cm.dita.entities.Espace;
 import cm.dita.entities.Image;
+import cm.dita.service.domaine.inter.IEspaceRessourceService;
 import cm.dita.service.domaine.inter.IImageService;
 import cm.dita.service.generic.ServiceBaseImpl;
 
@@ -18,7 +21,6 @@ public class IImageServiceImpl extends ServiceBaseImpl<Image>  implements IImage
 	/**
 	 * @return the dao
 	 */
-	@Override
 	public IImageDao getDao() {
 		return dao;
 	}
@@ -36,37 +38,14 @@ public class IImageServiceImpl extends ServiceBaseImpl<Image>  implements IImage
 	Query query =  dao.getCurrentSession().createNamedQuery("Image.deleteByType");
 	query.setParameter("type", type);
 	
-	
 	query.executeUpdate();
 
 		
 	}
-	
-	public void deleteIMageByImg(Image img) {
-		// TODO Auto-generated method stub
-		
-	
-		Query query =  dao.getCurrentSession().createNamedQuery("Image.deleteByTypeAndId");
-		query.setParameter("type", img.getType());
-		query.setParameter("identite", img.getIdEntite());
-	
-	query.executeUpdate();
-
-		
-	}
-	@Override
 	@Transactional
 	public void deleteAndSAve(Image img) {
 		// TODO Auto-generated method stub
 		deleteIMage(img.getType());
-		dao.save(img);
-		
-	}
-	
-	@Transactional
-	public void deleteAndSAveByImg(Image img) {
-		// TODO Auto-generated method stub
-		deleteIMageByImg(img);
 		dao.save(img);
 		
 	}

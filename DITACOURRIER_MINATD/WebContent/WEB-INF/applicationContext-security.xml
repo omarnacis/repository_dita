@@ -26,7 +26,7 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 		<security:intercept-url pattern="/faces/mouchard.xhtml" access="ROLE_ADMIN,ROLE_mouchard" />		
 		<security:intercept-url pattern="/faces/statistique.xhtml" access="ROLE_ADMIN,ROLE_statistique" />
 		<security:intercept-url pattern="/faces/notification.xhtml" access="ROLE_ADMIN,ROLE_notification" />		
-		<security:intercept-url pattern="/faces/personne/personnes.xhtml" access="ROLE_ADMIN,ROLE_personne" />
+		
 		<!-- <security:form-login login-page="/faces/login.xhtml" authentication-failure-url="/faces/login.xhtml?error=true" />	 -->	
 	<!-- 	<security:remember-me key="dita-key" /> -->
 	<security:form-login login-page="/faces/login.xhtml" authentication-failure-handler-ref="customAuthenticationFailureHandler" />
@@ -43,7 +43,7 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 	
 	<bean id="customAuthenticationFailureHandler"
       class="cm.dita.controller.managed.bean.user.CustomAuthenticationFailureHandler">
-    <property name="defaultFailureUrl" value="/faces/login.xhtml?error"/>
+    <property name="defaultFailureUrl" value="/faces/login.xhtml?error=true"/>
 </bean>
 	
 	<!-- <security:authentication-manager>

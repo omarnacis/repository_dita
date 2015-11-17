@@ -9,6 +9,7 @@ package cm.dita.entities.user;
  */
 
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,17 +28,19 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import cm.dita.object.model.OMBase;
-
 import cm.dita.annotation.AsignedIdEntity;
+import cm.dita.entities.Courriers;
 import cm.dita.entities.Espace;
+import cm.dita.entities.Typespersonnel;
 
+import java.util.Collection;
 
-import cm.dita.entities.Espace;
-
-import cm.dita.entities.Personne;
+import org.springframework.security.core.GrantedAuthority;
 
 
 
@@ -53,8 +56,6 @@ import cm.dita.entities.Personne;
         + "") ,        
         		@NamedQuery(name = "User.findByLogin", query = "select u  from User u where LOWER(u.login) = :login and u.delate='false'"
                 + ""),
-                @NamedQuery(name = "User.findByIdPersonne", query = "select u  from User u where u.infosPersonne.persid = :persid and u.delate='false'"
-                        + ""),
                 @NamedQuery(name = "User.getAllAccessForOneRole", query = "select access  from AccessRessource access,Role r,RoleUser ru,User u,RoleGroup rg,GroupAccessRessource ga,Group g"
                 		+ " where u.id = :idUser  and ru.user.id = u.id and r.identifier = ru.role.identifier and rg.role.identifier = r.identifier"
                 		+ " and rg.group.idGroup = g.idGroup and  ga.group.idGroup = g.idGroup and access.idRessource = ga.accessRessource.idRessource"
@@ -77,28 +78,20 @@ public class User  extends OMBase{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
+	
     
     
     /**
      * The login of the user, used for authentication
      */
-    @Column(name = "login")
+    @Column(name = "login",unique=true)
     private String login;
-    /**
-     * Ce champ permet d'identifier un compte de maniere unique
-     */
-    @Column(name = "index_login",unique=true)
-    private String index_login;
-    
     /**
      * The password of the user, used for authentication
      */
     @Column(name = "password")
     private String password;
     
-	/*@JoinColumn(name = "personneId", referencedColumnName = "persid", nullable=true)
-    @OneToOne()  // r�f�rence la relation dans la classe Commune
-    private Personne personne;*/
     /**
      * The creation date of the user
      */
@@ -125,11 +118,8 @@ public class User  extends OMBase{
     @Transient
     private String password1;
     
-    @Transient
-    private Integer espaceCourantId;
-    
-  /*  @Embedded
-    private InfosPersonne infosPersonne;*/
+    @Embedded
+    private InfosPersonne infosPersonne;
     
     public User(){
     	
@@ -148,23 +138,12 @@ public class User  extends OMBase{
 		this.Init_pass = u.Init_pass;
 		this.password1 = u.password1;
 		this.infosPersonne = u.infosPersonne;
-		this.index_login=u.index_login;
-		//this.infosPersonne.
-		this.roles = u.roles;	
+		this.roles = u.roles;
 		this.espace = u.espace;
-		
-		this.setDateCreate(u.getDateCreate());
-		this.setIdLastUserUpdate(u.getIdLastUserUpdate());
-		this.setIdUserCreate(u.getIdUserCreate());
-		this.setIdLastUserUpdate(u.getIdLastUserUpdate());
-		
-		
+		this.courriersCollection = u.courriersCollection;
 	}
 	
-	//@OneToOne(mappedBy="user" , cascade={CascadeType.ALL})	
-	@JoinColumn(name = "persid", referencedColumnName = "persid", nullable=true)
-	@OneToOne(cascade={CascadeType.ALL} ,fetch=FetchType.EAGER)  
-	 private Personne infosPersonne;
+	
 
 
 
@@ -174,8 +153,13 @@ public class User  extends OMBase{
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "espace_id", nullable = false)
     private Espace espace;
-   
+    /*
+    @JoinColumn(name = "types_id",  nullable = false)
+    @ManyToOne(fetch=FetchType.LAZY)
+    private Typespersonnel typespersonnel;*/
     
+    @OneToMany( mappedBy = "usersender")
+    private Collection<Courriers> courriersCollection;
     
 	public String getLogin() {
             return login;
@@ -205,7 +189,9 @@ public class User  extends OMBase{
         this.roles = roles;
     }
 
-  
+    
+    
+	
 	public Integer getId() {
 		return id;
 	}
@@ -218,20 +204,13 @@ public class User  extends OMBase{
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-	
-	
-	public Personne getInfosPersonne() {
+	public InfosPersonne getInfosPersonne() {
 		return infosPersonne;
 	}
-
-
-
-	public void setInfosPersonne(Personne infosPersonne) {
+	public void setInfosPersonne(InfosPersonne infosPersonne) {
 		this.infosPersonne = infosPersonne;
 	}
-
-
-
+	
 	public String getPassword1() {
 		return password1;
 	}
@@ -240,33 +219,6 @@ public class User  extends OMBase{
 	}
 	
 	
-	
-	
-	public Espace getEspace() {
-		return espace;
-	}
-
-
-
-	public void setEspace(Espace espace) {
-		this.espace = espace;
-	}
-
-	
-
-
-	public String getIndex_login() {
-		return index_login;
-	}
-
-
-
-	public void setIndex_login(String index_login) {
-		this.index_login = index_login;
-	}
-
-
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -291,8 +243,19 @@ public class User  extends OMBase{
 			return false;
 		return true;
 	}
+	public Espace getEspace() {
+		return espace;
+	}
+	public void setEspace(Espace espace) {
+		this.espace = espace;
+	}
 	
-	
+	public Collection<Courriers> getCourriersCollection() {
+		return courriersCollection;
+	}
+	public void setCourriersCollection(Collection<Courriers> courriersCollection) {
+		this.courriersCollection = courriersCollection;
+	}
 	public boolean isAutorithies() {
 		return autorithies;
 	}
@@ -311,25 +274,10 @@ public class User  extends OMBase{
 	public void setInit_pass(boolean init_pass) {
 		Init_pass = init_pass;
 	}
-
-
-
-	/**
-	 * @return the espaceCourantId
-	 */
-	public Integer getEspaceCourantId() {
-		return espaceCourantId;
-	}
-
-
-
-	/**
-	 * @param espaceCourantId the espaceCourantId to set
-	 */
-	public void setEspaceCourantId(Integer espaceCourantId) {
-		this.espaceCourantId = espaceCourantId;
-	}
-
+	
+	
+	
+	
 	
 	
 	

@@ -24,7 +24,6 @@ import java.util.Set;
 
 
 
-
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
@@ -92,7 +91,7 @@ public class RoleGroupServiceImpl extends ServiceBaseImpl<RoleGroup> implements
 			getDao().getCurrentSession().flush();
 		} catch (Exception e) {
 			tr.rollback();
-			throw new ApplicationException("Problï¿½me lors de la suppression de la liste de "+getDao().getOMClass().getSimpleName(), e, 11);
+			throw new ApplicationException("Problème lors de la suppression de la liste de "+getDao().getOMClass().getSimpleName(), e, 11);
 		}	
 	}
 	
@@ -108,7 +107,7 @@ public class RoleGroupServiceImpl extends ServiceBaseImpl<RoleGroup> implements
 			tr.commit();
 		} catch (Exception e) {
 			tr.rollback();
-			throw new ApplicationException("Problï¿½me lors du persist de la liste de "+getDao().getOMClass().getSimpleName(), e, 11);
+			throw new ApplicationException("Problème lors du persist de la liste de "+getDao().getOMClass().getSimpleName(), e, 11);
 		}
 		
 	}
@@ -145,7 +144,7 @@ public class RoleGroupServiceImpl extends ServiceBaseImpl<RoleGroup> implements
 		 			 Mouchard mouchard = new Mouchard();
 		 			 mouchard.setDelate(false);
 		 			 mouchard.setMouchardTache("Retrait du groupe :"+group.getGroupName()+"("
-		 					+group.getIdGroup()+") du rï¿½le "+role.getRoleName()+" "
+		 					+group.getIdGroup()+") du rôle "+role.getRoleName()+" "
 		 					+"("+role.getIdentifier()+")" );
 		 			 mouchard.setMouchardUserCode((User) httpSession.getAttribute(ISessionConstant.SS_USER));
 		 			 mouchard.setMouchardDate(sdf.format(new Date()));
@@ -162,7 +161,7 @@ public class RoleGroupServiceImpl extends ServiceBaseImpl<RoleGroup> implements
 			 Mouchard mouchard = new Mouchard();
 			 mouchard.setDelate(false);
 			 mouchard.setMouchardTache("Echec retrait du groupe :"+group.getGroupName()+"("
-					+group.getIdGroup()+") du rï¿½le "+role.getRoleName()+" "
+					+group.getIdGroup()+") du rôle "+role.getRoleName()+" "
 					+"("+role.getIdentifier()+")" );
 			 mouchard.setMouchardUserCode((User) httpSession.getAttribute(ISessionConstant.SS_USER));
 			 mouchard.setMouchardDate(sdf.format(new Date()));
@@ -178,7 +177,9 @@ public class RoleGroupServiceImpl extends ServiceBaseImpl<RoleGroup> implements
 	@Transactional //(propagation=Propagation.NOT_SUPPORTED,rollbackFor=Exception.class)
 	public void saveGroup2Role(Role role, List<Group> seletedGroups) {
 		   Group group=new Group();
-		  
+		   HttpServletRequest req=(HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+	    	HttpSession httpSession = req.getSession();
+	    	httpSession.getAttribute(ISessionConstant.SS_USER);
 		try{
 			//SUPPRIMER LES ANCIENS GROUPES	
 			Query query =  getDao().getCurrentSession().createQuery(" select grpRole from  RoleGroup grpRole where grpRole.role.identifier = :idRole");
@@ -189,11 +190,11 @@ public class RoleGroupServiceImpl extends ServiceBaseImpl<RoleGroup> implements
 					group=roleGroup.getGroup();
 					getDao().delete(roleGroup);
 					
-					/*SimpleDateFormat sdf = new SimpleDateFormat(IConstance.PARAMETER_DATE_FORMAT_2); 
+					SimpleDateFormat sdf = new SimpleDateFormat(IConstance.PARAMETER_DATE_FORMAT_2); 
 		 			 Mouchard mouchard = new Mouchard();
 		 			 mouchard.setDelate(false);
 		 			 mouchard.setMouchardTache("Retrait du groupe :"+group.getGroupName()+"("
-		 					+group.getIdGroup()+") du rï¿½le "+role.getRoleName()+" "
+		 					+group.getIdGroup()+") du rôle "+role.getRoleName()+" "
 		 					+"("+role.getIdentifier()+")" );
 		 			 mouchard.setMouchardUserCode((User) httpSession.getAttribute(ISessionConstant.SS_USER));
 		 			 mouchard.setMouchardDate(sdf.format(new Date()));
@@ -201,7 +202,7 @@ public class RoleGroupServiceImpl extends ServiceBaseImpl<RoleGroup> implements
 		 			 mouchard.setEntite_name("RoleGroup");
 		 			 mouchard.setOperation("suppression");
 		 			 mouchard.setReference_date(role.getDateUseToSortData());
-		 			 mouchardDao.save(mouchard);*/
+		 			 mouchardDao.save(mouchard);
 				}
 			}
 			
@@ -210,11 +211,11 @@ public class RoleGroupServiceImpl extends ServiceBaseImpl<RoleGroup> implements
 				group=seletedGroups.get(i);
 	    		  getDao().save(new RoleGroup(role, seletedGroups.get(i)));
 	    		  
-	    		 /* SimpleDateFormat sdf = new SimpleDateFormat(IConstance.PARAMETER_DATE_FORMAT_2); 
+	    		  SimpleDateFormat sdf = new SimpleDateFormat(IConstance.PARAMETER_DATE_FORMAT_2); 
 		 			 Mouchard mouchard = new Mouchard();
 		 			 mouchard.setDelate(false);
 		 			 mouchard.setMouchardTache("Attribution du groupe :"+group.getGroupName()+"("
-		 					+group.getIdGroup()+") au rï¿½le "+role.getRoleName()+" "
+		 					+group.getIdGroup()+") au rôle "+role.getRoleName()+" "
 		 					+"("+role.getIdentifier()+")" );
 		 			 mouchard.setMouchardUserCode((User) httpSession.getAttribute(ISessionConstant.SS_USER));
 		 			 mouchard.setMouchardDate(sdf.format(new Date()));
@@ -222,16 +223,16 @@ public class RoleGroupServiceImpl extends ServiceBaseImpl<RoleGroup> implements
 		 			 mouchard.setEntite_name("RoleGroup");
 		 			 mouchard.setOperation("suppression");
 		 			 mouchard.setReference_date(role.getDateUseToSortData());
-		 			 mouchardDao.save(mouchard);*/
+		 			 mouchardDao.save(mouchard);
 	    	   }
 			
 		}catch(Exception e){
 			
-			/*SimpleDateFormat sdf = new SimpleDateFormat(IConstance.PARAMETER_DATE_FORMAT_2); 
+			SimpleDateFormat sdf = new SimpleDateFormat(IConstance.PARAMETER_DATE_FORMAT_2); 
 			 Mouchard mouchard = new Mouchard();
 			 mouchard.setDelate(false);
 			 mouchard.setMouchardTache("Echec attribution ou retrait du groupe :"+group.getGroupName()+"("
-					+group.getIdGroup()+") au rï¿½le "+role.getRoleName()+" "
+					+group.getIdGroup()+") au rôle "+role.getRoleName()+" "
 					+"("+role.getIdentifier()+")" );
 			 mouchard.setMouchardUserCode((User) httpSession.getAttribute(ISessionConstant.SS_USER));
 			 mouchard.setMouchardDate(sdf.format(new Date()));
@@ -239,23 +240,11 @@ public class RoleGroupServiceImpl extends ServiceBaseImpl<RoleGroup> implements
 			 mouchard.setEntite_name("RoleGroup");
 			 mouchard.setOperation("suppression");
 			 mouchard.setReference_date(role.getDateUseToSortData());
-			 mouchardDao.save(mouchard);*/
-			e.printStackTrace();
+			 mouchardDao.save(mouchard);
+			//e.printStackTrace();
 		}
 		
 	}
-	
-	
-	
-	@Override
-	public Integer getCountRoleOfGroup(int id) {
-		// TODO Auto-generated methodole
-		return ((Long) dao.getCurrentSession().createQuery("select count(*) from RoleGroup rg where rg.group.idGroup=:id and rg.delate='false'").setParameter("id", id).getResultList().get(0)).intValue();
-   		
-	}
-	
-
-	
 	public IMouchardDao getMouchardDao() {
 		return mouchardDao;
 	}

@@ -4,6 +4,7 @@
 package cm.dita.entities.user;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import cm.dita.object.model.IOM;
 import cm.dita.object.model.OMBase;
 
 
@@ -23,7 +25,7 @@ import cm.dita.object.model.OMBase;
  * 
  */
 @Entity
-@Table(name = "dmp_role_user")
+@Table(name = "dita_role_user")
 public class RoleUser extends OMBase{
 	
     /**

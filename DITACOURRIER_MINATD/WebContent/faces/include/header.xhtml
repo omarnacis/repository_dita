@@ -116,67 +116,47 @@
               </li>
              
               <!-- User Account: style can be found in dropdown.less -->
-           <li class="dropdown user user-menu">
-                <a href="#"  class="dropdown-toggle" data-toggle="dropdown">
-              
-                 <c:choose>
-                 	<c:when test="#{sessionScope['SS_USER'].infosPersonne.src_img!=null}">
-                 		 <img src="${request.contextPath}${sessionScope['SS_USER'].infosPersonne.src_img}" class="user-image" alt="User Image"/>
-                 	</c:when>
-                 	<c:otherwise>
-                 		 <img src="${request.contextPath}/mon_theme/dist/img/avatar.png" class="user-image" alt="User Image"/>
-                 	</c:otherwise>
+              <li class="dropdown user user-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                  
-                 </c:choose>
-                 
-                  <span class="hidden-xs">#{sessionScope['SS_USER'].infosPersonne.persprenom}</span>
+                  <img src="${request.contextPath}/mon_theme/dist/img/avatar.png" class="user-image" alt="User Image"/>
+                  <span class="hidden-xs">#{sessionScope['SS_USER'].login}</span>
                 </a>
                 <ul class="dropdown-menu"  id="id_user">
                   <!-- User image -->
                   <li class="user-header">
-                  
-                  	<c:choose>
-                 	<c:when test="#{sessionScope['SS_USER'].infosPersonne.src_img!=null}">
-                 	 
-                 	   		 <img src="${request.contextPath}${sessionScope['SS_USER'].infosPersonne.src_img}" class="img-circle" alt="User Image"/>
-              
-                 	     <a title="Changer la photo d'identité"></a>
-                 		   	</c:when>
-                 	<c:otherwise>
-                 		   <img src="${request.contextPath}/mon_theme/dist/img/avatar.png" class="img-circle" alt="User Image"/>
-                 
-                 	</c:otherwise>
-                 
-                 </c:choose>
                    
-                     <p>
-                      #{sessionScope['SS_USER'].infosPersonne.persprenom} #{sessionScope['SS_USER'].infosPersonne.persnom}
-                      <br>
-                      <small>#{sessionScope['SS_USER'].login}</small>
+                    <img src="${request.contextPath}/mon_theme/dist/img/avatar.png" class="img-circle" alt="User Image"/>
+                    <p>
+                      #{sessionScope['SS_USER'].login}-#{sessionScope['SS_USER'].infosPersonne.nom} #{sessionScope['SS_USER'].infosPersonne.prenom}
                       <small>#{sessionScope['SS_USER'].dateCreation}</small>
-                      </br>
                     </p>
                   </li>
                   <!-- Menu Body -->
                   <li class="user-body">
                     <div class="col-xs-12 text-center">
-                     	                   
-			              <p:commandLink update=":profiluserForm" value="#{msg['menu.password']}"  actionListener="#{profilBean.profilEvent(actionEvent)}" oncomplete="PF('passDialog').show();hideUser()" styleClass="btn btn-default btn-flat"    />
-	                    
+                     	<h:form>                      
+			              <p:commandLink update=":profiluserForm" value="#{msg['menu.password']}"  actionListener="#{profilBean.profilEvent(actionEvent)}" oncomplete="PF('passDialog').show();PF(hideUser())" styleClass="btn btn-default btn-flat"    />
+	                    </h:form> 
                     </div>
                     
                   </li>
                   <!-- Menu Footer-->
                   <li class="user-footer">
                     <div class="pull-left">
-	                                      
-			              	<p:commandLink update=":profiluserForm" value="#{msg['global.profil']}"  actionListener="#{profilBean.profilEvent(actionEvent)}" oncomplete="PF('profilDialog').show();hideUser()" styleClass="btn btn-default btn-flat"    />
-	                     
+	                    <h:form>                      
+			              	<p:commandLink update=":profiluserForm" value="#{msg['global.profil']}"  actionListener="#{profilBean.profilEvent(actionEvent)}" oncomplete="PF('profilDialog').show();PF(hideUser())" styleClass="btn btn-default btn-flat"    />
+	                     </h:form> 
 		            </div>
                     <div class="pull-right">
-                    	<h:outputLink styleClass="btn btn-default btn-flat" value="#{facesContext.externalContext.requestContextPath}/j_spring_security_logout">
+                    	<!-- <h:outputLink styleClass="btn btn-default btn-flat"  value="#{facesContext.externalContext.requestContextPath}/j_spring_security_logout">
                      	#{msg['global.logout']}
-                      </h:outputLink>
+                      </h:outputLink> -->
+                      
+                      <h:form>                      
+			              	<h:commandLink  value="#{msg['global.logout']}"  action="#{loginBean.logout}" styleClass="btn btn-default btn-flat"    />
+	                     </h:form>
+                      
                     </div>
                   </li>
                 </ul>

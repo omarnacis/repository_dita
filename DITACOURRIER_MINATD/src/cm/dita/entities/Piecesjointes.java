@@ -59,8 +59,7 @@ public class Piecesjointes extends OMBase {
     
     @Column(name = "piecetitre", nullable=true)
     private String piecetitre;
-    @Basic(optional = true)
-    
+    @Basic(optional = true) 
   
    
     @Column(name = "piecedescription", nullable=true)

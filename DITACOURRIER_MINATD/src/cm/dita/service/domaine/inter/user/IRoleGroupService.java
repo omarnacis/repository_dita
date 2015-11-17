@@ -27,5 +27,4 @@ public interface IRoleGroupService extends IServiceBase<RoleGroup> {
 	void saveGroup2Role(Role role,List<Group> seletedGroups);
 	public void deleteGroup2Role(Role role);
 
-	Integer getCountRoleOfGroup(int id);
 }

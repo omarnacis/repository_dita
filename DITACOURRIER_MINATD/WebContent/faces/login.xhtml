@@ -63,18 +63,8 @@
          -->  
             <br/>  
           <h:messages showDetail="false" style="color: red;" id="msgErreur"  />
-          
-          <c:if test="#{sessionScope['error']==1}">
-          		<h:outputText value="#{msg['user.connexion.inconu']}"  style="color: red;"/>
-          </c:if>
-          <c:if test="#{sessionScope['error']==2}">
-          		<h:outputText value="#{msg['user.connexion.desabled']}"  style="color: red;"/>
-          </c:if>
-          <c:if test="#{sessionScope['error']==0}">
-          		<h:outputText value="EChec lors du chargement..."  style="color: red;"/>
-          </c:if>
-          
-           <h:outputText value="" />
+          <h:outputText value="#{msg['user.connexion.inconu']}" rendered="#{param.error}" style="color: red;"/>
+         
         </h:form>
       </div>
     </div><!-- /.login-box -->
