@@ -78,21 +78,8 @@ public class User  extends OMBase{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
-	  
-    @Column(name = "date_derniere_session", nullable =true )
-    private String date_derniere_session;
+	
     
-    @Column(name = "date_desabled", nullable =true )
-    private String date_desabled;
-    
-    @Column(name = "date_debut_validite", nullable =true )
-    private String date_debut_validite;
-    
-    @Column(name = "date_fin_validite", nullable =true )
-    private String date_fin_validite;
-    
-    @Column(name = "ip_derniere_session", nullable =true )
-    private String ip_derniere_session;
     
     /**
      * The login of the user, used for authentication
@@ -287,94 +274,11 @@ public class User  extends OMBase{
 	public void setInit_pass(boolean init_pass) {
 		Init_pass = init_pass;
 	}
-
-
-	/**
-	 * @return the date_derniere_session
-	 */
-	public String getDate_derniere_session() {
-		return date_derniere_session;
-	}
-
-
-
-	/**
-	 * @param date_derniere_session the date_derniere_session to set
-	 */
-	public void setDate_derniere_session(String date_derniere_session) {
-		this.date_derniere_session = date_derniere_session;
-	}
-
-
-	/**
-	 * @return the date_desabled
-	 */
-	public String getDate_desabled() {
-		return date_desabled;
-	}
-
-
-
-	/**
-	 * @param date_desabled the date_desabled to set
-	 */
-	public void setDate_desabled(String date_desabled) {
-		this.date_desabled = date_desabled;
-	}
-
-
-
-	/**
-	 * @return the ip_derniere_session
-	 */
-	public String getIp_derniere_session() {
-		return ip_derniere_session;
-	}
-
-
-
-	/**
-	 * @param ip_derniere_session the ip_derniere_session to set
-	 */
-	public void setIp_derniere_session(String ip_derniere_session) {
-		this.ip_derniere_session = ip_derniere_session;
-	}
-
-
-
-	/**
-	 * @return the date_debut_validite
-	 */
-	public String getDate_debut_validite() {
-		return date_debut_validite;
-	}
-
-
-
-	/**
-	 * @param date_debut_validite the date_debut_validite to set
-	 */
-	public void setDate_debut_validite(String date_debut_validite) {
-		this.date_debut_validite = date_debut_validite;
-	}
-
-
-
-	/**
-	 * @return the date_fin_validite
-	 */
-	public String getDate_fin_validite() {
-		return date_fin_validite;
-	}
-
-
-
-	/**
-	 * @param date_fin_validite the date_fin_validite to set
-	 */
-	public void setDate_fin_validite(String date_fin_validite) {
-		this.date_fin_validite = date_fin_validite;
-	}
+	
+	
+	
+	
+	
 	
 	
 }
