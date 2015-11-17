@@ -823,7 +823,6 @@ public class CourrierControllerBean  implements Serializable{
 				 courrier.setCourdatenreg(dateAujourdhuiSql);					 
 				 courrier.setRefid("RAS");//doit �tre g�n�r� suivant une nomenclature
 				 courrier.setUsercreate(userconnected);
-				 courrier.setLastUserUpdate(userconnected);
 				 courrier.setIdespacecourantducour(espaceCourant.getId());
 				 courrier.setIdstatutcourantducour(statutEnCours.getId());
 				 //courrier.setUsersender(utilisateurCourant);
