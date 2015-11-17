@@ -62,6 +62,11 @@ public class Correspondant extends OMBase{
 		this.dateCreation = co.dateCreation;
 		this.mailAddress = co.mailAddress;
 		this.telephone = co.telephone;
+		
+		this.setDateCreate(co.getDateCreate());
+		this.setIdLastUserUpdate(co.getIdLastUserUpdate());
+		this.setIdUserCreate(co.getIdUserCreate());
+		this.setIdLastUserUpdate(co.getIdLastUserUpdate());
 	}
 	
 	public Correspondant() {

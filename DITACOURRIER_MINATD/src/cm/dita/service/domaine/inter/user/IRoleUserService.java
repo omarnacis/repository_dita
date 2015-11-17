@@ -29,4 +29,6 @@ public interface IRoleUserService extends IServiceBase<RoleUser> {
 	public void saveRole2User(User user, List<Role> seletedRole);
 	public void deleteRole2User(User user);
 
+	Integer getCountRoleUser(int id);
+
 }

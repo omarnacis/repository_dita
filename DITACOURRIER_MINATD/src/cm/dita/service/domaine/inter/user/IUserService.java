@@ -6,7 +6,9 @@ package cm.dita.service.domaine.inter.user;
 
 import java.util.List;
 
-import cm.dita.entities.EspaceCourrier;
+
+
+import cm.dita.entities.Personne;
 import cm.dita.entities.user.User;
 import cm.dita.service.generic.IServiceBase;
 
@@ -27,5 +29,6 @@ public interface IUserService  extends IServiceBase<User>{
 	User findByLogin(String login);
 	public void updatePasswordAdmin(String password);
 	public Integer getCountUserParEspace(int espace);
+	public User findByIdPersonne(Personne personne);
     
 }

@@ -13,6 +13,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,6 +24,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import cm.dita.listener.EntiteListener;
 import cm.dita.object.model.OMBase;
 import cm.dita.annotation.AsignedIdEntity;
 
@@ -41,6 +43,7 @@ import cm.dita.annotation.AsignedIdEntity;
 //
 @Entity
 @Table(name="dita_role")
+
 public class Role extends OMBase {
 
     /**
@@ -84,6 +87,10 @@ public class Role extends OMBase {
 		this.dateCreation = role.dateCreation;
 		this.users = role.users;
 		this.groups = role.groups;
+		this.setDateCreate(role.getDateCreate());
+		this.setIdLastUserUpdate(role.getIdLastUserUpdate());
+		this.setIdUserCreate(role.getIdUserCreate());
+		this.setIdLastUserUpdate(role.getIdLastUserUpdate());
 	}
 
 

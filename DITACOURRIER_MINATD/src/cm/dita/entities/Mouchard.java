@@ -9,8 +9,6 @@ package cm.dita.entities;
 import cm.dita.entities.user.User;
 import cm.dita.object.model.OMBase;
 
-import java.util.Date;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,12 +16,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -48,12 +45,13 @@ public class Mouchard extends OMBase {
     private Long mouchardId;
  
     @Column(name = "mouchard_tache")
+    @Lob
     private String mouchardTache;
     
     @Column(name = "mouchard_date")
     private String mouchardDate;
     
-    @JoinColumn(name = "userid", referencedColumnName = "id",nullable=true)
+    @JoinColumn(name = "userid", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private User user;
     
@@ -65,6 +63,13 @@ public class Mouchard extends OMBase {
     
     @Column(name = "entite_name", nullable=true)
     private String entite_name;
+   
+    @Column(name="code_id",nullable=true, columnDefinition="bigint default '0'")
+    private long code_id;
+    
+    @Column(nullable=true)
+    @Lob
+	private String valeur;
     
    
     public Mouchard() {
@@ -176,6 +181,28 @@ public class Mouchard extends OMBase {
 	public void setEntite_name(String entite_name) {
 		this.entite_name = entite_name;
 	}
+
+
+	public long getCode_id() {
+		return code_id;
+	}
+
+
+	public void setCode_id(long code_id) {
+		this.code_id = code_id;
+	}
+
+
+	public String getValeur() {
+		return valeur;
+	}
+
+
+	public void setValeur(String valeur) {
+		this.valeur = valeur;
+	}
+	
+	
 	
 	
 

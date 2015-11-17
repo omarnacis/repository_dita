@@ -31,6 +31,7 @@ import cm.dita.constant.IConstance;
 import cm.core.csv.utils.CsvFileReaderImpl;
 import cm.core.csv.utils.ICsvFileReader;
 import cm.dita.entities.Espace;
+import cm.dita.entities.Personne;
 import cm.dita.entities.Preferences;
 import cm.dita.entities.Priorites;
 import cm.dita.entities.Statuts;
@@ -104,12 +105,8 @@ public class DitaInitListener implements ServletContextListener, ServletContextA
 			String cryptedPassword = encoder.encodePassword("admin", IConstance.MOT_POUR_CRYPTER);
 				
 			Espace espace=new Espace();
-			
 			espace.setId(1);
-			espace.setHierachie("0");
-			espace.setNomespace("Administrateur");
-			espace.setUsed(true);
-			
+			espace.setNomespace("Grand espace");
 				//if(espaceService.load(espace.getId())==null)
 			//	if(espaceService.load(espace.getId())==null)
 			//	if(espaceService.load(espace.getId())==null)
@@ -135,11 +132,11 @@ public class DitaInitListener implements ServletContextListener, ServletContextA
     		user.setEspace(espace);
     		//user.setTypespersonnel(typespersonnel);
     		user.setAutorithies(true);
-    		user.setInit_pass(true);
+    		user.setInit_pass(false);
     		user.setLangue("fr");
-    		InfosPersonne infosPersonne = new InfosPersonne();
-    		infosPersonne.setMailAddress("mbebruno@gmail.com");
-    		infosPersonne.setNom("Administrateur");
+    		Personne infosPersonne = new Personne();
+    		infosPersonne.setPersemail("mbebruno@gmail.com");
+    		infosPersonne.setPersnom("Administrateur");
     		user.setInfosPersonne(infosPersonne);
     		//if(userService.findByLogin(user.getLogin())==null)
     			userService.save(user);
@@ -168,7 +165,7 @@ public class DitaInitListener implements ServletContextListener, ServletContextA
     	if(prioritesRessourceService.getCount() <= 0){
 			Typescourriers 	 Typescourriers = new Typescourriers();
 			Typescourriers.setDelate(false);
-			Typescourriers.setTypecourdesignation("Entrant/Arrivé");
+			Typescourriers.setTypecourdesignation("Entrant/Arrivï¿½");
 			typescourriersService.save(Typescourriers);
 			
 			Typescourriers 	 Typescourriers1 = new Typescourriers();
@@ -183,7 +180,7 @@ public class DitaInitListener implements ServletContextListener, ServletContextA
 			
 			Priorites 	 priorites1 = new Priorites();
 			priorites1.setDelate(false);
-			priorites1.setPriodesignation("Très urgente");
+			priorites1.setPriodesignation("Trï¿½s urgente");
 			priorites1.setPrioriteordre(3);
 			prioritesRessourceService.save(priorites1);
 			
@@ -206,7 +203,7 @@ public class DitaInitListener implements ServletContextListener, ServletContextA
 			
 			Statuts statut2 = new Statuts();
 			statut2.setDelate(false);
-			statut2.setStatutdesignation("Terminé");
+			statut2.setStatutdesignation("Terminï¿½");
 			statutsRessourceService.save(statut2);
 			
 			Statuts statut = new Statuts();
@@ -216,12 +213,12 @@ public class DitaInitListener implements ServletContextListener, ServletContextA
 			
 			Statuts statut3 = new Statuts();
 			statut3.setDelate(false);
-			statut3.setStatutdesignation("Traité");
+			statut3.setStatutdesignation("Traitï¿½");
 			statutsRessourceService.save(statut3);
 			
 			Statuts statut1 = new Statuts();
 			statut1.setDelate(false);
-			statut1.setStatutdesignation("Rejeté");
+			statut1.setStatutdesignation("Rejetï¿½");
 			statutsRessourceService.save(statut1);
 			
 
@@ -237,7 +234,7 @@ public class DitaInitListener implements ServletContextListener, ServletContextA
     				
     		List<AccessRessource> accessRessources = new ArrayList<AccessRessource>();
     		for(Map<String, String> map: csvFileReader.getMappedData()){						
-    			accessRessources.add(new AccessRessource(map.get("detaille"), map.get("nom")));
+    			accessRessources.add(new AccessRessource(map.get("detaille"), map.get("nom"),map.get("bloc"),map.get("action")));
     		}	
     		accessRessourceService.saveAllRessource(accessRessources);   		
     	}

@@ -24,14 +24,17 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+
+
+
+
+
+
+
+
+
 import javax.swing.JOptionPane;
-
-
-
-
-
-
-
 
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
@@ -50,6 +53,7 @@ import cm.dita.dao.domaine.inter.IMouchardDao;
 import cm.dita.dao.domaine.inter.user.IAccessRessourceDao;
 import cm.dita.dao.domaine.inter.user.IUserDao;
 import cm.dita.entities.Mouchard;
+import cm.dita.entities.Personne;
 import cm.dita.entities.user.AccessRessource;
 import cm.dita.entities.user.RoleUser;
 import cm.dita.entities.user.User;
@@ -58,6 +62,7 @@ import cm.dita.service.domaine.inter.user.IAccessRessourceService;
 import cm.dita.service.domaine.inter.user.IUserService;
 import cm.dita.service.generic.ServiceBaseImpl;
 import cm.dita.utils.Messages;
+//import cm.dita.utils.OperRolesSpringSecurity;
 
 
 
@@ -71,6 +76,7 @@ public class UserServiceImpl extends ServiceBaseImpl< User> implements IUserServ
 	private IUserDao dao;
     private IAccessRessourceDao accessRessourceDao;
     private IMouchardDao mouchardDao;
+    //private IAccesProjet_roles0_projetDao accesprojet_roles0_projetDao;
     
     public static Map<String,Object> countries;
 	static{
@@ -113,7 +119,7 @@ public class UserServiceImpl extends ServiceBaseImpl< User> implements IUserServ
     		   
     	} catch (Exception e) {
 			
-			throw new ApplicationException("impossible de persiter l'entit�t� ["+getDao().getOMClass().getSimpleName()+ "] en base", e, 2);
+			throw new ApplicationException("impossible de persiter l'entit�t� ["+getDao().getOMClass().getSimpleName()+ "] en base", e, 2);
 		}
 	}
 
@@ -161,6 +167,16 @@ public class UserServiceImpl extends ServiceBaseImpl< User> implements IUserServ
 			
 	}
 	
+	
+	public User findByIdPersonne(Personne personne) {
+		
+		Map<String , Object> map=new Hashtable<String,Object>();
+		map.put("persid", personne.getPersid());
+		
+		return getDao().executeNameQuery("User.findByIdPersonne", map);
+		
+}
+	
 	/**
 	 * Change le mot de passe de l'administrateur
 	 * @param password
@@ -199,14 +215,20 @@ public class UserServiceImpl extends ServiceBaseImpl< User> implements IUserServ
 			try{
 				user=dao.executeNameQuery("User.findByLogin", map);
 			}catch(Exception e){
-				e.printStackTrace();
+				HttpServletRequest req=(HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+		    	HttpSession httpSession = req.getSession(true);
+		    	httpSession.setAttribute("error", 0);
 			}
 			
 	    	if(user == null){//cas ou l'utilisateur de login entr� n'existe pas en base
 	    		
-	    		FacesMessage message = Messages.getMessage("messages", "user.connexion.inconu", null);
+	    		HttpServletRequest req=(HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+		    	HttpSession httpSession = req.getSession(true);
+		    	httpSession.setAttribute("error", 1);
+	    		
+	    		/*FacesMessage message = Messages.getMessage("messages", "user.connexion.inconu", null);
 	    		message.setSeverity(FacesMessage.SEVERITY_ERROR);
-	   	     	context.addMessage("msgErreur", message); 
+	   	     	context.addMessage("msgErreur", message); */
 	   	     	
 	   	     SimpleDateFormat sdf = new SimpleDateFormat(IConstance.PARAMETER_DATE_FORMAT_2); 
 			 Mouchard mouchard = new Mouchard();
@@ -224,15 +246,21 @@ public class UserServiceImpl extends ServiceBaseImpl< User> implements IUserServ
 	    	
 	    
 	    	if(!user.isEnabled()){//si l'utilisateur est desactiv
+	    		HttpServletRequest req=(HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+		    	HttpSession httpSession = req.getSession(true);
+		    	httpSession.setAttribute("error", 2);
+	    		//request.getSession().setAttribute("t", );
 	    		FacesMessage message = Messages.getMessage("messages", "user.connexion.etat", null);
 	    		message.setSeverity(FacesMessage.SEVERITY_ERROR);
 	   	     	context.addMessage(null, message);
 	   	     	
+	   	    // throw new LockedException(error);
+	   	     	
 	   	     SimpleDateFormat sdf = new SimpleDateFormat(IConstance.PARAMETER_DATE_FORMAT_2); 
 			 Mouchard mouchard = new Mouchard();
 			 mouchard.setDelate(false);
-			 mouchard.setMouchardTache("Tentative de connexion  "+user.getInfosPersonne().getNom()+" "+user.getInfosPersonne().getPrenom()+"("
-					+user.getLogin()+") dans le système avec un compte desactivé");
+			 mouchard.setMouchardTache("Tentative de connexion  "+user.getInfosPersonne().getPersnom()+" "+user.getInfosPersonne().getPersprenom()+"("
+					+user.getLogin()+") dans le systéme avec un compte desactiv�");
 			 mouchard.setMouchardUserCode(null);
 			 mouchard.setMouchardDate(sdf.format(new Date()));
 			 mouchard.setEntite_name("user");
@@ -255,29 +283,26 @@ public class UserServiceImpl extends ServiceBaseImpl< User> implements IUserServ
 		    		}else{
 			    		 Map<String, Object > mapParameter = new HashMap<String, Object>();
 			    	   		mapParameter.put("identifier", user.getId()); 
+			    	   		
+			    	   //recup�ration et chargement de ses privil�ges sur l'application		
 			    		 List<AccessRessource> accessRessources= accessRessourceDao.executeNameQueryAndGetListResult("User.access", mapParameter);
 			    		 for(AccessRessource ressource : accessRessources){
 					    		authorities.add(new GrantedAuthorityImpl(ressource.getRessourceName()));		    		 
 					    	  }
+			    		 
+			    		
 		    		}
-	    		
-		    		//Lla langue de l'utilisateur
-		    		/*if(user.getLangue()!=null){
-				    	JOptionPane.showMessageDialog(null, countries.get(user.getLangue()));
-				    	 FacesContext.getCurrentInstance().getViewRoot().setLocale(Locale.ENGLISH);
-		    		}else{
-		    			
-				    	FacesContext.getCurrentInstance().getViewRoot().setLocale((Locale) countries.get("fr"));
-		    		}*/
-	    		
+		    		
+		    		
 	    		}
 	    		
 	    		 
 	    		// authorities.add(new GrantedAuthorityImpl("ROLE_ADMIN")) ;
 
 	    	 }catch(Exception e){
-	    		 e.printStackTrace();
-	    		 // dans le file log du system.
+	    		 HttpServletRequest req=(HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			    	HttpSession httpSession = req.getSession(true);
+			    	httpSession.setAttribute("error", 0);
 	    	 }
 		
 	    	  Collection<? extends GrantedAuthority> grantedAuthority;    	  
@@ -289,19 +314,23 @@ public class UserServiceImpl extends ServiceBaseImpl< User> implements IUserServ
 	    	
 		    	HttpServletRequest req=(HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 		    	HttpSession httpSession = req.getSession(true);
+		    	user.setEspaceCourantId(1);//par defaut tout utilisateur se retrouve dans l'espace initial de l'application qui est consid�r� ici coe l'espace par defaut
 		    	httpSession.setAttribute(ISessionConstant.SS_USER, user);
+		    	//JOptionPane.showMessageDialog(null, user.getInfosPersonne().getSrc_img()+" "+ user.getInfosPersonne().getPersnom());
 		    	
 		    	SimpleDateFormat sdf = new SimpleDateFormat(IConstance.PARAMETER_DATE_FORMAT_2); 
 				 Mouchard mouchard = new Mouchard();
 				 mouchard.setDelate(false);
-				 mouchard.setMouchardTache("Connexion de "+user.getInfosPersonne().getNom()+" "+user.getInfosPersonne().getPrenom()+"("
-						+user.getLogin()+") dans le système");
+				 mouchard.setMouchardTache("Connexion de "+user.getInfosPersonne().getPersnom()+" "+user.getInfosPersonne().getPersprenom()+"("
+						+user.getLogin()+") dans le syst�me");
 				 mouchard.setMouchardUserCode((User) httpSession.getAttribute(ISessionConstant.SS_USER));
 				 mouchard.setMouchardDate(sdf.format(new Date()));
 				 mouchard.setEntite_name("user");
 				 mouchard.setOperation("connexion");
 				 mouchard.setReference_date(user.getDateUseToSortData());
-				 mouchardDao.save(mouchard);
+				
+					 mouchardDao.save(mouchard);
+				
 	    	    	
 	    	return userNew;
 	    }
@@ -358,6 +387,8 @@ public class UserServiceImpl extends ServiceBaseImpl< User> implements IUserServ
 		List<User> listUser = getDao().getCurrentSession().createQuery("select e from User e where e.espace.id=:espace and e.delate='false'").setParameter("espace", espace).getResultList();
    		return listUser;
 	}
+
+	
 
  
 }

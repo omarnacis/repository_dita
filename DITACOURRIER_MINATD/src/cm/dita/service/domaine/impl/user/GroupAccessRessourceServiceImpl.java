@@ -13,13 +13,16 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.swing.JOptionPane;
 
 import org.springframework.transaction.annotation.Transactional;
 
 import cm.dita.constant.IConstance;
 import cm.dita.constant.ISessionConstant;
 import cm.dita.dao.domaine.inter.IMouchardDao;
+import cm.dita.dao.domaine.inter.user.IAccessRessourceDao;
 import cm.dita.dao.domaine.inter.user.IGroupAccessRessourceDao;
+import cm.dita.dao.domaine.inter.user.IGroupDao;
 import cm.dita.entities.Mouchard;
 import cm.dita.entities.user.AccessRessource;
 import cm.dita.entities.user.Group;
@@ -43,6 +46,8 @@ public class GroupAccessRessourceServiceImpl extends
 
 	
 	private IGroupAccessRessourceDao dao;
+	private IGroupDao groupDao;
+	private IAccessRessourceDao accessRessourceDao;
 	private IMouchardDao mouchardDao;
 	/* (non-Javadoc)
 	 * @see cm.socogel.service.generic.IServiceBase#getDao()
@@ -56,33 +61,65 @@ public class GroupAccessRessourceServiceImpl extends
 		this.dao = dao;
 	}
 	
-	@Override
-	public void saveAll(Set<GroupAccessRessource> groupAccessRessources)
-			throws ApplicationException {
-		EntityTransaction tr = getDao().getCurrentSession().getTransaction();
-		
-		try {
-			
-			for(GroupAccessRessource groupAccessRessource : groupAccessRessources){				
-				getDao().save(groupAccessRessource);
-			}
-			tr.commit();
-		} catch (Exception e) {
-			tr.rollback();
-			throw new ApplicationException("Problème lors du persist de la liste de "+getDao().getOMClass().getSimpleName(), e, 11);
-		}
+	
+	
+	/**
+	 * Cette fonction ajoute les ressources a un groupe
+	 * @param groupe concernÃ©
+	 * @param liste des ressoources Ã  ajouter
+	 */
+	
+	@Transactional 
+	public void createGroupAndAccess(Group group, List<AccessRessource> listRessoureBlocs){
+	
+			  
+		   	  //JOptionPane.showMessageDialog(null, group.getIdGroup()+" "+group.getGroupName());
+		   	 for(int i=0;i<listRessoureBlocs.size();i++){    		  
+		   		  for(int j=0;j<listRessoureBlocs.get(i).getSelectRessourceDuBloc().size();j++){
+		   			 GroupAccessRessource fa= new GroupAccessRessource(group,accessRessourceDao.load(Integer.parseInt(listRessoureBlocs.get(i).getSelectRessourceDuBloc().get(j))));
+		   			getDao().save(fa);
+		   			  
+		   		  }
+		   		   listRessoureBlocs.get(i).getSelectRessourceDuBloc().clear();
+		   	   }
 		
 	}
 	
+	@Transactional 
+	public void updateGroupAndAccess(Group group, List<AccessRessource> listRessoureBlocs){
+		
+		
+		groupDao.update(group);
+			  group=groupDao.load(group.getIdGroup());			  
+			  Query query =  getDao().getCurrentSession().createQuery(" select ga from  GroupAccessRessource ga where ga.group.idGroup = :idgroupe");
+				query.setParameter("idgroupe", group.getIdGroup());			
+				List<GroupAccessRessource> listResult = query.getResultList();	
+				group.getRessources().removeAll(listResult);
+				for(GroupAccessRessource accessGroup: listResult){
+					//access=accessGroup.getAccessRessource();
+					accessRessourceDao.load(accessGroup.getAccessRessource().getIdRessource()).getGroups().removeAll(listResult);
+					getDao().delete(accessGroup);
+				}
+			  
+		   	 for(int i=0;i<listRessoureBlocs.size();i++){    		  
+		   		  for(int j=0;j<listRessoureBlocs.get(i).getSelectRessourceDuBloc().size();j++){
+		   			 GroupAccessRessource fa= new GroupAccessRessource(group,accessRessourceDao.load(Integer.parseInt(listRessoureBlocs.get(i).getSelectRessourceDuBloc().get(j))));
+		   			getDao().save(fa);
+		   			  
+		   		  }
+		   		   listRessoureBlocs.get(i).getSelectRessourceDuBloc().clear();
+		   	   }
+		
+	}
 	
-	
-	@Transactional //(propagation=Propagation.NOT_SUPPORTED,rollbackFor=Exception.class)
+	/*
+	@Transactional 
 	public void saveAcess2Group(Group group, List<AccessRessource> seletedAccess) {
 		
 			AccessRessource access=new AccessRessource();
 		   HttpServletRequest req=(HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 	    	HttpSession httpSession = req.getSession();
-	    	httpSession.getAttribute(ISessionConstant.SS_USER);
+	   	httpSession.getAttribute(ISessionConstant.SS_USER);
 		
 		try{
 			
@@ -100,7 +137,7 @@ public class GroupAccessRessourceServiceImpl extends
 					SimpleDateFormat sdf = new SimpleDateFormat(IConstance.PARAMETER_DATE_FORMAT_2); 
 		 			 Mouchard mouchard = new Mouchard();
 		 			 mouchard.setDelate(false);
-		 			 mouchard.setMouchardTache("Retrait du privilège :"+accessGroup.getAccessRessource().getRessourceDetail()+"("
+		 			 mouchard.setMouchardTache("Retrait du privilï¿½ge :"+accessGroup.getAccessRessource().getRessourceDetail()+"("
 		 					+accessGroup.getAccessRessource().getIdRessource()+") du groupe "+group.getGroupName()+" "
 		 					+"("+group.getIdGroup()+")" );
 		 			 mouchard.setMouchardUserCode((User) httpSession.getAttribute(ISessionConstant.SS_USER));
@@ -113,14 +150,13 @@ public class GroupAccessRessourceServiceImpl extends
 			}
 			
 			
-			for(int i=0;i<seletedAccess.size();i++){
-	    		  getDao().save(new GroupAccessRessource(seletedAccess.get(i),group));
-	    		  access=seletedAccess.get(i);
-	    		  
+			for(int i=0;i<seletedAccess.size();i++){				
+	    		  getDao().save(new GroupAccessRessource(group,seletedAccess.get(i)));
+	    		  access=seletedAccess.get(i);	    		  
 	    		  	SimpleDateFormat sdf = new SimpleDateFormat(IConstance.PARAMETER_DATE_FORMAT_2); 
 		 			 Mouchard mouchard = new Mouchard();
 		 			 mouchard.setDelate(false);
-		 			 mouchard.setMouchardTache("Attribution du privilège :"+seletedAccess.get(i).getRessourceDetail()+"("
+		 			 mouchard.setMouchardTache("Attribution du privilï¿½ge :"+seletedAccess.get(i).getRessourceDetail()+"("
 		 					+seletedAccess.get(i).getIdRessource()+") au groupe "+group.getGroupName()+" "
 		 					+"("+group.getIdGroup()+")" );
 		 			 mouchard.setMouchardUserCode((User) httpSession.getAttribute(ISessionConstant.SS_USER));
@@ -136,7 +172,7 @@ public class GroupAccessRessourceServiceImpl extends
 			SimpleDateFormat sdf = new SimpleDateFormat(IConstance.PARAMETER_DATE_FORMAT_2); 
 			 Mouchard mouchard = new Mouchard();
 			 mouchard.setDelate(false);
-			 mouchard.setMouchardTache("Echec attribution ou retrait du privilège :"+access.getRessourceDetail()+"("
+			 mouchard.setMouchardTache("Echec attribution ou retrait du privilï¿½ge :"+access.getRessourceDetail()+"("
 					+access.getIdRessource()+") du groupe "+group.getGroupName()+" "
 					+"("+group.getIdGroup()+")" );
 			 mouchard.setMouchardUserCode((User) httpSession.getAttribute(ISessionConstant.SS_USER));
@@ -146,7 +182,7 @@ public class GroupAccessRessourceServiceImpl extends
 			 mouchard.setReference_date(group.getDateUseToSortData());
 			 mouchardDao.save(mouchard);
 	
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 		
 	}
@@ -172,7 +208,7 @@ public class GroupAccessRessourceServiceImpl extends
 					SimpleDateFormat sdf = new SimpleDateFormat(IConstance.PARAMETER_DATE_FORMAT_2); 
 					 Mouchard mouchard = new Mouchard();
 					 mouchard.setDelate(false);
-					 mouchard.setMouchardTache("Retrait du privilège :"+access.getRessourceDetail()+"("
+					 mouchard.setMouchardTache("Retrait du privilï¿½ge :"+access.getRessourceDetail()+"("
 							+access.getIdRessource()+") du groupe "+group.getGroupName()+" "
 							+"("+group.getIdGroup()+")" );
 					 mouchard.setMouchardUserCode((User) httpSession.getAttribute(ISessionConstant.SS_USER));
@@ -188,7 +224,7 @@ public class GroupAccessRessourceServiceImpl extends
 		SimpleDateFormat sdf = new SimpleDateFormat(IConstance.PARAMETER_DATE_FORMAT_2); 
 		 Mouchard mouchard = new Mouchard();
 		 mouchard.setDelate(false);
-		 mouchard.setMouchardTache("Echec retrait du privilège :"+access.getRessourceDetail()+"("
+		 mouchard.setMouchardTache("Echec retrait du privilï¿½ge :"+access.getRessourceDetail()+"("
 				+access.getIdRessource()+") du groupe "+group.getGroupName()+" "
 				+"("+group.getIdGroup()+")" );
 		 mouchard.setMouchardUserCode((User) httpSession.getAttribute(ISessionConstant.SS_USER));
@@ -199,13 +235,26 @@ public class GroupAccessRessourceServiceImpl extends
 		 mouchardDao.save(mouchard);
 		
 	}
-	}
+	}*/
 	public IMouchardDao getMouchardDao() {
 		return mouchardDao;
 	}
 	public void setMouchardDao(IMouchardDao mouchardDao) {
 		this.mouchardDao = mouchardDao;
 	}
+	public IGroupDao getGroupDao() {
+		return groupDao;
+	}
+	public void setGroupDao(IGroupDao groupDao) {
+		this.groupDao = groupDao;
+	}
+	public IAccessRessourceDao getAccessRessourceDao() {
+		return accessRessourceDao;
+	}
+	public void setAccessRessourceDao(IAccessRessourceDao accessRessourceDao) {
+		this.accessRessourceDao = accessRessourceDao;
+	}
+	
 	
 	
 

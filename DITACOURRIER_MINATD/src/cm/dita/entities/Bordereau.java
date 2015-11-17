@@ -71,7 +71,7 @@ public class Bordereau extends OMBase {
     @Column(name = "datetraitement")   
     private String datetraitement;
     
-    @Column(name = "usercreateid", nullable=false)
+    @Column(name = "usercreateid_bordereau", nullable=false)
     private Integer usercreateid;
     
     @Column(name = "userupdateid", nullable=true)

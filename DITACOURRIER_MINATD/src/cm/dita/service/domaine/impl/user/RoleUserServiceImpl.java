@@ -96,9 +96,9 @@ public class RoleUserServiceImpl extends  ServiceBaseImpl<RoleUser> implements
 						SimpleDateFormat sdf = new SimpleDateFormat(IConstance.PARAMETER_DATE_FORMAT_2); 
 			 			 Mouchard mouchard = new Mouchard();
 			 			 mouchard.setDelate(false);
-			 			 mouchard.setMouchardTache("Retrait du rôle :"+roleUser.getRole().getRoleName()+"("
-			 					+roleUser.getRole().getIdentifier()+") à l'utilisateur "+user.getInfosPersonne().getNom()+" "
-			 					+user.getInfosPersonne().getPrenom()+"("+user.getLogin()+")" );
+			 			 mouchard.setMouchardTache("Retrait du rï¿½le :"+roleUser.getRole().getRoleName()+"("
+			 					+roleUser.getRole().getIdentifier()+") ï¿½ l'utilisateur "+user.getInfosPersonne().getPersnom()+" "
+			 					+user.getInfosPersonne().getPersprenom()+"("+user.getLogin()+")" );
 			 			 mouchard.setMouchardUserCode((User) httpSession.getAttribute(ISessionConstant.SS_USER));
 			 			 mouchard.setMouchardDate(sdf.format(new Date()));
 			 			
@@ -117,9 +117,9 @@ public class RoleUserServiceImpl extends  ServiceBaseImpl<RoleUser> implements
 		    		   SimpleDateFormat sdf = new SimpleDateFormat(IConstance.PARAMETER_DATE_FORMAT_2); 
 		 			 Mouchard mouchard = new Mouchard();
 		 			 mouchard.setDelate(false);
-		 			 mouchard.setMouchardTache("Attribution du rôle :"+seletedRole.get(i).getRoleName()+"("
-		 					+seletedRole.get(i).getIdentifier()+") à l'utlisateur "+user.getInfosPersonne().getNom()+" "
-		 					+user.getInfosPersonne().getPrenom()+"("+user.getLogin()+")" );
+		 			 mouchard.setMouchardTache("Attribution du rï¿½le :"+seletedRole.get(i).getRoleName()+"("
+		 					+seletedRole.get(i).getIdentifier()+") ï¿½ l'utlisateur "+user.getInfosPersonne().getPersnom()+" "
+		 					+user.getInfosPersonne().getPersprenom()+"("+user.getLogin()+")" );
 		 			mouchard.setMouchardUserCode((User) httpSession.getAttribute(ISessionConstant.SS_USER));
 		 			 mouchard.setMouchardDate(sdf.format(new Date()));
 		 			 mouchard.setEntite_name("RoleUser");
@@ -133,9 +133,9 @@ public class RoleUserServiceImpl extends  ServiceBaseImpl<RoleUser> implements
 				SimpleDateFormat sdf = new SimpleDateFormat(IConstance.PARAMETER_DATE_FORMAT_2); 
 	 			 Mouchard mouchard = new Mouchard();
 	 			 mouchard.setDelate(false);
-	 			 mouchard.setMouchardTache("Echec d'Attribution ou retrait du rôle :"+role.getRoleName()+"("
-	 					+role.getIdentifier()+") à  l'utlisateur "+user.getInfosPersonne().getNom()+" "
-	 					+user.getInfosPersonne().getPrenom()+"("+user.getLogin()+")" );
+	 			 mouchard.setMouchardTache("Echec d'Attribution ou retrait du rï¿½le :"+role.getRoleName()+"("
+	 					+role.getIdentifier()+") ï¿½ l'utlisateur "+user.getInfosPersonne().getPersnom()+" "
+	 					+user.getInfosPersonne().getPersprenom()+"("+user.getLogin()+")" );
 	 			mouchard.setMouchardUserCode((User) httpSession.getAttribute(ISessionConstant.SS_USER));
 	 			 mouchard.setMouchardDate(sdf.format(new Date()));
 	 			 mouchard.setEntite_name("RoleUser");
@@ -170,9 +170,9 @@ public class RoleUserServiceImpl extends  ServiceBaseImpl<RoleUser> implements
 						SimpleDateFormat sdf = new SimpleDateFormat(IConstance.PARAMETER_DATE_FORMAT_2); 
 			 			 Mouchard mouchard = new Mouchard();
 			 			 mouchard.setDelate(false);
-			 			 mouchard.setMouchardTache("Retrait du rôle :"+role.getRoleName()+"("
-			 					+role.getIdentifier()+") à  l'utilisateur "+user.getInfosPersonne().getNom()+" "
-			 					+user.getInfosPersonne().getPrenom()+"("+user.getLogin()+")" );
+			 			 mouchard.setMouchardTache("Retrait du rï¿½le :"+role.getRoleName()+"("
+			 					+role.getIdentifier()+") ï¿½ l'utilisateur "+user.getInfosPersonne().getPersnom()+" "
+			 					+user.getInfosPersonne().getPersprenom()+"("+user.getLogin()+")" );
 			 			 mouchard.setMouchardUserCode((User) httpSession.getAttribute(ISessionConstant.SS_USER));
 			 			 mouchard.setMouchardDate(sdf.format(new Date()));
 			 			
@@ -189,9 +189,9 @@ public class RoleUserServiceImpl extends  ServiceBaseImpl<RoleUser> implements
 				SimpleDateFormat sdf = new SimpleDateFormat(IConstance.PARAMETER_DATE_FORMAT_2); 
 	 			 Mouchard mouchard = new Mouchard();
 	 			 mouchard.setDelate(false);
-	 			 mouchard.setMouchardTache("Echec Retrait du rôle: "+role.getRoleName()+"("
-	 					+role.getIdentifier()+") à l'utilisateur "+user.getInfosPersonne().getNom()+" "
-	 					+user.getInfosPersonne().getPrenom()+"("+user.getLogin()+")" );
+	 			 mouchard.setMouchardTache("Echec Retrait du rï¿½le: "+role.getRoleName()+"("
+	 					+role.getIdentifier()+") ï¿½ l'utilisateur "+user.getInfosPersonne().getPersnom()+" "
+	 					+user.getInfosPersonne().getPersprenom()+"("+user.getLogin()+")" );
 	 			 mouchard.setMouchardUserCode((User) httpSession.getAttribute(ISessionConstant.SS_USER));
 	 			 mouchard.setMouchardDate(sdf.format(new Date()));
 	 			
@@ -202,6 +202,13 @@ public class RoleUserServiceImpl extends  ServiceBaseImpl<RoleUser> implements
 				//e.printStackTrace();
 			}
 			
+		}
+		
+		@Override
+		public Integer getCountRoleUser(int id) {
+			// TODO Auto-generated method
+			return ((Long) dao.getCurrentSession().createQuery("select count(*) from RoleUser ru where ru.role.identifier=:id and ru.delate='false'").setParameter("id", id).getResultList().get(0)).intValue();
+	   		
 		}
 
 

@@ -72,7 +72,7 @@ public class EspaceCourrier extends OMBase {
     @ManyToOne(optional = true)
     private Espace espacedestination;
     
-    @JoinColumn(name = "usercreateid", referencedColumnName = "id", nullable=true)
+    @JoinColumn(name = "usercreateid_Courrier", referencedColumnName = "id", nullable=true)
     @ManyToOne(optional = true)
     private User usercreate;
     

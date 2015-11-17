@@ -68,7 +68,7 @@ public class Courriers extends OMBase {
     private String courobjet;
     @Basic(optional = false)
  
-    //date de dépot du courrier
+    //date de dï¿½pot du courrier
     @Column(name = "courdate", nullable=true)
     @Temporal(TemporalType.DATE)
     private Date courdate;
@@ -79,7 +79,7 @@ public class Courriers extends OMBase {
     @Column(name = "courmots")
     private String courmots;
    
-    @JoinColumn(name = "usercreateid", referencedColumnName = "id")
+    @JoinColumn(name = "usercreateid_courrier", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private User usercreate;
  

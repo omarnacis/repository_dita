@@ -18,7 +18,8 @@ import cm.dita.object.model.OMBase;
 @Entity
 @Table(name = "dita_image")
 @NamedQueries({
-    @NamedQuery(name = "Image.deleteByType", query = "delete FROM Image i where i.type=:type")
+    @NamedQuery(name = "Image.deleteByType", query = "delete FROM Image i where i.type=:type"),
+    @NamedQuery(name = "Image.deleteByTypeAndId", query = "delete FROM Image i where i.type=:type and i.idEntite=:identite")
     
 })
 public class Image extends OMBase{
@@ -39,7 +40,7 @@ public class Image extends OMBase{
     private int type;
     
     @Column(nullable=true)
-    private long idCourrier;
+    private long idEntite;
     
     @Column
     private String name;
@@ -68,12 +69,13 @@ public class Image extends OMBase{
 		this.type = type;
 	}
 
-	public long getIdCourrier() {
-		return idCourrier;
+	
+	public long getIdEntite() {
+		return idEntite;
 	}
 
-	public void setIdCourrier(long idCourrier) {
-		this.idCourrier = idCourrier;
+	public void setIdEntite(long idEntite) {
+		this.idEntite = idEntite;
 	}
 
 	public String getName() {
